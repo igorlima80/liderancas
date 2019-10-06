@@ -39,10 +39,10 @@
         </GridLayout>
       </CardView>
 
-      <Label alignSelf="center" class="p-5 text-primary" @tap="$navigator.navigate('/signup')">
+      <Label alignSelf="center" class="p-5 text-primary" @tap="openBrowser">
         <FormattedString>
-          <Span text="Não tem uma conta? " />
-          <Span text="Cadastre-se!" class="font-weight-bold" />
+          <Span text="Sem conta? " />
+          <Span text="Entre em contato com seu lider." class="font-weight-bold" />
         </FormattedString>
       </Label>
     </FlexboxLayout>
@@ -60,6 +60,7 @@ import SelectedPageService from "../shared/selected-page-service";
 import orientationModule from "nativescript-screen-orientation";
 import { Feedback } from "nativescript-feedback";
 import validator from "email-validator";
+const utilsModule = require("tns-core-modules/utils/utils");
 import {
   connectionType,
   getConnectionType
@@ -207,6 +208,9 @@ export default {
     pageUnloaded() {
       // orientationModule.orientationCleanup();
       // utils.gesturesEnabled(true);
+    },
+    openBrowser(){
+      utilsModule.openUrl("https://www.google.com")
     }
   }
 };

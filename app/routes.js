@@ -1,6 +1,6 @@
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+// import Signup from "./pages/Signup";
 import Settings from "./pages/Settings"
 import Featured from "./pages/Featured"
 import Notifications from "./pages/Notifications"
@@ -16,10 +16,10 @@ export const routes = {
            component: Login,
            meta: { needsAuth: false }
          },
-         "/signup": {
-           component: Signup,
-           meta: { needsAuth: false }
-         },
+        //  "/signup": {
+        //    component: Signup,
+        //    meta: { needsAuth: false }
+        //  },
          "/notifications": {
            component: Notifications,
            meta: { needsAuth: true }

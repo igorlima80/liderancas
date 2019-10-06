@@ -55,10 +55,10 @@
 <script>
 import * as utils from "~/shared/utils";
 import SelectedPageService from "../shared/selected-page-service";
-import SaudeMaisService from "~/services/SaudeMaisService";
+import LiderancasService from "~/services/LiderancasService";
 import { CHANGE_NOTIFICATION, LOGOUT } from "~/store/actions.type";
 import { Feedback } from "nativescript-feedback";
-const saudeMaisService = new SaudeMaisService();
+const liderancasService = new LiderancasService();
 const feedback = new Feedback();
 
 export default {
@@ -69,7 +69,7 @@ export default {
     notifyEnabled: {
       // getter
       get: function() {
-        return saudeMaisService.notification;
+        return liderancasService.notification;
       },
       // setter
       set: function(newValue) {
