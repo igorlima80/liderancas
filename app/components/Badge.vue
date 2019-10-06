@@ -1,0 +1,51 @@
+<template>
+  <GridLayout v-if="badgeValue">
+    <Label
+      row="0"
+      col="0"
+      :color="badgeColor"
+      class="fas badge"
+      :text="'fa-circle' | fonticon"
+      verticalAlignment="middle"
+      horizontalAlignment="center"
+    />
+    <Label
+      row="0"
+      col="0"
+      class="badge-text"
+      :text="badgeValue"
+      verticalAlignment="middle"
+      horizontalAlignment="center"
+    />
+  </GridLayout>
+</template>
+<script>
+export default {
+  props: {
+    badgeValue: {
+      type: String,
+      default: ""
+    },
+    badgeColor: {
+      type: String,
+      default: "#D84039"
+    }
+  }
+};
+</script>
+
+<style scoped>
+.badge {
+  font-size: 18px;
+  margin-right: 15;
+}
+
+.badge-text {
+  font-size: 10px;
+  margin-right: 15;
+  /* font-weight: bold; */
+  color: white;
+}
+</style>
+
+

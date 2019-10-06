@@ -1,0 +1,9 @@
+export const FETCH_USER = "fetchUser";
+export const UPDATE_USER = "updateUser";
+export const LOGIN = "login";
+export const LOGOUT = "logout";
+export const REGISTER = "register";
+export const RESET_PASSWORD = "resetPassword";
+export const CHANGE_NOTIFICATION = "changeNotification";
+export const GET_NOTIFICATIONS = "getNotifications";
+export const INIT_DB = "initDB";
