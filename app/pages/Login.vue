@@ -42,7 +42,7 @@
       <Label alignSelf="center" class="p-5 text-primary" @tap="openBrowser">
         <FormattedString>
           <Span text="Sem conta? " />
-          <Span text="Entre em contato com seu lider." class="font-weight-bold" />
+          <Span text="Contate seu gestor." class="font-weight-bold" />
         </FormattedString>
       </Label>
     </FlexboxLayout>
@@ -70,8 +70,8 @@ const feedback = new Feedback();
 export default {
   data() {
     return {
-      email: "",
-      password: ""
+      email: "admin@admin.com",
+      password: "12345678"
     };
   },
   mounted() {

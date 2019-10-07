@@ -6,6 +6,7 @@ import {
 } from "tns-core-modules/application-settings";
 
 const tokenKey = "token";
+const deviceToken = "deviceToken";
 const notificationKey = "notification"
 const initialKey = "initial"
 // const userKey = "user"
@@ -15,7 +16,7 @@ const initialKey = "initial"
  */
 export default class BackendService {
   constructor() {
-    this.baseUrl = "https://eb4062c9-4251-4e26-ad0c-717279877e9a.mock.pstmn.io/";
+    this.baseUrl = "https://cc3eae40-8c4b-488a-97d7-ed67b190255a.mock.pstmn.io/";
     this.apiUrl = "";
   }
 
@@ -32,6 +33,16 @@ export default class BackendService {
   set token(newToken) {
     setString(tokenKey, newToken);
     console.log('TOKEN SET TO: ' + newToken)
+  }
+
+  get deviceToken() {
+    console.log('GETTING diviceToken: ' + getString(deviceToken))
+    return getString(deviceToken);
+  }
+
+  set deviceToken(newDieviceToken) {
+    setString(deviceToken, newDeviceToken);
+    console.log('deviceToken SET TO: ' + newDeviceToken)
   }
 
   // get user() {
