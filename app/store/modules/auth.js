@@ -1,7 +1,7 @@
 import {
   LOGIN,
   LOGOUT,
-  REGISTER,
+  UPDATE_USER,
   FETCH_USER,
   RESET_PASSWORD
 } from "~/store/actions.type";
@@ -46,20 +46,20 @@ const actions = {
   [LOGOUT](context) {
     context.commit(PURGE_AUTH);
   },
-  [REGISTER](context, user) {
-    return new Promise((resolve, reject) => {
-      loginService
-        .register(user)
-        .then(data => {
-          context.commit(SET_TOKEN, data.authtoken);
-          resolve(data);
-        })
-        .catch(error => {
-          context.commit(SET_ERROR, error);
-          reject(error);
-        });
-    });
-  },
+  // [REGISTER](context, user) {
+  //   return new Promise((resolve, reject) => {
+  //     loginService
+  //       .register(user)
+  //       .then(data => {
+  //         context.commit(SET_TOKEN, data.authtoken);
+  //         resolve(data);
+  //       })
+  //       .catch(error => {
+  //         context.commit(SET_ERROR, error);
+  //         reject(error);
+  //       });
+  //   });
+  // },
   [RESET_PASSWORD](context, email) {
     return new Promise((resolve, reject) => {
       loginService
@@ -89,25 +89,21 @@ const actions = {
           reject(error);
         });
     });
-  }
-
-  /*     [UPDATE_USER](context, payload) {
-    const { email, username, password, image, bio } = payload;
-    const user = {
-      email,
-      username,
-      bio,
-      image
-    };
-    if (password) {
-      user.password = password;
-    }
-
-    return ApiService.put("user", user).then(({ data }) => {
-      context.commit(SET_AUTH, data.user);
-      return data;
+  },
+  [UPDATE_USER](context, user) {
+    return new Promise((resolve, reject) => {
+      loginService
+        .updateUser(user)
+        .then(data => {
+          context.commit(SET_AUTH, data);
+          resolve(data);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, error);
+          reject(error);
+        });
     });
-  } */
+  }
 };
 
 const mutations = {

@@ -56,21 +56,22 @@ export default class LoginService extends BackendService {
   }
 
   register(user) {
-    return http.request({
-      url: this.baseUrl + "register",
-      method: "POST",
-      headers: this.getCommonHeaders(),
-      content: JSON.stringify({
-        email: user.email,
-        password: user.password
-      }),
-    })
-    .then(this.validateCode)
-    .then(this.getJson)
-    .then(data => {
-      console.info('User registered: ', data)
-      return data
-    })
+    return http
+      .request({
+        url: this.baseUrl + "register",
+        method: "POST",
+        headers: this.getCommonHeaders(),
+        content: JSON.stringify({
+          email: user.email,
+          password: user.password
+        })
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("User registered: ", data);
+        return data;
+      });
   }
 
   resetPassword(email) {
@@ -106,17 +107,17 @@ export default class LoginService extends BackendService {
       });
   }
 
-  fetchSchool() {
+  updateUser() {
     return http
       .request({
-        url: this.baseUrl + "fetchschool",
+        url: this.baseUrl + "updateuser",
         method: "POST",
         headers: this.getCommonHeaders()
       })
       .then(this.validateCode)
       .then(this.getJson)
       .then(data => {
-        console.info("User logged in with token: " + data.result);
+        console.info("User update data: " + data);
         return data;
       });
   }

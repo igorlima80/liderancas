@@ -24,19 +24,10 @@
       <Label class="action-bar-title" text="Atualizar Cadastro"></Label>
     </ActionBar>
 
-    <GridLayout class="page-content">
-      <RadDataForm :source="user" :metadata="userMetadata">     
-          <!-- <PropertyGroup collapsible="true" name="outras info" hidden="true">
-            <properties>
-              <EntityProperty name="id" ></EntityProperty>
-              <EntityProperty name="authtoken" ></EntityProperty>
-              <EntityProperty name="cod" ></EntityProperty>
-              <EntityProperty name="lat" ></EntityProperty>
-              <EntityProperty name="log" ></EntityProperty>
-            </properties>
-          </PropertyGroup> -->
-        
-      </RadDataForm>
+    <GridLayout class="page-content" rows="*,auto" columns="*,*">
+      <RadDataForm :source="user" :metadata="userMetadata" row="0" col="0" colSpan="2"></RadDataForm>
+      <Button row="1" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
+      <Button row="1" col="1" text="Salvar" @tap="updateUser" class="btn btn-primary" />
     </GridLayout>
   </Page>
 </template>
@@ -46,6 +37,11 @@ import { mapGetters } from "vuex";
 import * as utils from "~/shared/utils";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
+import { UPDATE_USER } from "~/store/actions.type";
+import {
+  connectionType,
+  getConnectionType
+} from "tns-core-modules/connectivity";
 const feedback = new Feedback();
 
 export default {
@@ -56,6 +52,26 @@ export default {
         commitMode: "Immediate",
         validationMode: "Immediate",
         propertyAnnotations: [
+          {
+            name: "authtoken",
+            hidden: true
+          },
+          {
+            name: "id",
+            hidden: true
+          },
+          {
+            name: "image",
+            hidden: true
+          },
+          {
+            name: "latitude",
+            hidden: true
+          },
+          {
+            name: "longitude",
+            hidden: true
+          },
           {
             groupName: "Dados Pessoais",
             name: "name",
@@ -74,42 +90,42 @@ export default {
             groupName: "Dados Pessoais",
             name: "phone",
             displayName: "Celular",
-            index: 7,
+            index: 2,
             editor: "Phone"
           },
           {
             groupName: "Endereço",
             name: "address",
             displayName: "Logradouro",
-            index: 2,
+            index: 3,
             editor: "Text"
           },
           {
             groupName: "Endereço",
             name: "number",
             displayName: "Número",
-            index: 3,
+            index: 4,
             editor: "Number"
           },
           {
             groupName: "Endereço",
             name: "neighborhood",
             displayName: "Bairro",
-            index: 4,
+            index: 5,
             editor: "Text"
           },
           {
             groupName: "Endereço",
             name: "cep",
             displayName: "CEP",
-            index: 5,
+            index: 6,
             editor: "Number"
           },
           {
             groupName: "Endereço",
             name: "complement",
             displayName: "Complemento",
-            index: 6,
+            index: 7,
             editor: "Text"
           }
         ]
@@ -123,6 +139,34 @@ export default {
     }
   },
   methods: {
+    updateUser() {
+      if (getConnectionType() === connectionType.none) {
+        feedback.error({
+          message:
+            "Lideranças requer uma conexão com a Internet para efetuar o login."
+        });
+        return;
+      }
+
+      utils.loader.show();
+      this.$store
+        .dispatch(UPDATE_USER, this.user)
+        .then(() => {
+          this.$navigator.back();
+          utils.loader.hide();
+          feedback.success({
+            message: "Cadastro atualizado com sucesso."
+          });
+        })
+        .catch(error => {
+          console.error(error);
+          utils.loader.hide();
+          feedback.error({
+            message:
+              "Infelizmente não conseguimos atualizar sua conta. Tente mais tarde."
+          });
+        });
+    },
     onDrawerButtonTap() {
       utils.showDrawer();
     }
@@ -136,4 +180,7 @@ export default {
 // End custom common variables
 
 // Custom styles
+.btn-secondary{
+  background-color: $page-icon-color;
+}
 </style>

@@ -21,7 +21,7 @@
 
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Members' ? ' selected': '')" @tap="onNavigationItemTap('/members')">
                         <Label col="0" :text="'fa-users' | fonticon" class="fas"></Label>
-                        <Label col="1" text="Liderados" class="p-r-10"></Label>
+                        <Label col="1" text="Membros" class="p-r-10"></Label>
                     </GridLayout>
 
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Visits' ? ' selected': '')" @tap="onNavigationItemTap('/visits')">
@@ -36,11 +36,6 @@
                     </GridLayout>
         
                     <StackLayout class="hr-light"></StackLayout>
-
-                    <!-- <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Profile' ? ' selected': '')" @tap="onNavigationItemTap('/profile')">
-                        <Label col="0" :text="'fa-user' | fonticon" class="fas"></Label>
-                        <Label col="1" text="Conta" class="p-r-10"></Label>
-                    </GridLayout> -->
 
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Settings' ? ' selected': '')" @tap="onNavigationItemTap('/settings')">
                         <Label col="0" :text="'fa-cog' | fonticon" class="fas"></Label>
