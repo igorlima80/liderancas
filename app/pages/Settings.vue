@@ -26,7 +26,7 @@
 
     <GridLayout class="page-content">
       <ScrollView>
-        <GridLayout rows="auto,auto,auto,auto,auto,auto,auto,auto" columns="*, auto">
+        <GridLayout rows="auto,auto,auto,auto,auto,auto,auto,auto,auto" columns="*, auto">
           <Label row="0" col="0" text="Gerais" class="font-weight-bold text-primary m-b-20" />
           <Label row="1" col="0" text="Notificações" class="font-weight-bold" color="black" />
           <Switch row="1" col="1" rowSpan="2" v-model="notifyEnabled" />
@@ -42,7 +42,11 @@
           />
           <Label row="5" col="0" text="Avatar" class="font-weight-bold " color="black" />
           <Label row="6" col="0" text="Modifique o seu avatar" />
-          <StackLayout row="7" col="0" @tap="logout">
+          <StackLayout row="7" col="0" @tap="$navigator.navigate('/user-update')">
+          <Label text="Atualizar cadastro" class="font-weight-bold m-t-20" color="black" />
+          <Label text="Atualize seus dados pessoais" />
+          </StackLayout>
+          <StackLayout row="8" col="0" @tap="logout">
           <Label text="Sair" class="font-weight-bold m-t-20" color="black" />
           <Label text="Sair do aplicativo" />
           </StackLayout>
@@ -106,6 +110,9 @@ export default {
           // });
         }
       });
+    },
+    updateUser(){
+
     }
   }
 };

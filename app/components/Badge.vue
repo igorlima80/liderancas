@@ -23,8 +23,8 @@
 export default {
   props: {
     badgeValue: {
-      type: String,
-      default: ""
+      type: Number,
+      default: 0
     },
     badgeColor: {
       type: String,

@@ -40,7 +40,7 @@ export default class BackendService {
     return getString(deviceToken);
   }
 
-  set deviceToken(newDieviceToken) {
+  set deviceToken(newDeviceToken) {
     setString(deviceToken, newDeviceToken);
     console.log('deviceToken SET TO: ' + newDeviceToken)
   }

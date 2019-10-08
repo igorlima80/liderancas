@@ -1,7 +1,7 @@
 <template lang="html">
 <GridLayout rows="auto, *" class="sidedrawer sidedrawer-left">
             <StackLayout row="0" class="sidedrawer-header">
-                <Image v-if="user.pic" src="~/assets/images/userimage.png" class="sidedrawer-header-image"></Image>
+                <Image v-if="user.pic" :src="user.pic" class="sidedrawer-header-image"></Image>
                 <Image v-else src="~/assets/images/userimage.png" class="sidedrawer-header-image"></Image>
                 <Label class="sidedrawer-header-brand" :text="user.name"></Label>
                 <Label class="footnote" :text="user.email"></Label>
@@ -14,20 +14,25 @@
                         <Label col="1" text="Home" class="p-r-10"></Label>
                     </GridLayout>
 
+                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Leaders' ? ' selected': '')" @tap="onNavigationItemTap('/leaders')">
+                        <Label col="0" :text="'fa-bullhorn' | fonticon" class="fas"></Label>
+                        <Label col="1" text="Lideranças" class="p-r-10"></Label>
+                    </GridLayout>
+
+                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Members' ? ' selected': '')" @tap="onNavigationItemTap('/members')">
+                        <Label col="0" :text="'fa-users' | fonticon" class="fas"></Label>
+                        <Label col="1" text="Liderados" class="p-r-10"></Label>
+                    </GridLayout>
+
+                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Visits' ? ' selected': '')" @tap="onNavigationItemTap('/visits')">
+                        <Label col="0" :text="'fa-walking' | fonticon" class="fas"></Label>
+                        <Label col="1" text="Visitas" class="p-r-10"></Label>
+                    </GridLayout>
+
                     <GridLayout columns="auto, *, auto" :class="'sidedrawer-list-item' + (selectedPage === 'Notifications' ? ' selected': '')" @tap="onNavigationItemTap('/notifications')">
                         <Label col="0" :text="'fa-bell' | fonticon" class="fas"></Label>
                         <Label col="1" text="Notificações" class="p-r-10"></Label>
                         <badge :badgeValue="notifications_quant" col="2"/>
-                    </GridLayout>
-
-                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Search' ? ' selected': '')" @tap="onNavigationItemTap('/search')">
-                        <Label col="0" :text="'fa-search' | fonticon" class="fas"></Label>
-                        <Label col="1" text="Pesquisa" class="p-r-10"></Label>
-                    </GridLayout>
-
-                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Featured' ? ' selected': '')" @tap="onNavigationItemTap('/featured')">
-                        <Label col="0" :text="'fa-star' | fonticon" class="fas"></Label>
-                        <Label col="1" text="Favoritos" class="p-r-10"></Label>
                     </GridLayout>
         
                     <StackLayout class="hr-light"></StackLayout>

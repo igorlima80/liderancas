@@ -1,5 +1,5 @@
 <template>
-  <Page class="page" @loaded="pageLoaded()" @unloaded="pageUnloaded()" actionBarHidden="true">
+  <Page class="page" @loaded="pageLoaded()" actionBarHidden="true">
     <FlexboxLayout flexDirection="column" justifyContent="space-around" class="page-content">
       <!-- <ActivityIndicator :busy="busy" alignSelf="center"/> -->
       <Image src="~/assets/images/logo.png" width="30%" />
@@ -51,7 +51,6 @@
 
 <script>
 import * as utils from "~/shared/utils";
-import LoginService from "~/services/LoginService";
 import {
   LOGIN,
   RESET_PASSWORD
@@ -79,7 +78,7 @@ export default {
   },
   computed: {
     message() {
-      return "<!-- Page content goes here -->";
+      return "";
     }
   },
   methods: {
@@ -107,7 +106,7 @@ export default {
       if (getConnectionType() === connectionType.none) {
         feedback.error({
           message:
-            "Saúde+ requer uma conexão com a Internet para efetuar o login."
+            "Lideranças requer uma conexão com a Internet para efetuar o login."
         });
         return;
       }
@@ -134,14 +133,14 @@ export default {
       if (getConnectionType() === connectionType.none) {
         feedback.error({
           message:
-            "DiárioEDU requer uma conexão com a Internet para para redefinir sua senha."
+            "Lideranças requer uma conexão com a Internet para para redefinir sua senha."
         });
         return;
       }
       prompt({
         title: "Redefinir Senha",
         message:
-          "Digite o endereço de e-mail que você usou para se cadastrar no Saúde+ para redefinir sua senha.",
+          "Digite o endereço de e-mail que você usou para se cadastrar no Lideranças para redefinir sua senha.",
         inputType: "email",
         defaultText: "",
         okButtonText: "Enviar",
@@ -155,7 +154,7 @@ export default {
               .then(() => {
                 utils.loader.hide();
                 alert({
-                  title: "Saúde+",
+                  title: "Lideranças",
                   message:
                     "Sua senha foi redefinida com sucesso. Por favor, verifique seu e-mail para obter instruções sobre como escolher uma nova senha.",
                   okButtonText: "OK"
@@ -182,32 +181,9 @@ export default {
         }
       });
     },
-    // fetchUser() {
-    //   this.$store
-    //     .dispatch(FETCH_USER)
-    //     .then(() => {
-    //       utils.loader.hide();
-    //     })
-    //     .catch(error => {
-    //       utils.loader.hide();
-    //       alert({
-    //         title: "Saúde+",
-    //         message:
-    //           "Não foi possivei carregar os dados do usuário.Tente mais tarde.",
-    //         okButtonText: "OK"
-    //       });
-    //       this.$navigator.navigate("/login", {
-    //         clearHistory: true
-    //       });
-    //     });
-    // },
     pageLoaded() {
       orientationModule.setCurrentOrientation("portrait");
       utils.gesturesEnabled(false);
-    },
-    pageUnloaded() {
-      // orientationModule.orientationCleanup();
-      // utils.gesturesEnabled(true);
     },
     openBrowser(){
       utilsModule.openUrl("https://www.google.com")
@@ -222,7 +198,7 @@ export default {
 // End custom common variables
 
 .page {
-  background-color: #DDEDEA;
+  background-color: $background-light;
 }
 
 </style>

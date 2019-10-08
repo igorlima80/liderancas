@@ -16,12 +16,10 @@
                 @tap="onDrawerButtonTap"
                 ios.position="left">
             </ActionItem>
-            <Label class="action-bar-title" text="Featured"></Label>
+            <Label class="action-bar-title" text="Lideranças"></Label>
         </ActionBar>
 
         <GridLayout class="page-content">
-            <Label class="page-icon fa" text.decode="&#xf005;"></Label>
-            <Label class="page-placeholder" :text="message"></Label>
         </GridLayout>
     </Page>
 </template>
@@ -32,7 +30,7 @@
 
     export default {
         mounted() {
-            SelectedPageService.getInstance().updateSelectedPage("Featured");
+            SelectedPageService.getInstance().updateSelectedPage("Leaders");
         },
         computed: {
             message() {

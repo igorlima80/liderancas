@@ -8,6 +8,9 @@ import DrawerContent from "./components/DrawerContent";
 import App from './components/App'
 import {routes} from './routes'
 import store from './store'
+import LoginService from "~/services/LoginService";
+const loginService = new LoginService();
+let firebase = require("nativescript-plugin-firebase");
 
 Vue.use(RadSideDrawer)
 Vue.use(Navigator, { routes })
@@ -32,6 +35,18 @@ Vue.filter("fonticon", fonticon);
 firebaseService.init();
 
 new Vue({
+  created() {
+    firebase.addOnMessageReceivedCallback(
+      function(message) {
+        console.log("Title: " + message.title);
+        console.log("Body: " + message.body);
+        if (loginService.isLoggedIn() && message.data.next) {
+          console.log("Ir para: " + message.data.next);
+          // this.$navigator.navigate(message.data.next)
+        }
+      }
+    )
+  },
   store,
   render (h) {
       return h(

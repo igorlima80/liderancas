@@ -1,5 +1,5 @@
 <template>
-  <Page class="page" @loaded="pageLoaded()">
+  <Page class="page">
     <ActionBar class="action-bar">
       <!-- 
             Use the NavigationButton as a side-drawer button in Android
@@ -21,11 +21,10 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Conta"></Label>
+      <Label class="action-bar-title" text="Atualizar Cadastro"></Label>
     </ActionBar>
 
     <GridLayout class="page-content">
-      <Button text="Sair" @tap="logout" class="btn btn-primary" />
     </GridLayout>
   </Page>
 </template>
@@ -33,13 +32,12 @@
 <script>
 import * as utils from "~/shared/utils";
 import SelectedPageService from "../shared/selected-page-service";
-import { LOGOUT } from "~/store/actions.type";
 import { Feedback } from "nativescript-feedback";
 const feedback = new Feedback();
 
 export default {
   mounted() {
-    SelectedPageService.getInstance().updateSelectedPage("Profile");
+    // SelectedPageService.getInstance().updateSelectedPage("Members");
   },
   computed: {
     message() {
@@ -49,36 +47,6 @@ export default {
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
-    },
-    pageLoaded() {
-      //   orientationModule.orientationCleanup();
-      //   utils.gesturesEnabled(true);
-    },
-    logout() {
-      confirm({
-        title: "Sair",
-        message: "Você realmente deseja sair do Saúde+?",
-        okButtonText: "Sair",
-        cancelButtonText: "Cancelar"
-      }).then(result => {
-        if (result) {
-          utils.loader.show({
-            message: "Fazendo Logout..."
-          });
-          this.$store.dispatch(LOGOUT);
-          this.$navigator.navigate("/login", {
-            clearHistory: true
-          });
-          utils.loader.hide();
-          feedback.success({
-            message: "Logout efetuado com sucesso."
-          });
-
-          // feedback.success({
-          //   message: "Você foi deslogado com sucesso."
-          // });
-        }
-      });
     }
   }
 };

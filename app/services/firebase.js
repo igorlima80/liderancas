@@ -1,30 +1,24 @@
 let firebase = require("nativescript-plugin-firebase");
+import LoginService from "~/services/LoginService";
+const loginService = new LoginService();
 
 let firebaseService = {
     init() {
         firebase
             .subscribeToTopic("notifications")
             .then(() => console.log("Subscribed to topic notifications"));
-        // firebase.getCurrentPushToken().then((token) => {
-        //   may be null if not known yet
-        //   console.log(`Current push token: ${token}`);
-        // });
         firebase
             .init({
-                showNotificationsWhenInForeground: true,
-                onMessageReceivedCallback: function (message) {
-                    console.log("Title: " + message.title);
-                    console.log("Body: " + message.body);
-                    // if your server passed a custom property called 'foo', then do this:
-                    // console.log(
-                    //     "Value of Title: " + message.data.title
-                    // );
-                    // console.log(
-                    //   "Value of Body: " + message.data.body
-                    // );
-                    //goToPage(routes.Activity);
-                },
+                showNotificationsWhenInForeground: false,
+                // onMessageReceivedCallback: function (message) {
+                //     console.log("Title: " + message.title);
+                //     console.log("Body: " + message.body);
+                //     if (loginService.isLoggedIn() && message.data.next) {
+                //         vm.$navigator.navigate(next)
+                //     }
+                // },
                 onPushTokenReceivedCallback: function (token) {
+                    loginService.deviceToken = token;
                     console.log("Firebase push token: " + token);
                 }
             })

@@ -10,7 +10,8 @@ export default class LoginService extends BackendService {
         headers: this.getCommonHeaders(),
         content: JSON.stringify({
           username: user.email,
-          password: user.password
+          password: user.password,
+          deviceToken: this.deviceToken
         })
       })
       .then(this.validateCode)
