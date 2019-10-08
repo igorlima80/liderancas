@@ -49,10 +49,10 @@ const actions = {
 
 const mutations = {
   [SET_NOTIFICATION](state, notification) {
-    backendService.notification = notification;
+    liderancasService.notification = notification;
   },
   [SET_INITIAL](state, initial) {
-    backendService.initial = initial;
+    liderancasService.initial = initial;
   },
   [SET_NOTIFICATIONS](state, notifications) {
     state.notifications = notifications;

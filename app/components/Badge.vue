@@ -36,12 +36,12 @@ export default {
 
 <style scoped>
 .badge {
-  font-size: 18px;
+  font-size: 16px;
   margin-right: 15;
 }
 
 .badge-text {
-  font-size: 10px;
+  font-size: 8px;
   margin-right: 15;
   /* font-weight: bold; */
   color: white;

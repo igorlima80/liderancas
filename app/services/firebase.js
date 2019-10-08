@@ -19,7 +19,7 @@ let firebaseService = {
                 // },
                 onPushTokenReceivedCallback: function (token) {
                     loginService.deviceToken = token;
-                    console.log("Firebase push token: " + token);
+                    // console.log("Firebase push token: " + token);
                 }
             })
             .then(
