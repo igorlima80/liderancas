@@ -33,15 +33,18 @@
           <Label row="2" col="0" text="Ativar ou desativar as notificações do app" />
           <StackLayout row="3" col="0" colSpan="2" class="hr-light m-t-20"></StackLayout>
           <Label row="4" col="0" text="Conta" class="font-weight-bold text-primary m-y-20" />
+      
           <Image
             row="5"
             col="1"
             src="~/assets/images/userimage.png"
             class="thumb"
             rowSpan="2"
+            @tap="$navigator.navigate('/upload-image')"
           />
           <Label row="5" col="0" text="Avatar" class="font-weight-bold " color="black" />
           <Label row="6" col="0" text="Modifique o seu avatar" />
+        
           <StackLayout row="7" col="0" @tap="$navigator.navigate('/user-update')">
           <Label text="Atualizar cadastro" class="font-weight-bold m-t-20" color="black" />
           <Label text="Atualize seus dados pessoais" />
@@ -88,7 +91,7 @@ export default {
     logout() {
       confirm({
         title: "Sair",
-        message: "Você realmente deseja sair do Saúde+?",
+        message: "Você realmente deseja sair do Lideranças?",
         okButtonText: "Sair",
         cancelButtonText: "Cancelar"
       }).then(result => {
@@ -111,8 +114,8 @@ export default {
         }
       });
     },
-    updateUser(){
-
+    uploadAvatar(){
+      alert("teste");
     }
   }
 };

@@ -5,7 +5,7 @@
       <Image src="~/assets/images/logo.png" width="30%" />
       <CardView margin="1" elevation="5" radius="7" alignSelf="center">
         <GridLayout rows="auto,auto,auto,auto,auto" class="m-15">
-          <Label row="0" text="Login" class="text-center font-weight-bold text-primary m-b-10" />
+          <Label row="0" text="Login" class="text-center font-weight-bold text-primary m-y-15" />
           <TextField
             row="1"
             ref="email"
@@ -28,7 +28,7 @@
             returnKeyType="done"
             class="m-b-15"
           />
-          <Button row="3" text="Entrar" @tap="submit" class="btn btn-primary" />
+          <Button row="3" text="Entrar" @tap="submit" class="btn btn-primary m-y-20" />
           <Label
             row="4"
             text="Esqueceu sua senha?"

@@ -1,6 +1,6 @@
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-// import Signup from "./pages/Signup";
+import UploadImage from "./pages/UploadImage";
 import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
 import Leaders from "./pages/Leaders";
@@ -21,10 +21,10 @@ export const routes = {
     component: UserUpdate,
     meta: { needsAuth: true }
   },
-  //  "/signup": {
-  //    component: Signup,
-  //    meta: { needsAuth: false }
-  //  },
+   "/upload-image": {
+     component: UploadImage,
+     meta: { needsAuth: false }
+   },
   "/notifications": {
     component: Notifications,
     meta: { needsAuth: true }

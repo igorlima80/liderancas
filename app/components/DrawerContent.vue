@@ -25,7 +25,7 @@
                     </GridLayout>
 
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Visits' ? ' selected': '')" @tap="onNavigationItemTap('/visits')">
-                        <Label col="0" :text="'fa-walking' | fonticon" class="fas"></Label>
+                        <Label col="0" :text="'fa-map-marked-alt' | fonticon" class="fas"></Label>
                         <Label col="1" text="Visitas" class="p-r-10"></Label>
                     </GridLayout>
 

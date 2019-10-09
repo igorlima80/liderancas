@@ -24,8 +24,8 @@
       <Label class="action-bar-title" text="Dashboard"></Label>
     </ActionBar>
 
-    <StackLayout class="page-content">
-      <CardView margin="1" elevation="10" radius="7" class="list-group">
+    <GridLayout rows="auto,auto,*,auto,*" class="page-content">
+      <CardView margin="2" elevation="7" radius="7" class="list-group" row="0">
         <GridLayout rows="auto, auto" columns="80, *" class="list-group-item">
           <Image
             v-if="user.image"
@@ -47,17 +47,54 @@
           <Label row="1" col="1" :text="user.email" class="list-group-item-text" />
         </GridLayout>
       </CardView>
-      <Label row="0" col="0" text="Lideranças" class="font-weight-bold text-primary m-y-15" />
-      <ListView for="leadership in leaders" @itemTap="onItemLeadershipTap" class="list-group">
+      <Label text="Lideranças recentes" class="font-weight-bold text-primary m-t-20" row="1" />
+      <ListView
+        for="leadership in leaders"
+        @itemTap="onItemLeadershipTap"
+        class="list-group"
+        row="2"
+      >
         <v-template>
           <GridLayout rows="auto, auto" columns="auto, *" class="list-group-item">
-            <Label row="0" col="0" rowSpan="2" :text="'fa-bullhorn' | fonticon" class="fas text-primary m-r-20"></Label>
-            <Label row="0" col="1" :text="leadership.name" class="list-group-item-heading text-primary" />
+            <Label
+              row="0"
+              col="0"
+              rowSpan="2"
+              :text="'fa-bullhorn' | fonticon"
+              class="fas text-primary m-r-20"
+            ></Label>
+            <Label
+              row="0"
+              col="1"
+              :text="leadership.name"
+              class="list-group-item-heading text-primary"
+            />
             <Label row="1" col="1" :text="leadership.address" class="list-group-item-text" />
           </GridLayout>
         </v-template>
       </ListView>
-    </StackLayout>
+      <Label text="Visitas marcadas" class="font-weight-bold text-primary" row="3" />
+      <ListView for="visit in visits" @itemTap="onItemVisitTap" class="list-group" row="4">
+        <v-template>
+          <GridLayout rows="auto, auto" columns="auto, *" class="list-group-item">
+            <Label
+              row="0"
+              col="0"
+              rowSpan="2"
+              :text="'fa-map-marked-alt' | fonticon"
+              class="fas text-primary m-r-20"
+            ></Label>
+            <Label row="0" col="1" :text="visit.name" class="list-group-item-heading text-primary" />
+            <Label row="1" col="1" class="list-group-item-text">
+              <FormattedString>
+                <Span>{{visit.address}}</Span>
+                <Span class="font-weight-bold">  Data:{{visit.date}}</Span>
+              </FormattedString>
+            </Label>
+          </GridLayout>
+        </v-template>
+      </ListView>
+    </GridLayout>
   </Page>
 </template>
 
@@ -87,8 +124,25 @@ export default {
           name: "Casa Y",
           address: "Praça Pedro II, S/N"
         }
+      ],
+      visits: [
+        {
+          name: "Associação do bairro Mafua",
+          address: "Rua Magalhães Filho, 1120",
+          date: "11/09/2020"
+        },
+        {
+          name: "Fundação X",
+          address: "Rua primeiro de Maio, 1547",
+          date: "18/11/2019"
+        },
+        {
+          name: "Casa Y",
+          address: "Praça Pedro II, S/N",
+          date: "26/12/2019"
+        }
       ]
-    }
+    };
   },
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Home");
@@ -102,8 +156,11 @@ export default {
       orientationModule.orientationCleanup();
       utils.gesturesEnabled(true);
     },
-    onItemLeadershipTap(){
-      this.$navigator.navigate("/leaders")
+    onItemLeadershipTap() {
+      this.$navigator.navigate("/leaders");
+    },
+    onItemVisitTap() {
+      this.$navigator.navigate("/visits");
     }
   }
 };
@@ -115,7 +172,7 @@ export default {
 // End custom common variables
 
 // Custom styles
-.fas{
+.fas {
   font-size: 18;
 }
 </style>
