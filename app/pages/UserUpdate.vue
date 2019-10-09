@@ -25,7 +25,15 @@
     </ActionBar>
 
     <GridLayout class="page-content" rows="*,auto" columns="*,*">
-      <RadDataForm :source="user" :metadata="userMetadata" row="0" col="0" colSpan="2"></RadDataForm>
+      <RadDataForm
+        ref="dataForm"
+        :source="user"
+        :metadata="userMetadata"
+        :groups="groups"
+        row="0"
+        col="0"
+        colSpan="2"
+      ></RadDataForm>
       <Button row="1" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
       <Button row="1" col="1" text="Salvar" @tap="updateUser" class="btn btn-primary" />
     </GridLayout>
@@ -35,6 +43,12 @@
 <script>
 import { mapGetters } from "vuex";
 import * as utils from "~/shared/utils";
+import {
+  GroupTitleStyle,
+  PropertyGroup,
+  DataFormFontStyle
+} from "nativescript-ui-dataform";
+import { Color } from "tns-core-modules/color";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
 import { UPDATE_USER } from "~/store/actions.type";
@@ -47,6 +61,7 @@ const feedback = new Feedback();
 export default {
   data() {
     return {
+      groups: [],
       userMetadata: {
         isReadOnly: false,
         commitMode: "Immediate",
@@ -83,6 +98,7 @@ export default {
             groupName: "Dados Pessoais",
             name: "email",
             displayName: "Email",
+            readOnly: true,
             index: 1,
             editor: "Email"
           },
@@ -132,6 +148,30 @@ export default {
       }
     };
   },
+  created() {
+    let gts = new GroupTitleStyle();
+    let pg = new PropertyGroup();
+
+    gts.labelTextColor = new Color("#417169");
+    gts.labelFontStyle = DataFormFontStyle.Bold;
+    gts.labelTextSize = 14;
+
+    pg.name = "Dados Pessoais";
+    pg.collapsible = true;
+    pg.collapsed = false;
+    pg.titleStyle = gts;
+
+    this.groups.push(pg);
+
+    pg = new PropertyGroup();
+
+    pg.name = "Endereço";
+    pg.collapsible = true;
+    pg.collapsed = false;
+    pg.titleStyle = gts;
+
+    this.groups.push(pg);
+  },
   computed: {
     ...mapGetters(["user"]),
     message() {
@@ -180,7 +220,7 @@ export default {
 // End custom common variables
 
 // Custom styles
-.btn-secondary{
+.btn-secondary {
   background-color: $page-icon-color;
 }
 </style>

@@ -1,7 +1,7 @@
 <template lang="html">
 <GridLayout rows="auto, *" class="sidedrawer sidedrawer-left">
             <StackLayout row="0" class="sidedrawer-header">
-                <Image v-if="user.pic" :src="user.pic" class="sidedrawer-header-image"></Image>
+                <Image v-if="user.image" :src="user.image" class="sidedrawer-header-image"></Image>
                 <Image v-else src="~/assets/images/userimage.png" class="sidedrawer-header-image"></Image>
                 <Label class="sidedrawer-header-brand" :text="user.name"></Label>
                 <Label class="footnote" :text="user.email"></Label>
@@ -11,7 +11,7 @@
                 <StackLayout>
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Home' ? ' selected': '')" @tap="onNavigationItemTap('/home')">
                         <Label col="0" :text="'fa-home' | fonticon" class="fas"></Label>
-                        <Label col="1" text="Home" class="p-r-10"></Label>
+                        <Label col="1" text="Dashboard" class="p-r-10"></Label>
                     </GridLayout>
 
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Leaders' ? ' selected': '')" @tap="onNavigationItemTap('/leaders')">
