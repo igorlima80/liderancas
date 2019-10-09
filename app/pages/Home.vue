@@ -50,9 +50,9 @@
       <Label row="0" col="0" text="Lideranças" class="font-weight-bold text-primary m-y-15" />
       <ListView for="leadership in leaders" @itemTap="onItemLeadershipTap" class="list-group">
         <v-template>
-          <GridLayout rows="auto, auto" columns="80, *" class="list-group-item">
-            <Label row="0" col="0" rowspan="2" :text="'fa-bullhorn' | fonticon" class="fas text-center" verticalAlignment="center"></Label>
-            <Label row="0" col="1" :text="leadership.name" class="font-weight-bold list-group-item-heading text-primary" />
+          <GridLayout rows="auto, auto" columns="auto, *" class="list-group-item">
+            <Label row="0" col="0" rowSpan="2" :text="'fa-bullhorn' | fonticon" class="fas text-primary m-r-20"></Label>
+            <Label row="0" col="1" :text="leadership.name" class="list-group-item-heading text-primary" />
             <Label row="1" col="1" :text="leadership.address" class="list-group-item-text" />
           </GridLayout>
         </v-template>

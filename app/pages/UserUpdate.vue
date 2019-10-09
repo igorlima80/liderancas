@@ -27,7 +27,7 @@
     <GridLayout class="page-content" rows="*,auto" columns="*,*">
       <RadDataForm
         ref="dataForm"
-        :source="user"
+        :source="leader"
         :metadata="userMetadata"
         :groups="groups"
         row="0"
@@ -57,6 +57,7 @@ import {
   getConnectionType
 } from "tns-core-modules/connectivity";
 const feedback = new Feedback();
+let clone = require('clone');
 
 export default {
   data() {
@@ -174,8 +175,8 @@ export default {
   },
   computed: {
     ...mapGetters(["user"]),
-    message() {
-      return "<!-- Page content goes here -->";
+    leader() {
+      return clone(this.user);
     }
   },
   methods: {
@@ -190,7 +191,7 @@ export default {
 
       utils.loader.show();
       this.$store
-        .dispatch(UPDATE_USER, this.user)
+        .dispatch(UPDATE_USER, this.leader)
         .then(() => {
           this.$navigator.back();
           utils.loader.hide();
