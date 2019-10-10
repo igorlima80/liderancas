@@ -33,7 +33,7 @@
         class="btn btn-primary"
         @tap="uploadPicture"
       />
-      <Image ref="cameraImage" row="1" col="0" colSpan="2" class="preview" loadMode="async"/>
+      <Image ref="cameraImage" row="1" col="0" colSpan="2" class="preview" loadMode="async" />
       <Button
         row="2"
         colSpan="2"
@@ -49,8 +49,9 @@
 <script>
 import * as utils from "~/shared/utils";
 import * as camera from "nativescript-camera";
-import { Image } from "tns-core-modules/ui/image";
+const imageSourceModule = require("tns-core-modules/image-source");
 import * as imagepicker from "nativescript-imagepicker";
+let ImageCropper = require("nativescript-imagecropper").ImageCropper;
 import SelectedPageService from "../shared/selected-page-service";
 import { LOGOUT } from "~/store/actions.type";
 import { Feedback } from "nativescript-feedback";
@@ -88,10 +89,13 @@ export default {
                 keepAspectRatio: true
               })
               .then(imageAsset => {
-                console.log(
-                  "Result is an image asset instance:" + imageAsset.android
-                );
-                self.setImageAsset(imageAsset);
+                let source = new imageSourceModule.ImageSource();
+                source.fromAsset(imageAsset).then(source => {
+                  // now you have the image source
+                  // pass it to the cropper
+                  self.editPicture(source);
+                });
+                // self.setImageAsset(imageAsset);
               })
               .catch(err => {
                 console.log("Error -> " + err.message);
@@ -110,6 +114,20 @@ export default {
       let context = imagepicker.create({ mode: "single", mediaType: "Image" });
       this.startSelection(context);
     },
+    editPicture(imageSource) {
+      let imageCropper = new ImageCropper();
+      imageCropper
+        .show(imageSource, { width: 300, height: 300 })
+        .then(args => {
+          console.dir(args);
+          if (args.image !== null) {
+            this.setImageAsset(args.image);
+          }
+        })
+        .catch(function(e) {
+          console.dir(e);
+        });
+    },
     startSelection(context) {
       context
         .authorize()
@@ -119,12 +137,21 @@ export default {
         })
         .then(selection => {
           console.log("Selection done: " + JSON.stringify(selection[0]));
-          // set the images to be loaded from the assets with optimal sizes (optimize memory usage)
-          selection.forEach(element => {
-            element.options.width = this.imageWidth;
-            element.options.height = this.imageHeight;
+          selection.forEach(function(selected) {
+            // selected.options.width = this.imageWidth;
+            // selected.options.height = this.imageHeight;
+            selected.getImageAsync(source => {
+              const selectedImgSource = imageSourceModule.fromNativeSource(source);
+              this.editPicture(selectedImgSource);
+            });
           });
-          this.setImageAsset(selection[0]);
+          // set the images to be loaded from the assets with optimal sizes (optimize memory usage)
+          // selection.forEach(element => {
+          //   const selectedImgSource = source.fromNativeSource(source);
+          //   element.options.width = this.imageWidth;
+          //   element.options.height = this.imageHeight;
+          // });
+          // this.setImageAsset(selection[0]);
         })
         .catch(function(e) {
           console.log(e);

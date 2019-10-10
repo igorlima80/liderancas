@@ -56,6 +56,10 @@ export default {
     SelectedPageService.getInstance().updateSelectedPage("Notifications");
   },
   created() {
+    this.$store
+      .dispatch(GET_NOTIFICATIONS)
+      .then(() => {})
+      .catch(error => {});
   },
   computed: {
     message() {

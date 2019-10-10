@@ -6,4 +6,6 @@ export const REGISTER = "register";
 export const RESET_PASSWORD = "resetPassword";
 export const CHANGE_NOTIFICATION = "changeNotification";
 export const GET_NOTIFICATIONS = "getNotifications";
+export const GET_LEADERS = "getLeaders";
+export const GET_VISITS = "getVisits";
 export const INIT_DB = "initDB";

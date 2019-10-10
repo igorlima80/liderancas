@@ -69,7 +69,7 @@
               :text="leadership.name"
               class="list-group-item-heading text-primary"
             />
-            <Label row="1" col="1" :text="leadership.address" class="list-group-item-text" />
+            <Label row="1" col="1" :text="leadership.address" class="" />
           </GridLayout>
         </v-template>
       </ListView>
@@ -84,11 +84,11 @@
               :text="'fa-map-marked-alt' | fonticon"
               class="fas text-primary m-r-20"
             ></Label>
-            <Label row="0" col="1" :text="visit.name" class="list-group-item-heading text-primary" />
-            <Label row="1" col="1" class="list-group-item-text">
+            <Label row="0" col="1" :text="visit.description" class="list-group-item-heading text-primary" />
+            <Label row="1" col="1">
               <FormattedString>
-                <Span>{{visit.address}}</Span>
-                <Span class="font-weight-bold">  Data:{{visit.date}}</Span>
+                <Span>{{visit.address}}  </Span>
+                <Span class="font-weight-bold">Data: {{visit.date}}</Span>
               </FormattedString>
             </Label>
           </GridLayout>
@@ -103,6 +103,7 @@ import * as utils from "~/shared/utils";
 import { mapGetters } from "vuex";
 import SelectedPageService from "../shared/selected-page-service";
 import orientationModule from "nativescript-screen-orientation";
+import { GET_LEADERS, GET_VISITS } from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
@@ -111,43 +112,22 @@ import {
 export default {
   data() {
     return {
-      leaders: [
-        {
-          name: "Associação do bairro Mafua",
-          address: "Rua Magalhães Filho, 1120"
-        },
-        {
-          name: "Fundação X",
-          address: "Rua primeiro de Maio, 1547"
-        },
-        {
-          name: "Casa Y",
-          address: "Praça Pedro II, S/N"
-        }
-      ],
-      visits: [
-        {
-          name: "Associação do bairro Mafua",
-          address: "Rua Magalhães Filho, 1120",
-          date: "11/09/2020"
-        },
-        {
-          name: "Fundação X",
-          address: "Rua primeiro de Maio, 1547",
-          date: "18/11/2019"
-        },
-        {
-          name: "Casa Y",
-          address: "Praça Pedro II, S/N",
-          date: "26/12/2019"
-        }
-      ]
     };
+  },
+  created() {
+    this.$store
+      .dispatch(GET_LEADERS)
+      .then(() => {})
+      .catch(error => {});
+    this.$store
+      .dispatch(GET_VISITS)
+      .then(() => {})
+      .catch(error => {});
   },
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Home");
   },
-  computed: { ...mapGetters(["user"]) },
+  computed: { ...mapGetters(["user", "leaders", "visits"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
