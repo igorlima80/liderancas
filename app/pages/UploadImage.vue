@@ -91,11 +91,8 @@ export default {
               .then(imageAsset => {
                 let source = new imageSourceModule.ImageSource();
                 source.fromAsset(imageAsset).then(source => {
-                  // now you have the image source
-                  // pass it to the cropper
                   self.editPicture(source);
                 });
-                // self.setImageAsset(imageAsset);
               })
               .catch(err => {
                 console.log("Error -> " + err.message);
@@ -129,6 +126,7 @@ export default {
         });
     },
     startSelection(context) {
+      let self = this;
       context
         .authorize()
         .then(() => {
@@ -138,23 +136,11 @@ export default {
         .then(selection => {
           console.log("Selection done: " + JSON.stringify(selection[0]));
           selection.forEach(function(selected) {
-            // selected.options.width = this.imageWidth;
-            // selected.options.height = this.imageHeight;
-            selected.getImageAsync(source => {
-              const selectedImgSource = imageSourceModule.fromNativeSource(source);
-              this.editPicture(selectedImgSource);
+            let source = new imageSourceModule.ImageSource();
+            source.fromAsset(selected).then(source => {
+              self.editPicture(source);
             });
           });
-          // set the images to be loaded from the assets with optimal sizes (optimize memory usage)
-          // selection.forEach(element => {
-          //   const selectedImgSource = source.fromNativeSource(source);
-          //   element.options.width = this.imageWidth;
-          //   element.options.height = this.imageHeight;
-          // });
-          // this.setImageAsset(selection[0]);
-        })
-        .catch(function(e) {
-          console.log(e);
         });
     },
     updateAvatar() {},
