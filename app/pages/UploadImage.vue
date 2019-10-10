@@ -24,11 +24,24 @@
       <Label class="action-bar-title" text="Carregar Imagem"></Label>
     </ActionBar>
 
-    <GridLayout rows="*,auto" class="page-content">
-      <CardView margin="2" elevation="7" radius="7" row="0">
-        <Image ref="cameraImage" :src="pictureFromCamera"></Image>
-      </CardView>
-      <Button row="1" text="Tirar foto" class="btn btn-primary" marginTop="20" @tap="takePicture"></Button>
+    <GridLayout rows="auto,*,auto" columns="auto,*" class="page-content">
+      <Button row="0" col="0" text="Tirar uma foto" class="btn btn-primary" @tap="takePicture" />
+      <Button
+        row="0"
+        col="1"
+        text="Carregar do arquivo"
+        class="btn btn-primary"
+        @tap="uploadPicture"
+      />
+      <Image ref="cameraImage" row="1" col="0" colSpan="2" class="preview" loadMode="async"/>
+      <Button
+        row="2"
+        colSpan="2"
+        col="0"
+        text="Enviar foto"
+        class="btn btn-primary"
+        @tap="updateAvatar"
+      />
     </GridLayout>
   </Page>
 </template>
@@ -37,6 +50,7 @@
 import * as utils from "~/shared/utils";
 import * as camera from "nativescript-camera";
 import { Image } from "tns-core-modules/ui/image";
+import * as imagepicker from "nativescript-imagepicker";
 import SelectedPageService from "../shared/selected-page-service";
 import { LOGOUT } from "~/store/actions.type";
 import { Feedback } from "nativescript-feedback";
@@ -45,8 +59,10 @@ const feedback = new Feedback();
 export default {
   data() {
     return {
-      pictureFromCamera: "",
-      textPicture: "Take a Picture"
+      isSingleMode: true,
+      imageAssets: [],
+      imageWidth: 300,
+      imageHeight: 300
     };
   },
   computed: {
@@ -59,6 +75,7 @@ export default {
       utils.showDrawer();
     },
     takePicture() {
+      let self = this;
       if (camera.isAvailable()) {
         camera.requestPermissions().then(
           function success() {
@@ -66,13 +83,15 @@ export default {
             camera
               .takePicture({
                 saveToGallery: false,
-                width: 300,
-                height: 300,
+                width: self.imageWidth,
+                height: self.imageHeight,
                 keepAspectRatio: true
               })
               .then(imageAsset => {
-                console.log("Result is an image asset instance:" + imageAsset.android);
-                this.pictureFromCamera = imageAsset.android;
+                console.log(
+                  "Result is an image asset instance:" + imageAsset.android
+                );
+                self.setImageAsset(imageAsset);
               })
               .catch(err => {
                 console.log("Error -> " + err.message);
@@ -83,8 +102,37 @@ export default {
           }
         );
       } else {
-          alert("O dispositivo não possui camera!");
+        alert("O dispositivo não possui camera!");
       }
+    },
+    uploadPicture() {
+      this.isSingleMode = true;
+      let context = imagepicker.create({ mode: "single", mediaType: "Image" });
+      this.startSelection(context);
+    },
+    startSelection(context) {
+      context
+        .authorize()
+        .then(() => {
+          this.imageAssets = [];
+          return context.present();
+        })
+        .then(selection => {
+          console.log("Selection done: " + JSON.stringify(selection[0]));
+          // set the images to be loaded from the assets with optimal sizes (optimize memory usage)
+          selection.forEach(element => {
+            element.options.width = this.imageWidth;
+            element.options.height = this.imageHeight;
+          });
+          this.setImageAsset(selection[0]);
+        })
+        .catch(function(e) {
+          console.log(e);
+        });
+    },
+    updateAvatar() {},
+    setImageAsset(imageAsset) {
+      this.$refs.cameraImage.nativeView.src = imageAsset;
     }
   }
 };
@@ -96,4 +144,9 @@ export default {
 // End custom common variables
 
 // Custom styles
+.preview {
+  // width: 70%;
+  // height: 70%;
+  border-radius: 50%;
+}
 </style>
