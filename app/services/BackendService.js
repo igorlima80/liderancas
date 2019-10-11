@@ -16,8 +16,8 @@ const initialKey = "initial"
  */
 export default class BackendService {
   constructor() {
-    // this.baseUrl = "https://cc3eae40-8c4b-488a-97d7-ed67b190255a.mock.pstmn.io/";
-    this.baseUrl = "http://165.22.187.114:21460/";
+    this.baseUrl = "https://cc3eae40-8c4b-488a-97d7-ed67b190255a.mock.pstmn.io/";
+    // this.baseUrl = "http://165.22.187.114:21460/";
     this.apiUrl = "";
   }
 

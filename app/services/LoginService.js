@@ -5,7 +5,8 @@ export default class LoginService extends BackendService {
   login(user) {
     return http
       .request({
-        url: this.baseUrl + "api/leaders/login",
+        // url: this.baseUrl + "api/leaders/login",
+        url: "http://165.22.187.114:21460/api/leaders/login",
         method: "POST",
         headers: this.getCommonHeaders(),
         content: JSON.stringify({
