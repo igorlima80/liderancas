@@ -33,7 +33,7 @@
         class="btn btn-primary"
         @tap="uploadPicture"
       />
-      <Image ref="cameraImage" row="1" col="0" colSpan="2" class="preview" loadMode="async" />
+      <Image ref="cameraImage" row="1" col="0" colSpan="2" loadMode="async" borderRadius="50%"/>
       <Button
         row="2"
         colSpan="2"
@@ -62,8 +62,8 @@ export default {
     return {
       isSingleMode: true,
       imageAssets: [],
-      imageWidth: 300,
-      imageHeight: 300
+      imageWidth: 400,
+      imageHeight: 400
     };
   },
   computed: {
@@ -114,7 +114,7 @@ export default {
     editPicture(imageSource) {
       let imageCropper = new ImageCropper();
       imageCropper
-        .show(imageSource, { width: 300, height: 300 })
+        .show(imageSource, { width: 400, height: 400 })
         .then(args => {
           console.dir(args);
           if (args.image !== null) {
@@ -160,6 +160,6 @@ export default {
 .preview {
   // width: 70%;
   // height: 70%;
-  border-radius: 50%;
+  border-radius: 100%;
 }
 </style>

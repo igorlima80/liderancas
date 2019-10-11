@@ -1,5 +1,5 @@
 <template>
-  <Page class="page" @loaded="pageLoaded()">
+  <Page class="page" @loaded="pageLoaded()" @unloaded="pageUnLoaded()">
     <ActionBar class="action-bar">
       <!-- 
             Use the NavigationButton as a side-drawer button in Android
@@ -23,32 +23,49 @@
       ></ActionItem>
       <Label class="action-bar-title" text="Dashboard"></Label>
     </ActionBar>
-
-    <GridLayout rows="auto,auto,*,auto,*" class="page-content">
-      <CardView margin="2" elevation="7" radius="7" class="list-group" row="0">
-        <GridLayout rows="auto, auto" columns="80, *" class="list-group-item">
-          <Image
-            v-if="user.image"
-            :src="user.image"
-            row="0"
-            col="0"
-            class="thumb img-circle"
-            rowSpan="2"
-          />
-          <Image
-            v-else
-            src="~/assets/images/userimage.png"
-            row="0"
-            col="0"
-            class="thumb img-circle"
-            rowSpan="2"
-          />
-          <Label row="0" col="1" :text="user.name" class="list-group-item-heading" />
-          <Label row="1" col="1" :text="user.email" class="list-group-item-text" />
-        </GridLayout>
-      </CardView>
-      <Label text="Lideranças recentes" class="font-weight-bold text-primary m-t-20" row="1" />
-      <ListView
+      <GridLayout rows="auto,auto,*,auto,*" class="page-content">
+        <CardView margin="0" elevation="7" radius="7" class="list-group" row="0">
+          <GridLayout rows="auto, auto" columns="80, *" class="list-group-item">
+            <Image
+              v-if="user.image"
+              :src="user.image"
+              row="0"
+              col="0"
+              class="thumb img-circle"
+              rowSpan="2"
+            />
+            <Image
+              v-else
+              src="~/assets/images/userimage.png"
+              row="0"
+              col="0"
+              class="thumb img-circle"
+              rowSpan="2"
+            />
+            <Label row="0" col="1" :text="user.name" class="list-group-item-heading" />
+            <Label row="1" col="1" :text="user.email" class="list-group-item-text" />
+          </GridLayout>
+        </CardView>
+        <Label text="Lideranças recentes" class="font-weight-bold text-primary m-t-20" row="1" />
+        <ActivityIndicator class="indicator" row="2" v-if="leadersIndicator" :busy="leadersIndicator"/>
+        <Pager v-else
+          for="leadership in leaders"
+          row="2"
+          transformers="scale"
+          showIndicator="true"
+          spacing="1%"
+          peaking="5%"
+        >
+          <v-template>
+            <CardView elevation="7" radius="10" class="m-y-30 m-x-5">
+              <GridLayout class rows="auto, *" columns="*">
+                <Label row="0" :text="leadership.name" />
+                <Label row="1" :text="leadership.address" />
+              </GridLayout>
+            </CardView>
+          </v-template>
+        </Pager>
+        <!-- <ListView
         for="leadership in leaders"
         @itemTap="onItemLeadershipTap"
         class="list-group"
@@ -72,29 +89,52 @@
             <Label row="1" col="1" :text="leadership.address" class="" />
           </GridLayout>
         </v-template>
-      </ListView>
-      <Label text="Visitas marcadas" class="font-weight-bold text-primary" row="3" />
-      <ListView for="visit in visits" @itemTap="onItemVisitTap" class="list-group" row="4">
+        </ListView>-->
+        <Label text="Visitas marcadas" class="font-weight-bold text-primary" row="3" />
+        <ActivityIndicator class="indicator" row="4" v-if="visitsIndicator" :busy="visitsIndicator"/>
+        <Pager v-else
+          for="visit in visits"
+          row="4"
+          transformers="scale"
+          showIndicator="true"
+          spacing="1%"
+          peaking="5%"
+        >
+          <v-template>
+            <CardView elevation="7" radius="10" class="m-y-30  m-x-5">
+              <GridLayout class rows="auto, *" columns="*">
+                <Label row="0" :text="visit.description" />
+                <Label row="1" :text="visit.address" />
+              </GridLayout>
+            </CardView>
+          </v-template>
+        </Pager>
+        <!-- <ListView for="visit in visits" @itemTap="onItemVisitTap" class="list-group" row="4">
         <v-template>
           <GridLayout rows="auto, auto" columns="auto, *" class="list-group-item">
             <Label
               row="0"
               col="0"
-              rowSpan="2"
+              rowspan="2"
               :text="'fa-map-marked-alt' | fonticon"
               class="fas text-primary m-r-20"
             ></Label>
-            <Label row="0" col="1" :text="visit.description" class="list-group-item-heading text-primary" />
+            <Label
+              row="0"
+              col="1"
+              :text="visit.description"
+              class="list-group-item-heading text-primary"
+            />
             <Label row="1" col="1">
               <FormattedString>
-                <Span>{{visit.address}}  </Span>
+                <Span>{{visit.address}}</Span>
                 <Span class="font-weight-bold">Data: {{visit.date}}</Span>
               </FormattedString>
             </Label>
           </GridLayout>
         </v-template>
-      </ListView>
-    </GridLayout>
+        </ListView>-->
+      </GridLayout>
   </Page>
 </template>
 
@@ -112,16 +152,22 @@ import {
 export default {
   data() {
     return {
+      leadersIndicator: true,
+      visitsIndicator: true
     };
   },
   created() {
     this.$store
       .dispatch(GET_LEADERS)
-      .then(() => {})
+      .then(() => {
+        this.leadersIndicator = false
+      })
       .catch(error => {});
     this.$store
       .dispatch(GET_VISITS)
-      .then(() => {})
+      .then(() => {
+        this.visitsIndicator = false
+      })
       .catch(error => {});
   },
   mounted() {
@@ -133,8 +179,11 @@ export default {
       utils.showDrawer();
     },
     pageLoaded() {
-      orientationModule.orientationCleanup();
+      orientationModule.setCurrentOrientation("portrait");
       utils.gesturesEnabled(true);
+    },
+    pageUnLoaded() {
+      orientationModule.orientationCleanup();
     },
     onItemLeadershipTap() {
       this.$navigator.navigate("/leaders");
@@ -154,5 +203,14 @@ export default {
 // Custom styles
 .fas {
   font-size: 18;
+}
+
+.indicator{
+  width: 32;
+  height: 32;
+}
+
+.page {
+  background-color: $background-light;
 }
 </style>

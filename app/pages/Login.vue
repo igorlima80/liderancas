@@ -8,17 +8,17 @@
           <Label row="0" text="Login" class="text-center font-weight-bold text-primary m-y-15" />
           <TextField
             row="1"
-            ref="email"
-            hint="Email"
-            keyboardType="email"
+            ref="cpf"
+            hint="CPF"
+            keyboardType="text"
             autocorrect="false"
             autocapitalizationType="none"
-            v-model="email"
-            returnKeyType="next"
-            @returnPress="focusPassword"
-            class="m-b-10"
+            v-model="cpf"
+            returnKeyType="done"
+            @returnPress="submit"
+            class="m-b-15"
           />
-          <TextField
+          <!-- <TextField
             row="2"
             ref="password"
             hint="Senha"
@@ -27,10 +27,10 @@
             @returnPress="submit"
             returnKeyType="done"
             class="m-b-15"
-          />
-          <Button row="3" text="Entrar" @tap="submit" class="btn btn-primary m-y-20" />
+          /> -->
+          <Button row="2" text="Entrar" @tap="submit" class="btn btn-primary m-y-20" />
           <Label
-            row="4"
+            row="3"
             text="Esqueceu sua senha?"
             alignSelf="center"
             class="text-primary text-right m-t-15"
@@ -69,8 +69,9 @@ const feedback = new Feedback();
 export default {
   data() {
     return {
-      email: "admin@admin.com",
-      password: "12345678"
+      cpf: "81589123387"
+      // email: "admin@admin.com",
+      // password: "12345678"
     };
   },
   mounted() {
@@ -82,22 +83,22 @@ export default {
     }
   },
   methods: {
-    focusPassword() {
-      this.$refs.password.nativeView.focus();
-    },
+    // focusPassword() {
+    //   this.$refs.password.nativeView.focus();
+    // },
     submit() {
-      if (!this.email || !this.password) {
+      if (!this.cpf) {
         feedback.error({
-          message: "Por favor, digite o endereço de e-mail e senha."
+          message: "Por favor, digite o número do CPF."
         });
         return;
       }
-      if (!validator.validate(this.email)) {
-        feedback.error({
-          message: "Digite um endereço de e-mail válido."
-        });
-        return;
-      }
+      // if (!validator.validate(this.email)) {
+      //   feedback.error({
+      //     message: "Digite um endereço de e-mail válido."
+      //   });
+      //   return;
+      // }
 
       this.login();
     },
@@ -113,7 +114,7 @@ export default {
 
       utils.loader.show();
       this.$store
-        .dispatch(LOGIN, { email: this.email, password: this.password })
+        .dispatch(LOGIN, { cpf: this.cpf})
         .then(() => {
           this.$navigator.navigate("/home", {
             clearHistory: true

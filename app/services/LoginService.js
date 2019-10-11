@@ -5,13 +5,14 @@ export default class LoginService extends BackendService {
   login(user) {
     return http
       .request({
-        url: this.baseUrl + "login",
+        url: this.baseUrl + "api/leaders/login",
         method: "POST",
         headers: this.getCommonHeaders(),
         content: JSON.stringify({
-          username: user.email,
-          password: user.password,
-          deviceToken: this.deviceToken
+          cpf: user.cpf
+          // username: user.email,
+          // password: user.password,
+          // deviceToken: this.deviceToken
         })
       })
       .then(this.validateCode)

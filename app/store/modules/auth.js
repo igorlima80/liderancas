@@ -32,9 +32,9 @@ const actions = {
       loginService
         .login(user)
         .then(data => {
-          console.info("User logged in with token: " + data.authtoken);
-          context.commit(SET_TOKEN, data.authtoken);
-          context.commit(SET_AUTH, data);
+          console.info("User logged in with token: " + data.user.cpf);
+          context.commit(SET_TOKEN, data.user.cpf);
+          context.commit(SET_AUTH, data.user);
           resolve();
         })
         .catch(error => {
