@@ -17,6 +17,39 @@ export default class LiderancasService extends BackendService {
       });
   }
 
+  leader() {
+    return http
+      .request({
+        url: this.baseUrl + "leader",
+        method: "GET",
+        headers: this.getHeaders()
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Leader: " + data);
+        return data;
+      });
+  }
+
+  updateLeader() {
+    return http
+      .request({
+        url: this.baseUrl + "updateleader",
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify({
+          leader: leader
+        })
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Leader: " + data);
+        return data;
+      });
+  }
+
   leaders() {
     return http
       .request({

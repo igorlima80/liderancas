@@ -1,6 +1,8 @@
 import {
   CHANGE_NOTIFICATION,
   GET_NOTIFICATIONS,
+  UPDATE_LEADER,
+  GET_MEMBERS,
   GET_LEADERS,
   GET_VISITS
 } from "~/store/actions.type";
@@ -9,6 +11,8 @@ import {
   SET_NOTIFICATIONS,
   SET_INITIAL,
   SET_LEADERS,
+  SET_LEADER,
+  SET_MEMBERS,
   SET_VISITS
 } from "~/store/mutations.type";
 import LiderancasService from "~/services/LiderancasService";
@@ -18,6 +22,7 @@ const liderancasService = new LiderancasService();
 const state = {
   notifications: {},
   leaders: {},
+  members:{},
   visits: {}
 };
 
@@ -25,6 +30,7 @@ const getters = {
   notifications: state => state.notifications,
   notifications_quant: state => state.notifications.length,
   leaders: state => state.leaders,
+  members: state => state.members,
   visits: state => state.visits
 };
 
@@ -56,6 +62,20 @@ const actions = {
         });
     });
   },
+  [UPDATE_LEADER](context, leader) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .updateLeader(leader)
+        .then(data => {
+          context.commit(SET_AUTH, data);
+          resolve(data);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, error);
+          reject(error);
+        });
+    });
+  },
   [GET_LEADERS](context) {
     return new Promise((resolve, reject) => {
       liderancasService
@@ -63,6 +83,21 @@ const actions = {
         .then(data => {
           console.info("leaders: " + data);
           context.commit(SET_LEADERS, data);
+          resolve();
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, response.data.errors);
+          reject(error);
+        });
+    });
+  },
+  [GET_MEMBERS](context) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .members()
+        .then(data => {
+          console.info("members: " + data);
+          context.commit(SET_MEMBERS, data);
           resolve();
         })
         .catch(error => {
@@ -100,6 +135,12 @@ const mutations = {
   },
   [SET_LEADERS](state, leaders) {
     state.leaders = leaders;
+  },
+  [SET_LEADER](state, leader) {
+    state.user = leader;
+  },
+  [SET_MEMBERS](state, members) {
+    state.members = members;
   },
   [SET_VISITS](state, visits) {
     state.visits = visits;

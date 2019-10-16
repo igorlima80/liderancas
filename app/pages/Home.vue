@@ -23,118 +23,80 @@
       ></ActionItem>
       <Label class="action-bar-title" text="Dashboard"></Label>
     </ActionBar>
-      <GridLayout rows="auto,auto,*,auto,*" class="page-content">
-        <CardView margin="0" elevation="7" radius="7" class="list-group" row="0">
-          <GridLayout rows="auto, auto" columns="80, *" class="list-group-item">
-            <Image
-              v-if="user.image"
-              :src="user.image"
-              row="0"
-              col="0"
-              class="thumb img-circle"
-              rowSpan="2"
-            />
-            <Image
-              v-else
-              src="~/assets/images/userimage.png"
-              row="0"
-              col="0"
-              class="thumb img-circle"
-              rowSpan="2"
-            />
-            <Label row="0" col="1" :text="user.name" class="list-group-item-heading" />
-            <Label row="1" col="1" :text="user.email" class="list-group-item-text" />
-          </GridLayout>
-        </CardView>
-        <Label text="Lideranças recentes" class="font-weight-bold text-primary m-t-20" row="1" />
-        <ActivityIndicator class="indicator" row="2" v-if="leadersIndicator" :busy="leadersIndicator"/>
-        <Pager v-else
-          for="leadership in leaders"
-          row="2"
-          transformers="scale"
-          showIndicator="true"
-          spacing="1%"
-          peaking="5%"
-        >
-          <v-template>
-            <CardView elevation="7" radius="10" class="m-y-30 m-x-5">
-              <GridLayout class rows="auto, *" columns="*">
-                <Label row="0" :text="leadership.name" />
-                <Label row="1" :text="leadership.address" />
-              </GridLayout>
-            </CardView>
-          </v-template>
-        </Pager>
-        <!-- <ListView
-        for="leadership in leaders"
-        @itemTap="onItemLeadershipTap"
-        class="list-group"
+    <GridLayout rows="auto,auto,*,auto,*" class="page-content">
+      <CardView margin="0" elevation="7" radius="7" class="list-group" row="0">
+              <ActivityIndicator
+        class="indicator"
+        v-if="userIndicator"
+        :busy="userIndicator"
+      />
+        <GridLayout v-else rows="auto, auto" columns="80, *" class="list-group-item">
+          <Image
+            v-if="user.image"
+            :src="user.image"
+            row="0"
+            col="0"
+            class="thumb img-circle"
+            rowSpan="2"
+          />
+          <Image
+            v-else
+            src="~/assets/images/userimage.png"
+            row="0"
+            col="0"
+            class="thumb img-circle"
+            rowSpan="2"
+          />
+          <Label row="0" col="1" :text="user.user.name" class="list-group-item-heading" />
+          <Label row="1" col="1" :text="user.user.email" class="list-group-item-text" />
+        </GridLayout>
+      </CardView>
+      <Label text="Membros recentes" class="font-weight-bold text-primary m-t-20" row="1" />
+      <ActivityIndicator
+        class="indicator"
         row="2"
+        v-if="membersIndicator"
+        :busy="membersIndicator"
+      />
+      <Pager
+        v-else
+        for="member in members"
+        row="2"
+        transformers="scale"
+        showIndicator="true"
+        spacing="1%"
+        peaking="5%"
       >
         <v-template>
-          <GridLayout rows="auto, auto" columns="auto, *" class="list-group-item">
-            <Label
-              row="0"
-              col="0"
-              rowSpan="2"
-              :text="'fa-bullhorn' | fonticon"
-              class="fas text-primary m-r-20"
-            ></Label>
-            <Label
-              row="0"
-              col="1"
-              :text="leadership.name"
-              class="list-group-item-heading text-primary"
-            />
-            <Label row="1" col="1" :text="leadership.address" class="" />
-          </GridLayout>
+          <CardView elevation="7" radius="10" class="m-y-30 m-x-5">
+            <GridLayout class rows="auto, *" columns="*">
+              <Label row="0" :text="member.user.name" />
+              <Label row="1" :text="member.address.street" />
+            </GridLayout>
+          </CardView>
         </v-template>
-        </ListView>-->
-        <Label text="Visitas marcadas" class="font-weight-bold text-primary" row="3" />
-        <ActivityIndicator class="indicator" row="4" v-if="visitsIndicator" :busy="visitsIndicator"/>
-        <Pager v-else
-          for="visit in visits"
-          row="4"
-          transformers="scale"
-          showIndicator="true"
-          spacing="1%"
-          peaking="5%"
-        >
-          <v-template>
-            <CardView elevation="7" radius="10" class="m-y-30  m-x-5">
-              <GridLayout class rows="auto, *" columns="*">
-                <Label row="0" :text="visit.description" />
-                <Label row="1" :text="visit.address" />
-              </GridLayout>
-            </CardView>
-          </v-template>
-        </Pager>
-        <!-- <ListView for="visit in visits" @itemTap="onItemVisitTap" class="list-group" row="4">
+      </Pager>
+      <Label text="Visitas marcadas" class="font-weight-bold text-primary" row="3" />
+      <ActivityIndicator class="indicator" row="4" v-if="visitsIndicator" :busy="visitsIndicator" />
+      <Pager
+        v-else
+        for="visit in visits"
+        row="4"
+        transformers="scale"
+        showIndicator="true"
+        spacing="1%"
+        peaking="5%"
+      >
         <v-template>
-          <GridLayout rows="auto, auto" columns="auto, *" class="list-group-item">
-            <Label
-              row="0"
-              col="0"
-              rowspan="2"
-              :text="'fa-map-marked-alt' | fonticon"
-              class="fas text-primary m-r-20"
-            ></Label>
-            <Label
-              row="0"
-              col="1"
-              :text="visit.description"
-              class="list-group-item-heading text-primary"
-            />
-            <Label row="1" col="1">
-              <FormattedString>
-                <Span>{{visit.address}}</Span>
-                <Span class="font-weight-bold">Data: {{visit.date}}</Span>
-              </FormattedString>
-            </Label>
-          </GridLayout>
+          <CardView elevation="7" radius="10" class="m-y-30 m-x-5">
+            <GridLayout class rows="auto, *" columns="*">
+              <Label row="0" :text="visit.description" />
+              <Label row="1" :text="visit.address" />
+            </GridLayout>
+          </CardView>
         </v-template>
-        </ListView>-->
-      </GridLayout>
+      </Pager>
+    </GridLayout>
   </Page>
 </template>
 
@@ -143,37 +105,83 @@ import * as utils from "~/shared/utils";
 import { mapGetters } from "vuex";
 import SelectedPageService from "../shared/selected-page-service";
 import orientationModule from "nativescript-screen-orientation";
-import { GET_LEADERS, GET_VISITS } from "~/store/actions.type";
+import LoginService from "~/services/LoginService";
+import {
+  FETCH_USER,
+  GET_NOTIFICATIONS,
+  GET_MEMBERS,
+  GET_VISITS
+} from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
 } from "tns-core-modules/connectivity";
+const loginService = new LoginService();
 
 export default {
   data() {
     return {
-      leadersIndicator: true,
-      visitsIndicator: true
+      membersIndicator: true,
+      visitsIndicator: true,
+      userIndicator: false
     };
   },
   created() {
+    if (loginService.isLoggedIn()) {
+      if (getConnectionType() === connectionType.none) {
+        alert({
+          title: "Lideranças",
+          message:
+            "Não foi possivei carregar os dados do usuário. Sem conexão com a internet. Tente mais tarde.",
+          okButtonText: "OK"
+        });
+        this.$navigator.navigate("/login", {
+          clearHistory: true
+        });
+        return;
+      }
+
+      this.$store
+        .dispatch(FETCH_USER)
+        .then(() => {
+          this.userIndicator = false;
+        })
+        .catch(error => {
+          utils.loader.hide();
+          alert({
+            title: "lideranças",
+            message:
+              "Não foi possivei carregar os dados do usuário.Tente mais tarde.",
+            okButtonText: "OK"
+          });
+          this.$navigator.navigate("/login", {
+            clearHistory: true
+          });
+          return;
+        });
+    }
+
     this.$store
-      .dispatch(GET_LEADERS)
+      .dispatch(GET_MEMBERS)
       .then(() => {
-        this.leadersIndicator = false
+        this.membersIndicator = false;
       })
       .catch(error => {});
     this.$store
       .dispatch(GET_VISITS)
       .then(() => {
-        this.visitsIndicator = false
+        this.visitsIndicator = false;
       })
+      .catch(error => {});
+    this.$store
+      .dispatch(GET_NOTIFICATIONS)
+      .then(() => {})
       .catch(error => {});
   },
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Home");
   },
-  computed: { ...mapGetters(["user", "leaders", "visits"]) },
+  computed: { ...mapGetters(["user", "members", "visits"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
@@ -205,7 +213,7 @@ export default {
   font-size: 18;
 }
 
-.indicator{
+.indicator {
   width: 32;
   height: 32;
 }

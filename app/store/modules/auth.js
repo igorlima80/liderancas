@@ -34,7 +34,7 @@ const actions = {
         .then(data => {
           console.info("User logged in with token: " + data.user.cpf);
           context.commit(SET_TOKEN, data.user.cpf);
-          context.commit(SET_AUTH, data.user);
+          context.commit(SET_AUTH, data);
           resolve();
         })
         .catch(error => {
@@ -95,7 +95,7 @@ const actions = {
       loginService
         .updateUser(user)
         .then(data => {
-          context.commit(SET_AUTH, data);
+          context.commit(SET_AUTH, data.user);
           resolve(data);
         })
         .catch(error => {

@@ -26,6 +26,7 @@
 
     <GridLayout class="page-content" rows="*,auto" columns="*,*">
       <RadDataForm
+        @loaded="onLoaded"
         ref="dataForm"
         :source="leader"
         :metadata="userMetadata"
@@ -62,6 +63,7 @@ let clone = require('clone');
 export default {
   data() {
     return {
+      leader: {},
       groups: [],
       userMetadata: {
         isReadOnly: false,
@@ -174,10 +176,7 @@ export default {
     this.groups.push(pg);
   },
   computed: {
-    ...mapGetters(["user"]),
-    leader() {
-      return clone(this.user);
-    }
+    ...mapGetters(["user"])
   },
   methods: {
     updateUser() {
@@ -210,6 +209,9 @@ export default {
     },
     onDrawerButtonTap() {
       utils.showDrawer();
+    },
+    onLoaded(){
+      this.leader = clone(this.user);
     }
   }
 };

@@ -5,8 +5,8 @@ export default class LoginService extends BackendService {
   login(user) {
     return http
       .request({
-        // url: this.baseUrl + "api/leaders/login",
-        url: "http://165.22.187.114:21460/api/leaders/login",
+        url: this.baseUrl + "login",
+        // url: "http://165.22.187.114:21460/api/leaders/login",
         method: "POST",
         headers: this.getCommonHeaders(),
         content: JSON.stringify({
@@ -109,20 +109,20 @@ export default class LoginService extends BackendService {
       });
   }
 
-  updateUser() {
-    return http
-      .request({
-        url: this.baseUrl + "updateuser",
-        method: "POST",
-        headers: this.getCommonHeaders()
-      })
-      .then(this.validateCode)
-      .then(this.getJson)
-      .then(data => {
-        console.info("User update data: " + data);
-        return data;
-      });
-  }
+  // updateUser() {
+  //   return http
+  //     .request({
+  //       url: this.baseUrl + "updateuser",
+  //       method: "POST",
+  //       headers: this.getCommonHeaders()
+  //     })
+  //     .then(this.validateCode)
+  //     .then(this.getJson)
+  //     .then(data => {
+  //       console.info("User update data: " + data);
+  //       return data;
+  //     });
+  // }
 
   getCommonHeaders() {
     return {
