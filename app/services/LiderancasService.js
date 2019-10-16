@@ -65,6 +65,21 @@ export default class LiderancasService extends BackendService {
       });
   }
 
+  members() {
+    return http
+      .request({
+        url: this.baseUrl + "members",
+        method: "GET",
+        headers: this.getHeaders()
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Members: " + data);
+        return data;
+      });
+  }
+
   visits() {
     return http
       .request({

@@ -47,8 +47,8 @@
             class="thumb img-circle"
             rowSpan="2"
           />
-          <Label row="0" col="1" :text="user.user.name" class="list-group-item-heading" />
-          <Label row="1" col="1" :text="user.user.email" class="list-group-item-text" />
+          <Label row="0" col="1" :text="user.name" class="list-group-item-heading" />
+          <Label row="1" col="1" :text="user.email" class="list-group-item-text" />
         </GridLayout>
       </CardView>
       <Label text="Membros recentes" class="font-weight-bold text-primary m-t-20" row="1" />
@@ -70,8 +70,8 @@
         <v-template>
           <CardView elevation="7" radius="10" class="m-y-30 m-x-5">
             <GridLayout class rows="auto, *" columns="*">
-              <Label row="0" :text="member.user.name" />
-              <Label row="1" :text="member.address.street" />
+              <Label row="0" :text="member.name" />
+              <Label row="1" :text="member.address" />
             </GridLayout>
           </CardView>
         </v-template>

@@ -33,6 +33,7 @@ const actions = {
         .login(user)
         .then(data => {
           console.info("User logged in with token: " + data.user.cpf);
+          console.dir("User data:" + data);
           context.commit(SET_TOKEN, data.user.cpf);
           context.commit(SET_AUTH, data);
           resolve();
@@ -79,7 +80,7 @@ const actions = {
       loginService
         .user()
         .then(data => {
-          console.info("User data: " + data);
+          console.dir("User data: " + data);
           context.commit(SET_AUTH, data);
           resolve();
         })
