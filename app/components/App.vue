@@ -12,7 +12,12 @@
 <script>
 import * as utils from "~/shared/utils";
 import LoginService from "~/services/LoginService";
+import { FETCH_USER, GET_NOTIFICATIONS } from "~/store/actions.type";
 import { SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
+import {
+  connectionType,
+  getConnectionType
+} from "tns-core-modules/connectivity";
 const loginService = new LoginService();
 
 export default {
@@ -25,6 +30,43 @@ export default {
     isLoggedIn() {
       return loginService.isLoggedIn();
     }
+  },
+  created() {   
+    if (!loginService.isLoggedIn()) {
+      if (getConnectionType() === connectionType.none) {
+        alert({
+          title: "Lideranças",
+          message:
+            "Não foi possivei carregar os dados do usuário. Sem conexão com a internet. Tente mais tarde.",
+          okButtonText: "OK"
+        });
+        this.$navigator.navigate("/login", {
+          clearHistory: true
+        });
+      }
+      return;
+    }
+
+    this.$store
+      .dispatch(FETCH_USER)
+      .then(() => {})
+      .catch(error => {
+        alert({
+          title: "Lideranças",
+          message:
+            "Não foi possivei carregar os dados do usuário. Tente mais tarde.",
+          okButtonText: "OK"
+        });
+        this.$navigator.navigate("/login", {
+          clearHistory: true
+        });
+        return;
+      });
+
+    this.$store
+      .dispatch(GET_NOTIFICATIONS)
+      .then(() => {})
+      .catch(error => {});
   }
 };
 </script>

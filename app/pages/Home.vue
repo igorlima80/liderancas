@@ -25,12 +25,7 @@
     </ActionBar>
     <GridLayout rows="auto,auto,*,auto,*" class="page-content">
       <CardView margin="0" elevation="7" radius="7" class="list-group" row="0">
-              <ActivityIndicator
-        class="indicator"
-        v-if="userIndicator"
-        :busy="userIndicator"
-      />
-        <GridLayout v-else rows="auto, auto" columns="80, *" class="list-group-item">
+        <GridLayout rows="auto, auto" columns="80, *" class="list-group-item">
           <Image
             v-if="user.image"
             :src="user.image"
@@ -122,44 +117,43 @@ export default {
   data() {
     return {
       membersIndicator: true,
-      visitsIndicator: true,
-      userIndicator: false
+      visitsIndicator: true
     };
   },
-  created() {
-    if (loginService.isLoggedIn()) {
-      if (getConnectionType() === connectionType.none) {
+  created() {   
+    // if (loginService.isLoggedIn()) {
+    //   if (getConnectionType() === connectionType.none) {
+    //     alert({
+    //       title: "Lideranças",
+    //       message:
+    //         "Não foi possivei carregar os dados do usuário. Sem conexão com a internet. Tente mais tarde.",
+    //       okButtonText: "OK"
+    //     });
+    //     this.$navigator.navigate("/login", {
+    //       clearHistory: true
+    //     });
+    //   }
+    //   return;
+    // }
+
+    this.$store
+      .dispatch(FETCH_USER)
+      .then(() => {
+        this.userIndicator = false;
+      })
+      .catch(error => {
+        utils.loader.hide();
         alert({
-          title: "Lideranças",
+          title: "lideranças",
           message:
-            "Não foi possivei carregar os dados do usuário. Sem conexão com a internet. Tente mais tarde.",
+            "Não foi possivei carregar os dados do usuário.Tente mais tarde.",
           okButtonText: "OK"
         });
         this.$navigator.navigate("/login", {
           clearHistory: true
         });
         return;
-      }
-
-      this.$store
-        .dispatch(FETCH_USER)
-        .then(() => {
-          this.userIndicator = false;
-        })
-        .catch(error => {
-          utils.loader.hide();
-          alert({
-            title: "lideranças",
-            message:
-              "Não foi possivei carregar os dados do usuário.Tente mais tarde.",
-            okButtonText: "OK"
-          });
-          this.$navigator.navigate("/login", {
-            clearHistory: true
-          });
-          return;
-        });
-    }
+      });
 
     this.$store
       .dispatch(GET_MEMBERS)

@@ -81,6 +81,7 @@ const actions = {
         .user()
         .then(data => {
           console.dir("User data: " + data);
+          context.commit(SET_TOKEN, data.user.cpf);
           context.commit(SET_AUTH, data);
           resolve();
         })
