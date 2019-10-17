@@ -27,20 +27,31 @@
     <GridLayout class="page-content">
       <!-- <ActivityIndicator class="indicator" v-if="votersIndicator" :busy="votersIndicator" /> -->
       <RadListView
+        class="list-group"
         ref="listView"
         for="voter in voters"
         pullToRefresh="true"
         @itemTap="onItemTap"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
+        <v-template name="header">
+          <Label text="Eleitores" class="font-weight-bold text-primary" />
+        </v-template>
         <v-template>
-          <StackLayout class="item" orientation="vertical">
-            <Label :text="voter.name" class="nameLabel"></Label>
-            <Label :text="voter.description" class="descriptionLabel"></Label>
+          <StackLayout class="list-group-item">
+            <Label :text="voter.name" class="list-group-item-heading"></Label>
+            <Label :text="voter.address" class="list-group-item-text"></Label>
+          <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
+         
         </v-template>
       </RadListView>
-      <MDFloatingActionButton rippleColor="green" class="btn btn-primary f-btn" src="res://baseline_add_white_24"/>
+      <MDFloatingActionButton
+        rippleColor="green"
+        elevation="7"
+        class="btn btn-primary f-btn"
+        src="res://baseline_add_white_24"
+      />
     </GridLayout>
   </Page>
 </template>
@@ -95,9 +106,8 @@ export default {
 // End custom common variables
 
 // Custom styles
-.f-btn{
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
+.f-btn {
+  horizontal-align: right;
+  vertical-align: bottom;
 }
 </style>

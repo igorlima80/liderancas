@@ -24,7 +24,7 @@
       <Label class="action-bar-title" text="Dashboard"></Label>
     </ActionBar>
     <GridLayout rows="auto,auto,*,auto,*" class="page-content">
-      <MDCardView rippleColor="green" elevation="2" class="list-group" row="0">
+      <MDCardView rippleColor="transparent" elevation="2" class="list-group" row="0">
       <!-- <CardView margin="0" elevation="7" radius="7" class="list-group" row="0"> -->
               <ActivityIndicator
         class="indicator"
@@ -69,7 +69,7 @@
         peaking="5%"
       >
         <v-template>
-          <MDCardView rippleColor="none" elevation="2" class="m-y-30 m-x-5">
+          <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5">
           <!-- <CardView elevation="7" radius="10" class="m-y-30 m-x-5"> -->
             <GridLayout class rows="auto, *" columns="*">
               <Label row="0" :text="voter.name" />
@@ -90,7 +90,7 @@
         peaking="5%"
       >
         <v-template>
-          <MDCardView rippleColor="none" elevation="2" class="m-y-30 m-x-5">
+          <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5">
           <!-- <CardView elevation="7" radius="10" class="m-y-30 m-x-5"> -->
             <GridLayout class rows="auto, *" columns="*">
               <Label row="0" :text="visit.description" />
