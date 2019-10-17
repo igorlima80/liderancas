@@ -24,7 +24,8 @@
       <Label class="action-bar-title" text="Dashboard"></Label>
     </ActionBar>
     <GridLayout rows="auto,auto,*,auto,*" class="page-content">
-      <CardView margin="0" elevation="7" radius="7" class="list-group" row="0">
+      <MDCardView rippleColor="green" elevation="2" class="list-group" row="0">
+      <!-- <CardView margin="0" elevation="7" radius="7" class="list-group" row="0"> -->
               <ActivityIndicator
         class="indicator"
         v-if="userIndicator"
@@ -47,20 +48,20 @@
             class="thumb img-circle"
             rowSpan="2"
           />
-          <Label row="0" col="1" :text="user.name" class="list-group-item-heading" />
-          <Label row="1" col="1" :text="user.email" class="list-group-item-text" />
+          <Label row="0" col="1" :text="user.user.name" class="list-group-item-heading" />
+          <Label row="1" col="1" :text="user.user.email" class="list-group-item-text" />
         </GridLayout>
-      </CardView>
-      <Label text="Membros recentes" class="font-weight-bold text-primary m-t-20" row="1" />
+      </MDCardView>
+      <Label text="Eleitores recentes" class="font-weight-bold text-primary m-t-20" row="1" />
       <ActivityIndicator
         class="indicator"
         row="2"
-        v-if="membersIndicator"
-        :busy="membersIndicator"
+        v-if="votersIndicator"
+        :busy="votersIndicator"
       />
       <Pager
         v-else
-        for="member in members"
+        for="voter in voters"
         row="2"
         transformers="scale"
         showIndicator="true"
@@ -68,12 +69,13 @@
         peaking="5%"
       >
         <v-template>
-          <CardView elevation="7" radius="10" class="m-y-30 m-x-5">
+          <MDCardView rippleColor="none" elevation="2" class="m-y-30 m-x-5">
+          <!-- <CardView elevation="7" radius="10" class="m-y-30 m-x-5"> -->
             <GridLayout class rows="auto, *" columns="*">
-              <Label row="0" :text="member.name" />
-              <Label row="1" :text="member.address" />
+              <Label row="0" :text="voter.name" />
+              <Label row="1" :text="voter.address" />
             </GridLayout>
-          </CardView>
+          </MDCardView>
         </v-template>
       </Pager>
       <Label text="Visitas marcadas" class="font-weight-bold text-primary" row="3" />
@@ -88,12 +90,13 @@
         peaking="5%"
       >
         <v-template>
-          <CardView elevation="7" radius="10" class="m-y-30 m-x-5">
+          <MDCardView rippleColor="none" elevation="2" class="m-y-30 m-x-5">
+          <!-- <CardView elevation="7" radius="10" class="m-y-30 m-x-5"> -->
             <GridLayout class rows="auto, *" columns="*">
               <Label row="0" :text="visit.description" />
               <Label row="1" :text="visit.address" />
             </GridLayout>
-          </CardView>
+          </MDCardView>
         </v-template>
       </Pager>
     </GridLayout>
@@ -109,7 +112,7 @@ import LoginService from "~/services/LoginService";
 import {
   FETCH_USER,
   GET_NOTIFICATIONS,
-  GET_MEMBERS,
+  GET_VOTERS,
   GET_VISITS
 } from "~/store/actions.type";
 import {
@@ -121,7 +124,7 @@ const loginService = new LoginService();
 export default {
   data() {
     return {
-      membersIndicator: true,
+      votersIndicator: true,
       visitsIndicator: true,
       userIndicator: false
     };
@@ -143,9 +146,7 @@ export default {
 
       this.$store
         .dispatch(FETCH_USER)
-        .then(() => {
-          this.userIndicator = false;
-        })
+        .then(() => {})
         .catch(error => {
           utils.loader.hide();
           alert({
@@ -162,9 +163,9 @@ export default {
     }
 
     this.$store
-      .dispatch(GET_MEMBERS)
+      .dispatch(GET_VOTERS)
       .then(() => {
-        this.membersIndicator = false;
+        this.votersIndicator = false;
       })
       .catch(error => {});
     this.$store
@@ -181,7 +182,7 @@ export default {
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Home");
   },
-  computed: { ...mapGetters(["user", "members", "visits"]) },
+  computed: { ...mapGetters(["user", "voters", "visits"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
@@ -194,7 +195,7 @@ export default {
       orientationModule.orientationCleanup();
     },
     onItemLeadershipTap() {
-      this.$navigator.navigate("/leaders");
+      this.$navigator.navigate("/voters");
     },
     onItemVisitTap() {
       this.$navigator.navigate("/visits");

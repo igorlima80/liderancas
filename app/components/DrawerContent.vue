@@ -1,7 +1,7 @@
 <template lang="html">
 <GridLayout rows="auto, *" class="sidedrawer sidedrawer-left">
             <StackLayout row="0" class="sidedrawer-header">
-                <Image v-if="user.user.image" :src="user.user.image" class="sidedrawer-header-image"></Image>
+                <Image v-if="user.image" :src="user.image" class="sidedrawer-header-image"></Image>
                 <Image v-else src="~/assets/images/userimage.png" class="sidedrawer-header-image"></Image>
                 <Label class="sidedrawer-header-brand" :text="user.user.name"></Label>
                 <Label class="footnote" :text="user.user.email"></Label>
@@ -14,14 +14,9 @@
                         <Label col="1" text="Dashboard" class="p-r-10"></Label>
                     </GridLayout>
 
-                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Leaders' ? ' selected': '')" @tap="onNavigationItemTap('/leaders')">
-                        <Label col="0" :text="'fa-bullhorn' | fonticon" class="fas"></Label>
-                        <Label col="1" text="Lideranças" class="p-r-10"></Label>
-                    </GridLayout>
-
-                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Members' ? ' selected': '')" @tap="onNavigationItemTap('/members')">
+                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Voters' ? ' selected': '')" @tap="onNavigationItemTap('/voters')">
                         <Label col="0" :text="'fa-users' | fonticon" class="fas"></Label>
-                        <Label col="1" text="Membros" class="p-r-10"></Label>
+                        <Label col="1" text="Eleitores" class="p-r-10"></Label>
                     </GridLayout>
 
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Visits' ? ' selected': '')" @tap="onNavigationItemTap('/visits')">

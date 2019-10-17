@@ -50,32 +50,17 @@ export default class LiderancasService extends BackendService {
       });
   }
 
-  leaders() {
+  voters() {
     return http
       .request({
-        url: this.baseUrl + "leaders",
+        url: this.baseUrl + "voters",
         method: "GET",
         headers: this.getHeaders()
       })
       .then(this.validateCode)
       .then(this.getJson)
       .then(data => {
-        console.info("Leaders: " + data);
-        return data;
-      });
-  }
-
-  members() {
-    return http
-      .request({
-        url: this.baseUrl + "members",
-        method: "GET",
-        headers: this.getHeaders()
-      })
-      .then(this.validateCode)
-      .then(this.getJson)
-      .then(data => {
-        console.info("Members: " + data);
+        console.info("Voters: " + data);
         return data;
       });
   }

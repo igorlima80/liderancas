@@ -18,7 +18,7 @@ import { clear } from "tns-core-modules/application-settings";
 const loginService = new LoginService();
 
 const state = {
-  user: {},
+  user: {user:{}},
   errors: null
 };
 
