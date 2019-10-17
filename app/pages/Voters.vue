@@ -21,28 +21,29 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Visitas"></Label>
+      <Label class="action-bar-title" text="Eleitores"></Label>
     </ActionBar>
 
     <GridLayout class="page-content">
-      <!-- <ActivityIndicator class="indicator" v-if="visitsIndicator" :busy="visitsIndicator" /> -->
+      <!-- <ActivityIndicator class="indicator" v-if="votersIndicator" :busy="votersIndicator" /> -->
       <RadListView
         class="list-group"
         ref="listView"
-        for="visit in visits"
+        for="voter in voters"
         pullToRefresh="true"
         @itemTap="onItemTap"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
         <v-template name="header">
-          <Label text="Visitas" class="font-weight-bold text-primary" />
+          <Label text="Eleitores" class="font-weight-bold text-primary" />
         </v-template>
         <v-template>
           <StackLayout class="list-group-item">
-            <Label :text="visit.description" class="list-group-item-heading"></Label>
-            <Label :text="visit.address" class="list-group-item-text"></Label>
-            <StackLayout class="hr-light"></StackLayout>
+            <Label :text="voter.name" class="list-group-item-heading"></Label>
+            <Label :text="voter.address" class="list-group-item-text"></Label>
+          <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
+         
         </v-template>
       </RadListView>
       <MDFloatingActionButton
@@ -60,19 +61,21 @@ import * as utils from "~/shared/utils";
 import SelectedPageService from "../shared/selected-page-service";
 import { mapGetters } from "vuex";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
-import { GET_VISITS } from "~/store/actions.type";
+import { GET_VOTERS } from "~/store/actions.type";
+import { Feedback } from "nativescript-feedback";
+const feedback = new Feedback();
 
 export default {
   data() {
     return {
-      visitsIndicator: true,
-      listVisits: new ObservableArray(this.visits)
+      votersIndicator: true,
+      listVoters: new ObservableArray(this.voters)
     };
   },
   mounted() {
-    SelectedPageService.getInstance().updateSelectedPage("Visits");
+    SelectedPageService.getInstance().updateSelectedPage("Voters");
   },
-  computed: { ...mapGetters(["visits"]) },
+  computed: { ...mapGetters(["voters"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
@@ -84,7 +87,7 @@ export default {
       // we use this.$nextTick call
       this.$nextTick(() => {
         this.$store
-          .dispatch(GET_VISITS)
+          .dispatch(GET_VOTERS)
           .then(() => {})
           .catch(error => {});
         object.notifyPullToRefreshFinished();

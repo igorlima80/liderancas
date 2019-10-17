@@ -3,8 +3,7 @@ import Login from "./pages/Login";
 import UploadImage from "./pages/UploadImage";
 import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
-import Leaders from "./pages/Leaders";
-import Members from "./pages/Members";
+import Voters from "./pages/Voters";
 import Visits from "./pages/Visits";
 import UserUpdate from "./pages/UserUpdate.vue"
 
@@ -29,12 +28,8 @@ export const routes = {
     component: Notifications,
     meta: { needsAuth: true }
   },
-  "/leaders": {
-    component: Leaders,
-    meta: { needsAuth: true }
-  },
-  "/members": {
-    component: Members,
+  "/voters": {
+    component: Voters,
     meta: { needsAuth: true }
   },
   "/visits": {
