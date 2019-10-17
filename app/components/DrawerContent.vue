@@ -3,8 +3,8 @@
             <StackLayout row="0" class="sidedrawer-header">
                 <Image v-if="user.image" :src="user.image" class="sidedrawer-header-image"></Image>
                 <Image v-else src="~/assets/images/userimage.png" class="sidedrawer-header-image"></Image>
-                <Label class="sidedrawer-header-brand" :text="user.name"></Label>
-                <Label class="footnote" :text="user.email"></Label>
+                <Label class="sidedrawer-header-brand" :text="user.user.name"></Label>
+                <Label class="footnote" :text="user.user.email"></Label>
             </StackLayout>
         
             <ScrollView row="1" class="sidedrawer-content">

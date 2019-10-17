@@ -85,4 +85,7 @@ export default {
 // End custom common variables
 
 // Custom styles
+.page-content{
+  padding: 20;
+}
 </style>

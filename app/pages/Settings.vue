@@ -131,4 +131,7 @@ export default {
   width: 40;
   border-radius: 50%;
 }
+.page-content{
+  padding: 20;
+}
 </style>

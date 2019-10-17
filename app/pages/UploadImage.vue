@@ -24,16 +24,28 @@
       <Label class="action-bar-title" text="Carregar Imagem"></Label>
     </ActionBar>
 
-    <GridLayout rows="auto,*,auto" columns="auto,*" class="page-content">
-      <Button row="0" col="0" text="Tirar uma foto" class="btn btn-primary" @tap="takePicture" />
-      <Button
+    <GridLayout rows="auto,*,auto" columns="*,*" class="m-15">
+      <MDCardView row="0" col="0" class="btn btn-primary" @tap="takePicture">
+        <StackLayout class="m-10">
+          <Label class="fas icon-action" :text="'fa-camera-retro' | fonticon"/>
+          <Label class="text-center font-weight-bold" text="Tirar uma foto" textWrap="true"/>
+        </StackLayout>
+      </MDCardView>
+      <MDCardView row="0" col="1" class="btn btn-primary" @tap="uploadPicture">
+        <StackLayout class="m-10">
+          <Label class="fas icon-action" :text="'fa-images' | fonticon"/>
+          <Label class="text-center font-weight-bold" text="Carregar do arquivo" textWrap="true"/>
+        </StackLayout>
+      </MDCardView>
+      <!-- <Button row="0" col="0" text="Tirar uma foto" class="btn btn-primary" @tap="takePicture" /> -->
+      <!-- <Button
         row="0"
         col="1"
         text="Carregar do arquivo"
         class="btn btn-primary"
         @tap="uploadPicture"
-      />
-      <Image ref="cameraImage" row="1" col="0" colSpan="2" loadMode="async" borderRadius="50%"/>
+      /> -->
+      <Image ref="cameraImage" stretch="none" row="1" col="0" colSpan="2" loadMode="async" class="preview"/>
       <Button
         row="2"
         colSpan="2"
@@ -62,8 +74,8 @@ export default {
     return {
       isSingleMode: true,
       imageAssets: [],
-      imageWidth: 400,
-      imageHeight: 400
+      imageWidth: 500,
+      imageHeight: 500
     };
   },
   computed: {
@@ -114,7 +126,7 @@ export default {
     editPicture(imageSource) {
       let imageCropper = new ImageCropper();
       imageCropper
-        .show(imageSource, { width: 400, height: 400 })
+        .show(imageSource, { width: 500, height: 500 })
         .then(args => {
           console.dir(args);
           if (args.image !== null) {
@@ -158,8 +170,13 @@ export default {
 
 // Custom styles
 .preview {
-  // width: 70%;
-  // height: 70%;
   border-radius: 100%;
+  horizontal-align: center;
+  vertical-align: center;
+}
+
+.icon-action {
+  font-size: 38px;
+  text-align: center;
 }
 </style>

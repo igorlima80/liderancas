@@ -52,7 +52,7 @@
           <Label row="1" col="1" :text="user.user.email" class="list-group-item-text" />
         </GridLayout>
       </MDCardView>
-      <Label text="Eleitores recentes" class="font-weight-bold text-primary m-t-20" row="1" />
+      <Label text="Eleitores recentes" class="font-weight-bold text-primary m-t-20 m-l-15" row="1" />
       <ActivityIndicator
         class="indicator"
         row="2"
@@ -78,7 +78,7 @@
           </MDCardView>
         </v-template>
       </Pager>
-      <Label text="Visitas marcadas" class="font-weight-bold text-primary" row="3" />
+      <Label text="Visitas marcadas" class="font-weight-bold text-primary m-l-15" row="3" />
       <ActivityIndicator class="indicator" row="4" v-if="visitsIndicator" :busy="visitsIndicator" />
       <Pager
         v-else
@@ -124,8 +124,9 @@ const loginService = new LoginService();
 export default {
   data() {
     return {
-      membersIndicator: true,
-      visitsIndicator: true
+      votersIndicator: true,
+      visitsIndicator: true,
+      userIndicator: true
     };
   },
   created() {   

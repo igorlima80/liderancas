@@ -110,4 +110,8 @@ export default {
   horizontal-align: right;
   vertical-align: bottom;
 }
+
+.page-content{
+  padding: 20;
+}
 </style>
