@@ -64,9 +64,7 @@ export default {
   computed: { ...mapGetters(["user","notifications_quant"]) },
   methods: {
     onNavigationItemTap(path) {
-      this.$navigator.navigate(path, {
-        clearHistory: true
-      });
+      this.$navigator.navigate(path);
       utils.closeDrawer();
     }
   }

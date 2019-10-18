@@ -24,9 +24,12 @@
       <Label class="action-bar-title" text="Eleitores"></Label>
     </ActionBar>
 
-    <GridLayout class="page-content">
+    <GridLayout rows="auto,auto,*">
+      <SearchBar row="0" hint="Buscar por Eleitor" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
+      <Label row="1" text="Eleitores" class="font-weight-bold text-primary m-t-15 m-l-10" />
       <!-- <ActivityIndicator class="indicator" v-if="votersIndicator" :busy="votersIndicator" /> -->
       <RadListView
+        row="2"
         class="list-group"
         ref="listView"
         for="voter in voters"
@@ -34,19 +37,16 @@
         @itemTap="onItemTap"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
-        <v-template name="header">
-          <Label text="Eleitores" class="font-weight-bold text-primary" />
-        </v-template>
         <v-template>
           <StackLayout class="list-group-item">
             <Label :text="voter.name" class="list-group-item-heading"></Label>
             <Label :text="voter.address" class="list-group-item-text"></Label>
           <StackLayout class="hr-light"></StackLayout>
-          </StackLayout>
-         
+          </StackLayout>   
         </v-template>
       </RadListView>
       <MDFloatingActionButton
+        row="2"
         rippleColor="green"
         elevation="7"
         class="btn btn-primary f-btn"
@@ -109,9 +109,5 @@ export default {
 .f-btn {
   horizontal-align: right;
   vertical-align: bottom;
-}
-
-.page-content{
-  padding: 20;
 }
 </style>

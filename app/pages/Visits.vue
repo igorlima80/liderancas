@@ -24,9 +24,12 @@
       <Label class="action-bar-title" text="Visitas"></Label>
     </ActionBar>
 
-    <GridLayout class="page-content">
+    <GridLayout rows="auto,auto,*">
+      <SearchBar row="0" hint="Buscar por Visitas" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
       <!-- <ActivityIndicator class="indicator" v-if="visitsIndicator" :busy="visitsIndicator" /> -->
+      <Label row="1" text="Visitas" class="font-weight-bold text-primary m-t-15 m-l-10" />
       <RadListView
+        row="2"
         class="list-group"
         ref="listView"
         for="visit in visits"
@@ -34,9 +37,6 @@
         @itemTap="onItemTap"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
-        <v-template name="header">
-          <Label text="Visitas" class="font-weight-bold text-primary" />
-        </v-template>
         <v-template>
           <StackLayout class="list-group-item">
             <Label :text="visit.description" class="list-group-item-heading"></Label>
@@ -46,6 +46,7 @@
         </v-template>
       </RadListView>
       <MDFloatingActionButton
+        row="2"
         rippleColor="green"
         elevation="7"
         class="btn btn-primary f-btn"
@@ -106,9 +107,5 @@ export default {
 .f-btn {
   horizontal-align: right;
   vertical-align: bottom;
-}
-
-.page-content{
-  padding: 20;
 }
 </style>

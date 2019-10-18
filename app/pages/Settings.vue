@@ -26,30 +26,29 @@
 
     <GridLayout class="page-content">
       <ScrollView>
-        <GridLayout rows="auto,auto,auto,auto,auto,auto,auto,auto,auto" columns="*, auto">
+        <GridLayout rows="auto,auto,auto,auto,auto,auto,auto,auto" columns="*, auto">
           <Label row="0" col="0" text="Gerais" class="font-weight-bold text-primary m-b-20" />
           <Label row="1" col="0" text="Notificações" class="font-weight-bold" color="black" />
           <Switch row="1" col="1" rowSpan="2" v-model="notifyEnabled" />
           <Label row="2" col="0" text="Ativar ou desativar as notificações do app" />
           <StackLayout row="3" col="0" colSpan="2" class="hr-light m-t-20"></StackLayout>
           <Label row="4" col="0" text="Conta" class="font-weight-bold text-primary m-y-20" />
-      
+          <GridLayout row="5" col="0" colSpan="2" rows="auto,auto,auto" columns="*, auto" @tap="$navigator.navigate('/upload-image')">
           <Image
-            row="5"
+            row="0"
             col="1"
             src="~/assets/images/userimage.png"
             class="thumb"
-            rowSpan="2"
-            @tap="$navigator.navigate('/upload-image')"
+            rowSpan="3"
           />
-          <Label row="5" col="0" text="Avatar" class="font-weight-bold " color="black" />
-          <Label row="6" col="0" text="Modifique o seu avatar" />
-        
-          <StackLayout row="7" col="0" @tap="$navigator.navigate('/user-update')">
+          <Label row="1" col="0" text="Avatar" class="font-weight-bold " color="black" />
+          <Label row="2" col="0" text="Modifique o seu avatar" />
+          </GridLayout>
+          <StackLayout row="6" col="0" @tap="$navigator.navigate('/user-update')">
           <Label text="Atualizar cadastro" class="font-weight-bold m-t-20" color="black" />
           <Label text="Atualize seus dados pessoais" />
           </StackLayout>
-          <StackLayout row="8" col="0" @tap="logout">
+          <StackLayout row="7" col="0" @tap="logout">
           <Label text="Sair" class="font-weight-bold m-t-20" color="black" />
           <Label text="Sair do aplicativo" />
           </StackLayout>
@@ -127,8 +126,8 @@ export default {
 // End custom common variables
 // Drawer navigation custom styles
 .thumb{
-  height: 40;
-  width: 40;
+  height: 50;
+  width: 50;
   border-radius: 50%;
 }
 .page-content{

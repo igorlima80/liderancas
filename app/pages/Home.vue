@@ -31,7 +31,7 @@
         v-if="userIndicator"
         :busy="userIndicator"
       />
-        <GridLayout v-else rows="auto, auto" columns="80, *" class="list-group-item">
+        <GridLayout v-else rows="auto, auto" columns="auto, *" class="list-group-item">
           <Image
             v-if="user.image"
             :src="user.image"
@@ -216,11 +216,11 @@ export default {
   font-size: 18;
 }
 
-.indicator {
-  width: 32;
-  height: 32;
+.thumb{
+  height: 50;
+  width: 50;
+  border-radius: 50%;
 }
-
 .page {
   background-color: $background-light;
 }

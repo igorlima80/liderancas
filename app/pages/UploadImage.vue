@@ -21,7 +21,7 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Carregar Imagem"></Label>
+      <Label class="action-bar-title" text="Modificar Avatar"></Label>
     </ActionBar>
 
     <GridLayout rows="auto,*,auto" columns="*,*" class="m-15">
@@ -37,14 +37,6 @@
           <Label class="text-center font-weight-bold" text="Carregar do arquivo" textWrap="true"/>
         </StackLayout>
       </MDCardView>
-      <!-- <Button row="0" col="0" text="Tirar uma foto" class="btn btn-primary" @tap="takePicture" /> -->
-      <!-- <Button
-        row="0"
-        col="1"
-        text="Carregar do arquivo"
-        class="btn btn-primary"
-        @tap="uploadPicture"
-      /> -->
       <Image ref="cameraImage" stretch="none" row="1" col="0" colSpan="2" loadMode="async" class="preview"/>
       <Button
         row="2"
