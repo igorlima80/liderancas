@@ -32,7 +32,7 @@ export default class LiderancasService extends BackendService {
       });
   }
 
-  updateLeader() {
+  updateLeader(leader) {
     return http
       .request({
         url: this.baseUrl + "updateleader",
@@ -61,6 +61,24 @@ export default class LiderancasService extends BackendService {
       .then(this.getJson)
       .then(data => {
         console.info("Voters: " + data);
+        return data;
+      });
+  }
+
+  updateVoter(voter) {
+    return http
+      .request({
+        url: this.baseUrl + "voterupdate",
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify({
+          voter: voter
+        })
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Leader: " + data);
         return data;
       });
   }

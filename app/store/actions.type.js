@@ -9,4 +9,5 @@ export const GET_NOTIFICATIONS = "getNotifications";
 export const UPDATE_LEADER = "updateLeader";
 export const GET_VOTERS = "getVoters";
 export const GET_VISITS = "getVisits";
+export const UPDATE_VOTER = "updateVoter";
 export const INIT_DB = "initDB";

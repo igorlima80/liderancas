@@ -21,29 +21,28 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Eleitores"></Label>
+      <Label class="action-bar-title" text="Adicionar Eleitor"></Label>
     </ActionBar>
 
     <GridLayout rows="auto,auto,*">
-      <SearchBar row="0" hint="Buscar por Eleitor" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
-      <Label row="1" text="Eleitores" class="font-weight-bold text-primary m-t-15 m-l-10" />
-      <ActivityIndicator row="2" class="indicator" v-if="votersIndicator" :busy="votersIndicator" />
+      <SearchBar row="0" hint="Buscar por Visitas" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
+      <ActivityIndicator row="2" class="indicator" v-if="visitsIndicator" :busy="visitsIndicator" />
+      <Label row="1" text="Visitas" class="font-weight-bold text-primary m-t-15 m-l-10" />
       <RadListView
-        v-else
         row="2"
         class="list-group"
         ref="listView"
-        for="voter in voters"
+        for="visit in visits"
         pullToRefresh="true"
         @itemTap="onItemTap"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
         <v-template>
           <StackLayout class="list-group-item">
-            <Label :text="voter.name" class="list-group-item-heading"></Label>
-            <Label :text="voter.address" class="list-group-item-text"></Label>
-          <StackLayout class="hr-light"></StackLayout>
-          </StackLayout>   
+            <Label :text="visit.description" class="list-group-item-heading"></Label>
+            <Label :text="visit.address" class="list-group-item-text"></Label>
+            <StackLayout class="hr-light"></StackLayout>
+          </StackLayout>
         </v-template>
       </RadListView>
       <MDFloatingActionButton
@@ -62,29 +61,27 @@ import * as utils from "~/shared/utils";
 import SelectedPageService from "../shared/selected-page-service";
 import { mapGetters } from "vuex";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
-import { GET_VOTERS } from "~/store/actions.type";
-import { Feedback } from "nativescript-feedback";
-const feedback = new Feedback();
+import { GET_VISITS } from "~/store/actions.type";
 
 export default {
   data() {
     return {
-      votersIndicator: true,
-      listVoters: new ObservableArray(this.voters)
+      visitsIndicator: true,
+      listVisits: new ObservableArray(this.visits)
     };
   },
   created() {
     this.$store
-      .dispatch(GET_VOTERS)
+      .dispatch(GET_VISITS)
       .then(() => {
-        this.votersIndicator = false;
+        this.visitsIndicator = false;
       })
       .catch(error => {});
   },
   mounted() {
-    SelectedPageService.getInstance().updateSelectedPage("Voters");
+    SelectedPageService.getInstance().updateSelectedPage("Visits");
   },
-  computed: { ...mapGetters(["voters"]) },
+  computed: { ...mapGetters(["visits"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
@@ -96,14 +93,14 @@ export default {
       // we use this.$nextTick call
       this.$nextTick(() => {
         this.$store
-          .dispatch(GET_VOTERS)
+          .dispatch(GET_VISITS)
           .then(() => {})
           .catch(error => {});
         object.notifyPullToRefreshFinished();
       });
     },
     onItemTap({ item }) {
-      this.$navigator.navigate("/voter", { props: { voter: item }})
+      console.log(`Tapped on ${item.name}`);
     }
   }
 };

@@ -4,7 +4,11 @@ import UploadImage from "./pages/UploadImage";
 import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
 import Voters from "./pages/Voters";
+import Voter from "./pages/Voter";
+import AddVoter from "./pages/AddVoter";
 import Visits from "./pages/Visits";
+import Visit from "./pages/Visit";
+import AddVisit from "./pages/AddVisit";
 import UserUpdate from "./pages/UserUpdate.vue"
 
 export const routes = {
@@ -32,8 +36,24 @@ export const routes = {
     component: Voters,
     meta: { needsAuth: true }
   },
+  "/voter": {
+    component: Voter,
+    meta: { needsAuth: true }
+  },
+  "/addvoter": {
+    component: AddVoter,
+    meta: { needsAuth: true }
+  },
   "/visits": {
     component: Visits,
+    meta: { needsAuth: true }
+  },
+  "/visit": {
+    component: Visit,
+    meta: { needsAuth: true }
+  },
+  "/addvisit": {
+    component: AddVisit,
     meta: { needsAuth: true }
   },
   "/settings": {

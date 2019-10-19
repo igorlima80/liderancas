@@ -200,6 +200,7 @@ export default {
 
 .page {
   background-color: $background-light;
+  padding: 20;
 }
 
 </style>

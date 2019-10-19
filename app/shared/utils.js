@@ -1,5 +1,5 @@
 import { getRootView } from "tns-core-modules/application";
-let LoadingIndicator = require("@essent/nativescript-loading-indicator")
+let LoadingIndicator = require("@nstudio/nativescript-loading-indicator")
   .LoadingIndicator;
 
 export const showDrawer = () => {

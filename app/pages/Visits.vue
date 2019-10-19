@@ -26,7 +26,7 @@
 
     <GridLayout rows="auto,auto,*">
       <SearchBar row="0" hint="Buscar por Visitas" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
-      <!-- <ActivityIndicator class="indicator" v-if="visitsIndicator" :busy="visitsIndicator" /> -->
+      <ActivityIndicator row="2" class="indicator" v-if="visitsIndicator" :busy="visitsIndicator" />
       <Label row="1" text="Visitas" class="font-weight-bold text-primary m-t-15 m-l-10" />
       <RadListView
         row="2"
@@ -69,6 +69,14 @@ export default {
       visitsIndicator: true,
       listVisits: new ObservableArray(this.visits)
     };
+  },
+  created() {
+    this.$store
+      .dispatch(GET_VISITS)
+      .then(() => {
+        this.visitsIndicator = false;
+      })
+      .catch(error => {});
   },
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Visits");

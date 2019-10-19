@@ -21,7 +21,7 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Atualizar Cadastro"></Label>
+      <Label class="action-bar-title" text="Nova Visita"></Label>
     </ActionBar>
 
     <GridLayout class="page-content" rows="*,auto" columns="*,*">
@@ -223,4 +223,7 @@ export default {
 // End custom common variables
 
 // Custom styles
+.btn-secondary {
+  background-color: $page-icon-color;
+}
 </style>

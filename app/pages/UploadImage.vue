@@ -42,7 +42,7 @@
         row="2"
         colSpan="2"
         col="0"
-        text="Enviar foto"
+        text="Enviar imagem"
         class="btn btn-primary"
         @tap="updateAvatar"
       />
@@ -62,6 +62,7 @@ import { Feedback } from "nativescript-feedback";
 const feedback = new Feedback();
 
 export default {
+  props: ["user","role"],
   data() {
     return {
       isSingleMode: true,

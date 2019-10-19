@@ -35,6 +35,15 @@
           <Label row="4" col="0" text="Conta" class="font-weight-bold text-primary m-y-20" />
           <GridLayout row="5" col="0" colSpan="2" rows="auto,auto,auto" columns="*, auto" @tap="$navigator.navigate('/upload-image')">
           <Image
+            v-if="user.image"
+            row="0"
+            col="1"
+            :src="user.image"
+            class="thumb"
+            rowSpan="3"
+          />
+          <Image
+            v-else
             row="0"
             col="1"
             src="~/assets/images/userimage.png"
@@ -44,7 +53,7 @@
           <Label row="1" col="0" text="Avatar" class="font-weight-bold " color="black" />
           <Label row="2" col="0" text="Modifique o seu avatar" />
           </GridLayout>
-          <StackLayout row="6" col="0" @tap="$navigator.navigate('/user-update')">
+          <StackLayout row="6" col="0" @tap="$navigator.navigate('/user-update', { props: { user: voter, role: 'leader' }})">
           <Label text="Atualizar cadastro" class="font-weight-bold m-t-20" color="black" />
           <Label text="Atualize seus dados pessoais" />
           </StackLayout>
@@ -60,6 +69,7 @@
 
 <script>
 import * as utils from "~/shared/utils";
+import { mapGetters } from "vuex";
 import SelectedPageService from "../shared/selected-page-service";
 import LiderancasService from "~/services/LiderancasService";
 import { CHANGE_NOTIFICATION, LOGOUT } from "~/store/actions.type";
@@ -72,6 +82,7 @@ export default {
     SelectedPageService.getInstance().updateSelectedPage("Settings");
   },
   computed: {
+    computed: { ...mapGetters(["user"]) },
     notifyEnabled: {
       // getter
       get: function() {

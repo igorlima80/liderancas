@@ -3,6 +3,7 @@ import {
   GET_NOTIFICATIONS,
   UPDATE_LEADER,
   GET_VOTERS,
+  UPDATE_VOTER,
   GET_VISITS
 } from "~/store/actions.type";
 import {
@@ -82,6 +83,20 @@ const actions = {
         })
         .catch(error => {
           context.commit(SET_ERROR, response.data.errors);
+          reject(error);
+        });
+    });
+  },
+  [UPDATE_VOTER](context, voter) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .updateVoter(voter)
+        .then(data => {
+          context.commit(SET_AUTH, data);
+          resolve(data);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, error);
           reject(error);
         });
     });
