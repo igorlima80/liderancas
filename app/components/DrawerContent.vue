@@ -61,10 +61,18 @@ export default {
       selectedPage: ""
     };
   },
-  computed: { ...mapGetters(["user","notifications_quant"]) },
+  computed: { ...mapGetters(["user", "notifications_quant"]) },
   methods: {
     onNavigationItemTap(path) {
-      this.$navigator.navigate(path);
+      this.$navigator.navigate(path, {
+        clearHistory: true,
+        animated: true,
+        transition: {
+          name: "fade",
+          duration: 500,
+          curve: "ease"
+        }
+      });
       utils.closeDrawer();
     }
   }

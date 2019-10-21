@@ -122,7 +122,6 @@
 
 <script>
 import * as utils from "~/shared/utils";
-const utilsModule = require("tns-core-modules/utils/utils");
 import { mapGetters } from "vuex";
 import SelectedPageService from "../shared/selected-page-service";
 import orientationModule from "nativescript-screen-orientation";
@@ -221,9 +220,7 @@ export default {
       this.$navigator.navigate("/visits");
     },
     openMaps(latitude,longitude) {
-      utilsModule.openUrl(
-        `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
-      );
+      utils.openMaps(latitude,longitude)
     },
     onVoterCardTap(voter){
       this.$navigator.navigate("/voter", { props: { voter: voter }})

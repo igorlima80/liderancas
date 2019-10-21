@@ -67,7 +67,6 @@
 
 <script>
 import * as utils from "~/shared/utils";
-const utilsModule = require("tns-core-modules/utils/utils");
 import SelectedPageService from "../shared/selected-page-service";
 import { mapGetters } from "vuex";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
@@ -91,6 +90,7 @@ export default {
       .catch(error => {});
   },
   mounted() {
+    // this.$refs.listView.nativeView.focus();
     SelectedPageService.getInstance().updateSelectedPage("Voters");
   },
   computed: { ...mapGetters(["voters"]) },
@@ -115,10 +115,8 @@ export default {
       this.$navigator.navigate("/voter", { props: { voter: item }})
     },
     openMaps(latitude,longitude) {
-      utilsModule.openUrl(
-        `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
-      );
-    },
+      utils.openMaps(latitude,longitude)
+    }
   }
 };
 </script>
