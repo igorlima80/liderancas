@@ -39,11 +39,18 @@
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
         <v-template>
-          <StackLayout class="list-group-item">
+        <GridLayout class="list-group-item" rows="auto, *" columns="auto, *, auto">
+          <Image v-if="voter.image" row="0" col="0" :src="voter.image" class="thumb img-circle" rowSpan="2"/>
+          <Image v-else row="0" col="0" src="~/assets/images/userimage.png" class="thumb img-circle" rowSpan="2" />
+          <Label row="0" col="1" :text="voter.name" class="list-group-item-heading" />
+          <Label row="1" col="1" :text="voter.address" class="list-group-item-text" />
+          <Label row="0" col="2" class="fas m-r-10" :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" rowSpan="2" @tap="openMaps(voter.latitude, voter.longitude)" />
+        </GridLayout>
+
+          <!-- <StackLayout class="list-group-item list-style-layout">
             <Label :text="voter.name" class="list-group-item-heading"></Label>
             <Label :text="voter.address" class="list-group-item-text"></Label>
-          <StackLayout class="hr-light"></StackLayout>
-          </StackLayout>   
+          </StackLayout>    -->
         </v-template>
       </RadListView>
       <MDFloatingActionButton
@@ -52,6 +59,7 @@
         elevation="7"
         class="btn btn-primary f-btn"
         src="res://baseline_add_white_24"
+        @tap="$navigator.navigate('/addvoter')"
       />
     </GridLayout>
   </Page>
@@ -59,6 +67,7 @@
 
 <script>
 import * as utils from "~/shared/utils";
+const utilsModule = require("tns-core-modules/utils/utils");
 import SelectedPageService from "../shared/selected-page-service";
 import { mapGetters } from "vuex";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
@@ -104,7 +113,12 @@ export default {
     },
     onItemTap({ item }) {
       this.$navigator.navigate("/voter", { props: { voter: item }})
-    }
+    },
+    openMaps(latitude,longitude) {
+      utilsModule.openUrl(
+        `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
+      );
+    },
   }
 };
 </script>

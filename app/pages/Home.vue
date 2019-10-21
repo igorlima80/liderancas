@@ -25,12 +25,8 @@
     </ActionBar>
     <GridLayout rows="auto,auto,*,auto,*" class="page-content">
       <MDCardView rippleColor="transparent" elevation="2" class="list-group" row="0">
-      <!-- <CardView margin="0" elevation="7" radius="7" class="list-group" row="0"> -->
-              <ActivityIndicator
-        class="indicator"
-        v-if="userIndicator"
-        :busy="userIndicator"
-      />
+        <!-- <CardView margin="0" elevation="7" radius="7" class="list-group" row="0"> -->
+        <ActivityIndicator class="indicator" v-if="userIndicator" :busy="userIndicator" />
         <GridLayout v-else rows="auto, auto" columns="auto, *" class="list-group-item">
           <Image
             v-if="user.image"
@@ -53,15 +49,10 @@
         </GridLayout>
       </MDCardView>
       <Label text="Eleitores recentes" class="font-weight-bold text-primary m-t-20 m-l-15" row="1" />
-      <ActivityIndicator
-        class="indicator"
-        row="2"
-        v-if="votersIndicator"
-        :busy="votersIndicator"
-      />
+      <ActivityIndicator class="indicator" row="2" v-if="votersIndicator" :busy="votersIndicator" />
       <Pager
         v-else
-        for="voter in voters"
+        for="voter in recent_voters"
         row="2"
         transformers="scale"
         showIndicator="true"
@@ -69,12 +60,38 @@
         peaking="5%"
       >
         <v-template>
-          <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5">
-          <!-- <CardView elevation="7" radius="10" class="m-y-30 m-x-5"> -->
-            <GridLayout class rows="auto, *" columns="*">
-              <Label row="0" :text="voter.name" />
-              <Label row="1" :text="voter.address" />
-            </GridLayout>
+          <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5" height="80%">
+            <!-- <CardView elevation="7" radius="10" class="m-y-30 m-x-5"> -->
+            <StackLayout class="m-20" verticalAlignment="center">
+              <Image
+                v-if="voter.image"
+                :src="voter.image"
+                class="thumb img-circle"
+                horizontalAlignment="center"
+                @tap="onVoterCardTap(voter)"
+              />
+              <Image
+                v-else
+                src="~/assets/images/userimage.png"
+                class="thumb img-circle"
+                horizontalAlignment="center"
+                @tap="onVoterCardTap(voter)"
+              />
+              <Label
+                class="text-center font-weight-bold m-t-10"
+                :text="voter.name"
+                textWrap="true"
+                @tap="onVoterCardTap(voter)"
+              />
+              <!-- <Label class="text-center font-weight-bold" :text="voter.address" textWrap="true" /> -->
+              <Label textWrap="true" class="fas text-center m-t-30 p-y-5" @tap="openMaps(voter.latitude, voter.longitude)">
+              <FormattedString>
+                <Span :text="voter.address"/>
+                <Span text="  "/>
+                <Span :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" />
+              </FormattedString>
+            </Label>
+            </StackLayout>
           </MDCardView>
         </v-template>
       </Pager>
@@ -82,7 +99,7 @@
       <ActivityIndicator class="indicator" row="4" v-if="visitsIndicator" :busy="visitsIndicator" />
       <Pager
         v-else
-        for="visit in visits"
+        for="visit in recent_visits"
         row="4"
         transformers="scale"
         showIndicator="true"
@@ -91,8 +108,8 @@
       >
         <v-template>
           <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5">
-          <!-- <CardView elevation="7" radius="10" class="m-y-30 m-x-5"> -->
-            <GridLayout class rows="auto, *" columns="*">
+            <!-- <CardView elevation="7" radius="10" class="m-y-30 m-x-5"> -->
+            <GridLayout rows="auto, *" columns="*">
               <Label row="0" :text="visit.description" />
               <Label row="1" :text="visit.address" />
             </GridLayout>
@@ -105,6 +122,7 @@
 
 <script>
 import * as utils from "~/shared/utils";
+const utilsModule = require("tns-core-modules/utils/utils");
 import { mapGetters } from "vuex";
 import SelectedPageService from "../shared/selected-page-service";
 import orientationModule from "nativescript-screen-orientation";
@@ -129,7 +147,7 @@ export default {
       userIndicator: true
     };
   },
-  created() {   
+  created() {
     // if (loginService.isLoggedIn()) {
     //   if (getConnectionType() === connectionType.none) {
     //     alert({
@@ -184,7 +202,7 @@ export default {
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Home");
   },
-  computed: { ...mapGetters(["user", "voters", "visits"]) },
+  computed: { ...mapGetters(["user", "recent_voters", "recent_visits"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
@@ -201,6 +219,14 @@ export default {
     },
     onItemVisitTap() {
       this.$navigator.navigate("/visits");
+    },
+    openMaps(latitude,longitude) {
+      utilsModule.openUrl(
+        `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
+      );
+    },
+    onVoterCardTap(voter){
+      this.$navigator.navigate("/voter", { props: { voter: voter }})
     }
   }
 };
@@ -216,9 +242,14 @@ export default {
   font-size: 18;
 }
 
-.thumb{
-  height: 50;
-  width: 50;
+.icon-action {
+  font-size: 38px;
+  text-align: center;
+}
+
+.thumb {
+  height: 70;
+  width: 70;
   border-radius: 50%;
 }
 .page {

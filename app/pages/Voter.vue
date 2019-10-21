@@ -38,7 +38,7 @@
         row="0"
         col="0"
         colSpan="2"
-        rows="auto,auto,auto"
+        rows="auto,auto"
         columns="*, auto"
         @tap="$navigator.navigate('/upload-image', { props: { user: voter, role: 'voter' }})"
       >
@@ -48,11 +48,11 @@
           col="1"
           :src="voter.image"
           class="thumb"
-          rowSpan="3"
+          rowSpan="2"
         />
-        <Image v-else row="0" col="1" src="~/assets/images/userimage.png" class="thumb" rowSpan="3" />
-        <Label row="1" col="0" text="Avatar" class="font-weight-bold" color="black" />
-        <Label row="2" col="0" text="Modifique o seu avatar" />
+        <Image v-else row="0" col="1" src="~/assets/images/userimage.png" class="thumb" rowSpan="2" />
+        <Label row="0" col="0" text="Avatar" class="font-weight-bold" color="black" />
+        <Label row="1" col="0" text="Modifique o seu avatar" />
       </GridLayout>
       <RadDataForm
         ref="dataForm"
@@ -214,7 +214,7 @@ export default {
       if (getConnectionType() === connectionType.none) {
         feedback.error({
           message:
-            "Lideranças requer uma conexão com a Internet para efetuar o login."
+            "Lideranças requer uma conexão com a Internet para atualizar o eleitor."
         });
         return;
       }

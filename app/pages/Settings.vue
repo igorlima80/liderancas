@@ -53,7 +53,7 @@
           <Label row="1" col="0" text="Avatar" class="font-weight-bold " color="black" />
           <Label row="2" col="0" text="Modifique o seu avatar" />
           </GridLayout>
-          <StackLayout row="6" col="0" @tap="$navigator.navigate('/user-update', { props: { user: voter, role: 'leader' }})">
+          <StackLayout row="6" col="0" @tap="$navigator.navigate('/user-update', { props: { user: user, role: 'leader' }})">
           <Label text="Atualizar cadastro" class="font-weight-bold m-t-20" color="black" />
           <Label text="Atualize seus dados pessoais" />
           </StackLayout>
@@ -82,7 +82,7 @@ export default {
     SelectedPageService.getInstance().updateSelectedPage("Settings");
   },
   computed: {
-    computed: { ...mapGetters(["user"]) },
+    ...mapGetters(["user"]),
     notifyEnabled: {
       // getter
       get: function() {

@@ -78,7 +78,25 @@ export default class LiderancasService extends BackendService {
       .then(this.validateCode)
       .then(this.getJson)
       .then(data => {
-        console.info("Leader: " + data);
+        console.info("Voter: " + data);
+        return data;
+      });
+  }
+
+  addVoter(voter) {
+    return http
+      .request({
+        url: this.baseUrl + "voteradd",
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify({
+          voter: voter
+        })
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Voter: " + data);
         return data;
       });
   }

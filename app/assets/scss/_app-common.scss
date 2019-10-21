@@ -15,10 +15,6 @@
 .fas {
   font-family: Font Awesome 5 Free, fa-solid-900;
 }
-// Common page class
-.page-content {
-    
-}
 
 /* Action bar*/
 ActionBar .action-bar-title {
@@ -34,4 +30,9 @@ ActionBar .action-bar-title {
 
 .btn-secondary {
   background-color: $page-icon-color;
+}
+
+.list-style-layout{
+  border-bottom-width: 1;
+  border-color: black;
 }

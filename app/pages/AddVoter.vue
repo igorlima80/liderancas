@@ -21,86 +21,221 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Adicionar Eleitor"></Label>
+      <Label class="action-bar-title" text="Novo Eleitor"></Label>
     </ActionBar>
 
-    <GridLayout rows="auto,auto,*">
-      <SearchBar row="0" hint="Buscar por Visitas" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
-      <ActivityIndicator row="2" class="indicator" v-if="visitsIndicator" :busy="visitsIndicator" />
-      <Label row="1" text="Visitas" class="font-weight-bold text-primary m-t-15 m-l-10" />
-      <RadListView
-        row="2"
-        class="list-group"
-        ref="listView"
-        for="visit in visits"
-        pullToRefresh="true"
-        @itemTap="onItemTap"
-        @pullToRefreshInitiated="onPullToRefreshInitiated"
+    <GridLayout class="page-content" rows="auto,*,auto" columns="*,*">
+      <GridLayout
+        class="m-20"
+        row="0"
+        col="0"
+        colSpan="2"
+        rows="auto,auto"
+        columns="*, auto"
+        @tap="$navigator.navigate('/upload-image', { props: { user: voter, role: 'voter' }})"
       >
-        <v-template>
-          <StackLayout class="list-group-item">
-            <Label :text="visit.description" class="list-group-item-heading"></Label>
-            <Label :text="visit.address" class="list-group-item-text"></Label>
-            <StackLayout class="hr-light"></StackLayout>
-          </StackLayout>
-        </v-template>
-      </RadListView>
-      <MDFloatingActionButton
-        row="2"
-        rippleColor="green"
-        elevation="7"
-        class="btn btn-primary f-btn"
-        src="res://baseline_add_white_24"
-      />
+        <Image v-if="voter.image" row="0" col="1" :src="voter.image" class="thumb" rowSpan="2" />
+        <Image
+          v-else
+          row="0"
+          col="1"
+          src="~/assets/images/userimage.png"
+          class="thumb"
+          rowSpan="2"
+        />
+        <Label row="0" col="0" text="Avatar" class="font-weight-bold" color="black" />
+        <Label row="1" col="0" text="Modifique o seu avatar" />
+      </GridLayout>
+      <RadDataForm
+        ref="dataForm"
+        :source="voter"
+        :metadata="userMetadata"
+        :groups="groups"
+        row="1"
+        col="0"
+        colSpan="2"
+      ></RadDataForm>
+      <Button row="2" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
+      <Button row="2" col="1" text="Salvar" @tap="addVoter" class="btn btn-primary" />
     </GridLayout>
   </Page>
 </template>
 
 <script>
 import * as utils from "~/shared/utils";
+import {
+  GroupTitleStyle,
+  PropertyGroup,
+  DataFormFontStyle
+} from "nativescript-ui-dataform";
+import { Color } from "tns-core-modules/color";
 import SelectedPageService from "../shared/selected-page-service";
-import { mapGetters } from "vuex";
-import { ObservableArray } from "tns-core-modules/data/observable-array";
-import { GET_VISITS } from "~/store/actions.type";
+import { Feedback } from "nativescript-feedback";
+import { ADD_VOTER } from "~/store/actions.type";
+import {
+  connectionType,
+  getConnectionType
+} from "tns-core-modules/connectivity";
+const feedback = new Feedback();
 
 export default {
-  data() {
+  data() {-42.8115157
     return {
-      visitsIndicator: true,
-      listVisits: new ObservableArray(this.visits)
+      voter: {
+        id: "",
+        name: "",
+        image: "",
+        address: "",
+        number: "",
+        neighborhood: "",
+        cep: "",
+        complement: "",
+        latitude: "",
+        longitude: "",
+        liderancas_id: "",
+        obs: ""
+      },
+      groups: [],
+      isReadOnly: true,
+      userMetadata: {
+        commitMode: "Immediate",
+        validationMode: "Immediate"
+        // propertyAnnotations: [
+        //   {
+        //     name: "authtoken",
+        //     hidden: true
+        //   },
+        //   {
+        //     name: "id",
+        //     hidden: true
+        //   },
+        //   {
+        //     name: "image",
+        //     hidden: true
+        //   },
+        //   {
+        //     name: "latitude",
+        //     hidden: true
+        //   },
+        //   {
+        //     name: "longitude",
+        //     hidden: true
+        //   },
+        //   {
+        //     groupName: "Dados Pessoais",
+        //     name: "name",
+        //     displayName: "Nome",
+        //     index: 0,
+        //     editor: "Text"
+        //   },
+        //   {
+        //     groupName: "Dados Pessoais",
+        //     name: "email",
+        //     displayName: "Email",
+        //     readOnly: true,
+        //     index: 1,
+        //     editor: "Email"
+        //   },
+        //   {
+        //     groupName: "Dados Pessoais",
+        //     name: "phone",
+        //     displayName: "Celular",
+        //     index: 2,
+        //     editor: "Phone"
+        //   },
+        //   {
+        //     groupName: "Endereço",
+        //     name: "address",
+        //     displayName: "Logradouro",
+        //     index: 3,
+        //     editor: "Text"
+        //   },
+        //   {
+        //     groupName: "Endereço",
+        //     name: "number",
+        //     displayName: "Número",
+        //     index: 4,
+        //     editor: "Number"
+        //   },
+        //   {
+        //     groupName: "Endereço",
+        //     name: "neighborhood",
+        //     displayName: "Bairro",
+        //     index: 5,
+        //     editor: "Text"
+        //   },
+        //   {
+        //     groupName: "Endereço",
+        //     name: "cep",
+        //     displayName: "CEP",
+        //     index: 6,
+        //     editor: "Number"
+        //   },
+        //   {
+        //     groupName: "Endereço",
+        //     name: "complement",
+        //     displayName: "Complemento",
+        //     index: 7,
+        //     editor: "Text"
+        //   }
+        // ]
+      }
     };
   },
   created() {
-    this.$store
-      .dispatch(GET_VISITS)
-      .then(() => {
-        this.visitsIndicator = false;
-      })
-      .catch(error => {});
+    let gts = new GroupTitleStyle();
+    let pg = new PropertyGroup();
+
+    gts.labelTextColor = new Color("#417169");
+    gts.labelFontStyle = DataFormFontStyle.Bold;
+    gts.labelTextSize = 14;
+
+    pg.name = "Dados Pessoais";
+    pg.collapsible = true;
+    pg.collapsed = false;
+    pg.titleStyle = gts;
+
+    this.groups.push(pg);
+
+    pg = new PropertyGroup();
+
+    pg.name = "Endereço";
+    pg.collapsible = true;
+    pg.collapsed = false;
+    pg.titleStyle = gts;
+
+    this.groups.push(pg);
   },
-  mounted() {
-    SelectedPageService.getInstance().updateSelectedPage("Visits");
-  },
-  computed: { ...mapGetters(["visits"]) },
   methods: {
+    addVoter() {
+      if (getConnectionType() === connectionType.none) {
+        feedback.error({
+          message:
+            "Lideranças requer uma conexão com a Internet para cadastrar novo eleitor."
+        });
+        return;
+      }
+
+      utils.loader.show();
+      this.$store
+        .dispatch(ADD_VOTER, this.voter)
+        .then(() => {
+          this.$navigator.back();
+          utils.loader.hide();
+          feedback.success({
+            message: "Eleitor cadastrado com sucesso."
+          });
+        })
+        .catch(error => {
+          console.error(error);
+          utils.loader.hide();
+          feedback.error({
+            message: "Infelizmente não conseguimos cadsatrar. Tente mais tarde."
+          });
+        });
+    },
     onDrawerButtonTap() {
       utils.showDrawer();
-    },
-    onPullToRefreshInitiated({ object }) {
-      console.log("Pulling...");
-      // in order to avoid race conditions (only on iOS),
-      // in which the UI may not be completely updated here
-      // we use this.$nextTick call
-      this.$nextTick(() => {
-        this.$store
-          .dispatch(GET_VISITS)
-          .then(() => {})
-          .catch(error => {});
-        object.notifyPullToRefreshFinished();
-      });
-    },
-    onItemTap({ item }) {
-      console.log(`Tapped on ${item.name}`);
     }
   }
 };
@@ -112,8 +247,13 @@ export default {
 // End custom common variables
 
 // Custom styles
-.f-btn {
-  horizontal-align: right;
-  vertical-align: bottom;
+.thumb {
+  height: 45;
+  width: 45;
+  border-radius: 50%;
+}
+
+.disabled {
+  opacity: 0.5;
 }
 </style>
