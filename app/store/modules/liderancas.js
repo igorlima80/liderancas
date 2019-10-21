@@ -5,7 +5,8 @@ import {
   GET_VOTERS,
   UPDATE_VOTER,
   ADD_VOTER,
-  GET_VISITS
+  GET_VISITS,
+  UPDATE_VISIT
 } from "~/store/actions.type";
 import {
   SET_NOTIFICATION,
@@ -30,7 +31,7 @@ const getters = {
   voters: state => state.voters,
   visits: state => state.visits,
   recent_voters: state => state.voters.slice(0, 5),
-  recent_visits: state => state.visits.slice(0, 5)  
+  near_voters: state => state.voters.slice(0, 5)
 };
 
 const actions = {
@@ -108,6 +109,20 @@ const actions = {
     return new Promise((resolve, reject) => {
       liderancasService
         .updateVoter(voter)
+        .then(data => {
+          // context.commit(SET_AUTH, data);
+          resolve(data);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, error);
+          reject(error);
+        });
+    });
+  },
+  [UPDATE_VISIT](context, visit) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .updateVisit(visit)
         .then(data => {
           // context.commit(SET_AUTH, data);
           resolve(data);

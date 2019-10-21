@@ -40,18 +40,17 @@
         <v-template>
           <StackLayout class="list-group-item">
             <Label :text="visit.description" class="list-group-item-heading"></Label>
-            <Label :text="visit.address" class="list-group-item-text"></Label>
-            <StackLayout class="hr-light"></StackLayout>
+            <Label :text="visit.date" class="list-group-item-text"></Label>
           </StackLayout>
         </v-template>
       </RadListView>
-      <MDFloatingActionButton
+      <!-- <MDFloatingActionButton
         row="2"
         rippleColor="green"
         elevation="7"
         class="btn btn-primary f-btn"
         src="res://baseline_add_white_24"
-      />
+      /> -->
     </GridLayout>
   </Page>
 </template>

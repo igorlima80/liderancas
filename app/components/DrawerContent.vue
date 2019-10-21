@@ -11,7 +11,7 @@
                 <StackLayout>
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Home' ? ' selected': '')" @tap="onNavigationItemTap('/home')">
                         <Label col="0" :text="'fa-home' | fonticon" class="fas"></Label>
-                        <Label col="1" text="Dashboard" class="p-r-10"></Label>
+                        <Label col="1" text="Início" class="p-r-10"></Label>
                     </GridLayout>
 
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Voters' ? ' selected': '')" @tap="onNavigationItemTap('/voters')">
@@ -24,11 +24,11 @@
                         <Label col="1" text="Visitas" class="p-r-10"></Label>
                     </GridLayout>
 
-                    <GridLayout columns="auto, *, auto" :class="'sidedrawer-list-item' + (selectedPage === 'Notifications' ? ' selected': '')" @tap="onNavigationItemTap('/notifications')">
+                    <!-- <GridLayout columns="auto, *, auto" :class="'sidedrawer-list-item' + (selectedPage === 'Notifications' ? ' selected': '')" @tap="onNavigationItemTap('/notifications')">
                         <Label col="0" :text="'fa-bell' | fonticon" class="fas"></Label>
                         <Label col="1" text="Notificações" class="p-r-10"></Label>
                         <badge :badgeValue="notifications_quant" col="2"/>
-                    </GridLayout>
+                    </GridLayout> -->
         
                     <StackLayout class="hr-light"></StackLayout>
 

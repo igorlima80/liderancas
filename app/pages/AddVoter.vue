@@ -79,7 +79,7 @@ import {
 const feedback = new Feedback();
 
 export default {
-  data() {-42.8115157
+  data() {
     return {
       voter: {
         id: "",

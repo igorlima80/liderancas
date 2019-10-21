@@ -24,6 +24,7 @@
     "nativescript-camera": "^4.5.0",
     "nativescript-feedback": "^1.3.12",
     "nativescript-fonticon": "^2.0.0",
+    "nativescript-geolocation": "^5.1.0",
     "nativescript-imagecropper": "^1.0.7",
     "nativescript-imagepicker": "^7.1.0",
     "nativescript-material-cardview": "^2.5.0",

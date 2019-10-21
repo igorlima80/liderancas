@@ -21,11 +21,10 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Dashboard"></Label>
+      <Label class="action-bar-title" text="Início"></Label>
     </ActionBar>
     <GridLayout rows="auto,auto,*,auto,*" class="page-content">
       <MDCardView rippleColor="transparent" elevation="2" class="list-group" row="0">
-        <!-- <CardView margin="0" elevation="7" radius="7" class="list-group" row="0"> -->
         <ActivityIndicator class="indicator" v-if="userIndicator" :busy="userIndicator" />
         <GridLayout v-else rows="auto, auto" columns="auto, *" class="list-group-item">
           <Image
@@ -44,11 +43,12 @@
             class="thumb img-circle"
             rowSpan="2"
           />
-          <Label row="0" col="1" :text="user.user.name" class="list-group-item-heading" />
-          <Label row="1" col="1" :text="user.user.email" class="list-group-item-text" />
+          <Label row="0" col="1" text="Olá," class="list-group-item-heading font-weight-bold" />
+          <Label row="1" col="1" :text="user.user.name" class="list-group-item-heading" />
+          <!-- <Label row="1" col="1" :text="user.user.email" class="list-group-item-text" /> -->
         </GridLayout>
       </MDCardView>
-      <Label text="Eleitores recentes" class="font-weight-bold text-primary m-t-20 m-l-15" row="1" />
+      <Label text="Membros cadastrados recentemente" class="font-weight-bold text-primary m-t-20 m-l-15" row="1" />
       <ActivityIndicator class="indicator" row="2" v-if="votersIndicator" :busy="votersIndicator" />
       <Pager
         v-else
@@ -60,9 +60,9 @@
         peaking="5%"
       >
         <v-template>
-          <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5" height="80%">
-            <!-- <CardView elevation="7" radius="10" class="m-y-30 m-x-5"> -->
+          <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5">
             <StackLayout class="m-20" verticalAlignment="center">
+              <Label :text="'fa-shoe-prints' | fonticon" class="fas text-right" :class="{visited: voter.status}"/>
               <Image
                 v-if="voter.image"
                 :src="voter.image"
@@ -83,7 +83,6 @@
                 textWrap="true"
                 @tap="onVoterCardTap(voter)"
               />
-              <!-- <Label class="text-center font-weight-bold" :text="voter.address" textWrap="true" /> -->
               <Label textWrap="true" class="fas text-center m-t-30 p-y-5" @tap="openMaps(voter.latitude, voter.longitude)">
               <FormattedString>
                 <Span :text="voter.address"/>
@@ -95,11 +94,11 @@
           </MDCardView>
         </v-template>
       </Pager>
-      <Label text="Visitas marcadas" class="font-weight-bold text-primary m-l-15" row="3" />
-      <ActivityIndicator class="indicator" row="4" v-if="visitsIndicator" :busy="visitsIndicator" />
+      <Label text="Membros próximos" class="font-weight-bold text-primary m-l-15" row="3" />
+      <ActivityIndicator class="indicator" row="4" v-if="nearVoterIndicator" :busy="nearVoterIndicator" />
       <Pager
         v-else
-        for="visit in recent_visits"
+        for="voter in near_voters"
         row="4"
         transformers="scale"
         showIndicator="true"
@@ -108,11 +107,36 @@
       >
         <v-template>
           <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5">
-            <!-- <CardView elevation="7" radius="10" class="m-y-30 m-x-5"> -->
-            <GridLayout rows="auto, *" columns="*">
-              <Label row="0" :text="visit.description" />
-              <Label row="1" :text="visit.address" />
-            </GridLayout>
+            <StackLayout class="m-20" verticalAlignment="center">
+              <Label :text="'fa-shoe-prints' | fonticon" class="fas text-right" :class="{visited: voter.status}"/>
+              <Image
+                v-if="voter.image"
+                :src="voter.image"
+                class="thumb img-circle"
+                horizontalAlignment="center"
+                @tap="onNearVoterCardTap(voter)"
+              />
+              <Image
+                v-else
+                src="~/assets/images/userimage.png"
+                class="thumb img-circle"
+                horizontalAlignment="center"
+                @tap="onNearVoterCardTap(voter)"
+              />
+              <Label
+                class="text-center font-weight-bold m-t-10"
+                :text="voter.name"
+                textWrap="true"
+                @tap="onNearVoterCardTap(voter)"
+              />
+              <Label textWrap="true" class="fas text-center m-t-30 p-y-5" @tap="openMaps(voter.latitude, voter.longitude)">
+              <FormattedString>
+                <Span :text="voter.address"/>
+                <Span text="  "/>
+                <Span :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" />
+              </FormattedString>
+            </Label>
+            </StackLayout>
           </MDCardView>
         </v-template>
       </Pager>
@@ -126,11 +150,11 @@ import { mapGetters } from "vuex";
 import SelectedPageService from "../shared/selected-page-service";
 import orientationModule from "nativescript-screen-orientation";
 import LoginService from "~/services/LoginService";
+const geolocation = require("nativescript-geolocation");
+const { Accuracy } = require("tns-core-modules/ui/enums");
 import {
   FETCH_USER,
-  GET_NOTIFICATIONS,
-  GET_VOTERS,
-  GET_VISITS
+  GET_VOTERS
 } from "~/store/actions.type";
 import {
   connectionType,
@@ -142,26 +166,14 @@ export default {
   data() {
     return {
       votersIndicator: true,
-      visitsIndicator: true,
-      userIndicator: true
+      nearVoterIndicator: true,
+      userIndicator: true,
+      lat: "",
+      lon: ""
     };
   },
   created() {
-    // if (loginService.isLoggedIn()) {
-    //   if (getConnectionType() === connectionType.none) {
-    //     alert({
-    //       title: "Lideranças",
-    //       message:
-    //         "Não foi possivei carregar os dados do usuário. Sem conexão com a internet. Tente mais tarde.",
-    //       okButtonText: "OK"
-    //     });
-    //     this.$navigator.navigate("/login", {
-    //       clearHistory: true
-    //     });
-    //   }
-    //   return;
-    // }
-
+    this.getLocation();
     this.$store
       .dispatch(FETCH_USER)
       .then(() => {
@@ -185,23 +197,15 @@ export default {
       .dispatch(GET_VOTERS)
       .then(() => {
         this.votersIndicator = false;
+        this.nearVoterIndicator = false;
       })
-      .catch(error => {});
-    this.$store
-      .dispatch(GET_VISITS)
-      .then(() => {
-        this.visitsIndicator = false;
-      })
-      .catch(error => {});
-    this.$store
-      .dispatch(GET_NOTIFICATIONS)
-      .then(() => {})
       .catch(error => {});
   },
   mounted() {
+    geolocation.enableLocationRequest();
     SelectedPageService.getInstance().updateSelectedPage("Home");
   },
-  computed: { ...mapGetters(["user", "recent_voters", "recent_visits"]) },
+  computed: { ...mapGetters(["user", "recent_voters", "near_voters"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
@@ -224,7 +228,36 @@ export default {
     },
     onVoterCardTap(voter){
       this.$navigator.navigate("/voter", { props: { voter: voter }})
-    }
+    },
+    onNearVoterCardTap(voter){
+      this.$navigator.navigate("/visit", { props: { voter: voter }})
+    },
+    getLocation() {
+          geolocation
+              .getCurrentLocation({
+                  desiredAccuracy: Accuracy.high,
+                  maximumAge: 5000,
+                  timeout: 20000
+              })
+              .then(res => {
+                  this.lat = res.latitude;
+                  this.lon = res.longitude;
+                  console.log(`${this.lat} , ${this.lon}`)
+                  // this.speed = res.speed;
+                  // get the address (REQUIRES YOUR OWN GOOGLE MAP API KEY!)
+                  // fetch(
+                  //     "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+                  //         res.latitude +
+                  //         "," +
+                  //         res.longitude +
+                  //         "&key=YOUR-API-KEY"
+                  // )
+                  //     .then(response => response.json())
+                  //     .then(r => {
+                  //         this.addr = r.results[0].formatted_address;
+                  //     });
+              });
+      }
   }
 };
 </script>
@@ -244,6 +277,9 @@ export default {
   text-align: center;
 }
 
+.visited{
+  color: $warning-light 
+}
 .thumb {
   height: 70;
   width: 70;

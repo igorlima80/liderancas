@@ -35,15 +35,14 @@
         ref="listView"
         for="voter in voters"
         pullToRefresh="true"
-        @itemTap="onItemTap"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
         <v-template>
         <GridLayout class="list-group-item" rows="auto, *" columns="auto, *, auto">
-          <Image v-if="voter.image" row="0" col="0" :src="voter.image" class="thumb img-circle" rowSpan="2"/>
-          <Image v-else row="0" col="0" src="~/assets/images/userimage.png" class="thumb img-circle" rowSpan="2" />
-          <Label row="0" col="1" :text="voter.name" class="list-group-item-heading" />
-          <Label row="1" col="1" :text="voter.address" class="list-group-item-text" />
+          <Image v-if="voter.image" row="0" col="0" :src="voter.image" class="thumb img-circle" rowSpan="2" @tap="onItemTap(voter)"/>
+          <Image v-else row="0" col="0" src="~/assets/images/userimage.png" class="thumb img-circle" rowSpan="2" @tap="onItemTap(voter)"/>
+          <Label row="0" col="1" :text="voter.name" class="list-group-item-heading" @tap="onTap(voter)"/>
+          <Label row="1" col="1" :text="voter.address" class="list-group-item-text" @tap="onTap(voter)"/>
           <Label row="0" col="2" class="fas m-r-10" :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" rowSpan="2" @tap="openMaps(voter.latitude, voter.longitude)" />
         </GridLayout>
 
@@ -111,8 +110,11 @@ export default {
         object.notifyPullToRefreshFinished();
       });
     },
-    onItemTap({ item }) {
-      this.$navigator.navigate("/voter", { props: { voter: item }})
+    onItemTap(voter) {
+      this.$navigator.navigate("/voter", { props: { voter: voter }})
+    },
+    onTap(voter) {
+      this.$navigator.navigate("/visit", { props: { voter: voter }})
     },
     openMaps(latitude,longitude) {
       utils.openMaps(latitude,longitude)
