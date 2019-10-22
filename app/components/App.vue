@@ -11,8 +11,9 @@
 
 <script>
 import * as utils from "~/shared/utils";
+import { mapGetters } from "vuex";
 import LoginService from "~/services/LoginService";
-import { FETCH_USER, GET_NOTIFICATIONS } from "~/store/actions.type";
+import { FETCH_USER } from "~/store/actions.type";
 import { SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
 import {
   connectionType,
@@ -31,6 +32,7 @@ export default {
       return loginService.isLoggedIn();
     }
   },
+  computed: { ...mapGetters(["user"]) },
   created() {   
     if (!loginService.isLoggedIn()) {
       if (getConnectionType() === connectionType.none) {
@@ -48,7 +50,7 @@ export default {
     }
 
     this.$store
-      .dispatch(FETCH_USER)
+      .dispatch(FETCH_USER, this.user.id)
       .then(() => {})
       .catch(error => {
         alert({
@@ -63,10 +65,10 @@ export default {
         return;
       });
 
-    this.$store
-      .dispatch(GET_NOTIFICATIONS)
-      .then(() => {})
-      .catch(error => {});
+    // this.$store
+    //   .dispatch(GET_NOTIFICATIONS)
+    //   .then(() => {})
+    //   .catch(error => {});
   }
 };
 </script>

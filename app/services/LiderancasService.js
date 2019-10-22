@@ -35,7 +35,8 @@ export default class LiderancasService extends BackendService {
   updateLeader(leader) {
     return http
       .request({
-        url: this.baseUrl + "updateleader",
+        // url: this.baseUrl + "updateleader",
+        url: `http://liderancas.net.br/api/leaders/${leader.id}`,
         method: "POST",
         headers: this.getHeaders(),
         content: JSON.stringify({

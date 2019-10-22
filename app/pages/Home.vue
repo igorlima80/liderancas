@@ -173,9 +173,12 @@ export default {
     };
   },
   created() {
-    this.getLocation();
+    // if (!geolocation.isEnabled()) {
+    //   geolocation.enableLocationRequest();
+    // }
+    // this.getLocation();
     this.$store
-      .dispatch(FETCH_USER)
+      .dispatch(FETCH_USER, this.user.id)
       .then(() => {
         this.userIndicator = false;
       })
@@ -202,7 +205,6 @@ export default {
       .catch(error => {});
   },
   mounted() {
-    geolocation.enableLocationRequest();
     SelectedPageService.getInstance().updateSelectedPage("Home");
   },
   computed: { ...mapGetters(["user", "recent_voters", "near_voters"]) },

@@ -27,10 +27,10 @@ const getters = {
 };
 
 const actions = {
-  [LOGIN](context, user) {
+  [LOGIN](context, cpf) {
     return new Promise((resolve, reject) => {
       loginService
-        .login(user)
+        .login(cpf)
         .then(data => {
           console.info("User logged in with token: " + data.user.cpf);
           console.dir("User data:" + data);
@@ -75,10 +75,10 @@ const actions = {
         });
     });
   },
-  [FETCH_USER](context) {
+  [FETCH_USER](context, id) {
     return new Promise((resolve, reject) => {
       loginService
-        .user()
+        .user(id)
         .then(data => {
           console.dir("User data: " + data);
           context.commit(SET_TOKEN, data.user.cpf);

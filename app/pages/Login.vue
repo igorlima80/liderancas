@@ -114,7 +114,7 @@ export default {
 
       utils.loader.show();
       this.$store
-        .dispatch(LOGIN, { cpf: this.cpf})
+        .dispatch(LOGIN, this.cpf)
         .then(() => {
           this.$navigator.navigate("/home", {
             clearHistory: true

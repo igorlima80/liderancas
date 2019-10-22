@@ -17,7 +17,7 @@ const initialKey = "initial"
 export default class BackendService {
   constructor() {
     this.baseUrl = "https://testapi.io/api/jomauricio/";
-    // this.baseUrl = "http://165.22.187.114:21460/";
+    // this.baseUrl = "http://liderancas.net.br/api/";
     this.apiUrl = "";
   }
 

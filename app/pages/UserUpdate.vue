@@ -92,7 +92,7 @@ export default {
           },
           {
             groupName: "Dados Pessoais",
-            name: "name",
+            name: "user.name",
             displayName: "Nome",
             index: 0,
             editor: "Text"

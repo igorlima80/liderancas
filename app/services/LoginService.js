@@ -2,15 +2,15 @@ import * as http from "tns-core-modules/http";
 import BackendService from "./BackendService";
 
 export default class LoginService extends BackendService {
-  login(user) {
+  login(cpf) {
     return http
       .request({
-        url: this.baseUrl + "login",
-        // url: "http://165.22.187.114:21460/api/leaders/login",
+        // url: this.baseUrl + "login",
+        url: "http://liderancas.net.br/api/leaders/login",
         method: "POST",
         headers: this.getCommonHeaders(),
         content: JSON.stringify({
-          cpf: user.cpf
+          cpf: cpf
           // username: user.email,
           // password: user.password,
           // deviceToken: this.deviceToken
@@ -94,10 +94,11 @@ export default class LoginService extends BackendService {
       });
   }
 
-  user() {
+  user(id) {
     return http
       .request({
-        url: this.baseUrl + "user",
+        // url: this.baseUrl + "user",
+        url: `http://sistema1.liderancas.net.br/api/leaders/${id}`,
         method: "GET",
         headers: this.getHeaders()
       })
