@@ -124,7 +124,7 @@ const mutations = {
     state.errors = {};
   },
   [PURGE_AUTH](state) {
-    state.user = {};
+    state.user = { user: {} };
     state.errors = {};
     clear();
   }

@@ -6,17 +6,18 @@
       <CardView margin="1" elevation="5" radius="7" alignSelf="center">
         <GridLayout rows="auto,auto,auto,auto,auto" class="m-15">
           <Label row="0" text="Login" class="text-center font-weight-bold text-primary m-y-15" />
-          <TextField
+          <MaskedTextField
             row="1"
             ref="cpf"
             hint="CPF"
-            keyboardType="text"
+            keyboardType="phone"
             autocorrect="false"
             autocapitalizationType="none"
             v-model="cpf"
             returnKeyType="done"
             @returnPress="submit"
             class="m-b-15"
+            mask="000.000.000-00"
           />
           <!-- <TextField
             row="2"

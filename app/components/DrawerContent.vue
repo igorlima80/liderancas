@@ -1,8 +1,8 @@
 <template lang="html">
 <GridLayout rows="auto, *" class="sidedrawer sidedrawer-left">
             <StackLayout row="0" class="sidedrawer-header">
-                <Image v-if="user.image" :src="user.image" class="sidedrawer-header-image"></Image>
-                <Image v-else src="~/assets/images/userimage.png" class="sidedrawer-header-image"></Image>
+                <!-- <Image v-if="user.image" :src="user.image" class="sidedrawer-header-image"></Image> -->
+                <Image src="~/assets/images/userimage.png" class="sidedrawer-header-image"></Image>
                 <Label class="sidedrawer-header-brand" :text="user.user.name"></Label>
                 <Label class="footnote" :text="user.user.email"></Label>
             </StackLayout>
@@ -43,14 +43,14 @@
 
 <script>
 import * as utils from "~/shared/utils";
-import Badge from "~/components/Badge";
+// import Badge from "~/components/Badge";
 import SelectedPageService from "~/shared/selected-page-service";
 import { mapGetters } from "vuex";
 
 export default {
-  components: {
-    Badge
-  },
+  // components: {
+  //   Badge
+  // },
   mounted() {
     SelectedPageService.getInstance().selectedPage$.subscribe(
       selectedPage => (this.selectedPage = selectedPage)
@@ -61,7 +61,7 @@ export default {
       selectedPage: ""
     };
   },
-  computed: { ...mapGetters(["user", "notifications_quant"]) },
+  computed: { ...mapGetters(["user"]) },
   methods: {
     onNavigationItemTap(path) {
       this.$navigator.navigate(path, {

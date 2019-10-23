@@ -27,6 +27,7 @@
     "nativescript-geolocation": "^5.1.0",
     "nativescript-imagecropper": "^1.0.7",
     "nativescript-imagepicker": "^7.1.0",
+    "nativescript-masked-text-field": "^4.0.3",
     "nativescript-material-cardview": "^2.5.0",
     "nativescript-material-floatingactionbutton": "^2.5.0",
     "nativescript-pager": "^11.0.10",

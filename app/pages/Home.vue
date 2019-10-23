@@ -27,16 +27,15 @@
       <MDCardView rippleColor="transparent" elevation="2" class="list-group" row="0">
         <ActivityIndicator class="indicator" v-if="userIndicator" :busy="userIndicator" />
         <GridLayout v-else rows="auto, auto" columns="auto, *" class="list-group-item">
-          <Image
+          <!-- <Image
             v-if="user.image"
             :src="user.image"
             row="0"
             col="0"
             class="thumb img-circle"
             rowSpan="2"
-          />
+          /> -->
           <Image
-            v-else
             src="~/assets/images/userimage.png"
             row="0"
             col="0"
@@ -183,7 +182,7 @@ export default {
         this.userIndicator = false;
       })
       .catch(error => {
-        utils.loader.hide();
+        // utils.loader.hide();
         alert({
           title: "lideranças",
           message:

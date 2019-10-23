@@ -5,8 +5,8 @@ export default class LoginService extends BackendService {
   login(cpf) {
     return http
       .request({
-        // url: this.baseUrl + "login",
-        url: "http://liderancas.net.br/api/leaders/login",
+        url: this.baseUrl + "login",
+        // url: "http://liderancas.net.br/api/leaders/login",
         method: "POST",
         headers: this.getCommonHeaders(),
         content: JSON.stringify({
@@ -97,8 +97,8 @@ export default class LoginService extends BackendService {
   user(id) {
     return http
       .request({
-        // url: this.baseUrl + "user",
-        url: `http://sistema1.liderancas.net.br/api/leaders/${id}`,
+        url: this.baseUrl + "user",
+        // url: `http://liderancas.net.br/api/leaders/${id}`,
         method: "GET",
         headers: this.getHeaders()
       })
