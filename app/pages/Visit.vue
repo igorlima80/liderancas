@@ -31,7 +31,7 @@
     </ActionBar>
 
     <GridLayout class="page-content" rows="auto,*,auto" columns="*,*">
-      <GridLayout
+      <!-- <GridLayout
         class="m-20"
         row="0"
         col="0"
@@ -50,7 +50,7 @@
         <Image v-else row="0" col="1" src="~/assets/images/userimage.png" class="thumb" rowSpan="2" />
         <Label row="0" col="0" text="Avatar" class="font-weight-bold" color="black" />
         <Label row="1" col="0" text="Modifique o seu avatar" />
-      </GridLayout>
+      </GridLayout> -->
       <RadDataForm
         ref="dataForm"
         :source="visit"

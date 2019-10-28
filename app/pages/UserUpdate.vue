@@ -1,5 +1,5 @@
 <template>
-  <Page class="page">
+  <Page class="page" @loaded="onLoaded">
     <ActionBar class="action-bar">
       <!-- 
             Use the NavigationButton as a side-drawer button in Android
@@ -24,43 +24,126 @@
       <Label class="action-bar-title" text="Atualizar Cadastro"></Label>
     </ActionBar>
 
-    <StackLayout> 
-      <ScrollView>
-      <GridLayout class="page-content" rows="auto,auto,auto,auto" columns="*,*">
-      <Label row="0" col="0" text="Gerais" colSpan="2" class="font-weight-bold text-primary m-b-20" />
-      <TextField
-        row="1"
+    <GridLayout rows="*,auto" columns="*,*"> 
+      <ScrollView col="0" row="0" colSpan="2">
+      <GridLayout class="page-content" rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto" columns="*,*">
+      <Label row="0" col="0" text="Dados Gerais" colSpan="2" class="font-weight-bold text-primary m-b-20" />
+      <StackLayout class="input-field" row="1" colSpan="2">
+        <Label text="Nome" class="label" />
+        <TextField
         ref="name"
-        hint="Nome"
         keyboardType="text"
         autocorrect="false"
         autocapitalizationType="none"
+        v-model="leader.user.name"
         returnKeyType="next"
-        text="teste"
       />
-      <TextField
-        row="2"
+      </StackLayout>
+      <StackLayout class="input-field" row="2" colSpan="2">
+        <Label text="Email" class="label" />
+        <TextField
         ref="email"
-        hint="Email"
         keyboardType="email"
         autocorrect="false"
         autocapitalizationType="none"
-        v-model="user.email"
+        v-model="leader.user.email"
         returnKeyType="next"
       />
-      <MaskedTextField
-        row="3"
-        ref="cpf"
-        hint="CPF"
+      </StackLayout>
+      <StackLayout class="input-field" row="3" colSpan="2">
+        <Label text="CPF" class="label" />
+        <MaskedTextField
+          isEnabled="false"
+          ref="cpf"
+          keyboardType="text"
+          autocorrect="false"
+          autocapitalizationType="none"
+          :text="leader.user.cpf"
+          returnKeyType="next"
+          mask="000.000.000-00"
+        />
+      </StackLayout>
+      <Label row="4" col="0" text="Endereço" colSpan="2" class="font-weight-bold text-primary m-y-20" />
+      <StackLayout class="input-field" row="5" colSpan="2">
+        <Label text="Descrição" class="label" />
+        <TextField
+        ref="description"
         keyboardType="text"
         autocorrect="false"
         autocapitalizationType="none"
-        v-model="user.cpf"
+        v-model="leader.address.description"
         returnKeyType="next"
-        mask="000.000.000-00"
       />
-      <!-- <RadDataForm
-        @loaded="onLoaded"
+      </StackLayout>
+      <StackLayout class="input-field" row="6" colSpan="2">
+        <Label text="Número" class="label" />
+        <TextField
+        ref="number"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="leader.address.number"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="7" colSpan="2">
+        <Label text="Complemento" class="label" />
+        <TextField
+        ref="complement"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="leader.address.complement"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="8" colSpan="2">
+        <Label text="CEP" class="label" />
+        <MaskedTextField
+        ref="zipcode"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="leader.address.zipcode"
+        returnKeyType="next"
+        mask="00000-000"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="9" colSpan="2">
+        <Label text="Bairro" class="label" />
+        <TextField
+        ref="district"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="leader.address.district"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="10" colSpan="2">
+        <Label text="Logradouro" class="label" />
+        <TextField
+        ref="street"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="leader.address.street"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="11" colSpan="2">
+        <Label text="Cidade" class="label" />
+        <TextField
+        ref="city_id"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="leader.address.city_id"
+        returnKeyType="done"
+      />
+      </StackLayout>
+      <!-- <RadDataFormMaskedTextField
+        @loaded="onLoadMaskedTextField
         ref="dataForm"
         :source="leader"
         :metadata="userMetadata"
@@ -71,12 +154,11 @@
       ></RadDataForm> -->
       </GridLayout>
       </ScrollView>
-      <GridLayout rows="auto" columns="*,*">
-      <Button row="1" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
-      <Button row="1" col="1" text="Salvar" @tap="updateUser" class="btn btn-primary" />
+      <GridLayout col="0" row="1" colSpan="2" rows="auto" columns="*,*">
+        <Button row="0" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
+        <Button row="0" col="1" text="Salvar" @tap="updateUser" class="btn btn-primary" />
       </GridLayout>
-    
-    </StackLayout>
+    </GridLayout>
   </Page>
 </template>
 
@@ -91,7 +173,7 @@ import {
 import { Color } from "tns-core-modules/color";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
-import { UPDATE_USER } from "~/store/actions.type";
+import { UPDATE_LEADER } from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
@@ -102,7 +184,8 @@ let clone = require('clone');
 export default {
   data() {
     return {
-      leader: {}
+      leader: {user: {},
+      address: {}}
       // groups: [],
       // userMetadata: {
       //   isReadOnly: false,
@@ -229,7 +312,7 @@ export default {
 
       utils.loader.show();
       this.$store
-        .dispatch(UPDATE_USER, this.leader)
+        .dispatch(UPDATE_LEADER, this.leader)
         .then(() => {
           this.$navigator.back();
           utils.loader.hide();
@@ -262,4 +345,7 @@ export default {
 // End custom common variables
 
 // Custom styles
+.page-content{
+  padding: 15 15 0 15;
+}
 </style>

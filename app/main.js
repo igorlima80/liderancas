@@ -28,9 +28,10 @@ if(TNS_ENV !== 'production') {
   Vue.use(VueDevtools)
 }
 Vue.registerElement(
-  "MaskedTextField",
-  () => require("nativescript-masked-text-field").MaskedTextField
+  'MaskedTextField',
+  () => require('nativescript-masked-text-field').MaskedTextField
 );
+
 Vue.registerElement(
   'CardView',
   () => require('@nstudio/nativescript-cardview').CardView

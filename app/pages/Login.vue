@@ -13,7 +13,6 @@
             keyboardType="phone"
             autocorrect="false"
             autocapitalizationType="none"
-            v-model="cpf"
             returnKeyType="done"
             @returnPress="submit"
             class="m-b-15"
@@ -70,7 +69,7 @@ const feedback = new Feedback();
 export default {
   data() {
     return {
-      cpf: "81589123387"
+      // cpf: ""
       // email: "admin@admin.com",
       // password: "12345678"
     };
@@ -84,11 +83,12 @@ export default {
     }
   },
   methods: {
-    // focusPassword() {
-    //   this.$refs.password.nativeView.focus();
-    // },
+    getCpf() {
+      return this.$refs.cpf.nativeView.text
+    },
     submit() {
-      if (!this.cpf) {
+      console.log(this.getCpf())
+      if (!this.getCpf()) {
         feedback.error({
           message: "Por favor, digite o número do CPF."
         });
@@ -115,7 +115,7 @@ export default {
 
       utils.loader.show();
       this.$store
-        .dispatch(LOGIN, this.cpf)
+        .dispatch(LOGIN, this.getCpf())
         .then(() => {
           this.$navigator.navigate("/home", {
             clearHistory: true

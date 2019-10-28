@@ -6,6 +6,7 @@ import {
 } from "tns-core-modules/application-settings";
 
 const tokenKey = "token";
+// const userIdKey = "userId";
 const deviceToken = "deviceToken";
 const notificationKey = "notification"
 const initialKey = "initial"
@@ -26,6 +27,12 @@ export default class BackendService {
     return !!getString(tokenKey);
   }
 
+  // isLoggedIn() {
+  //   console.log('GETTING ID LOGGED IN: ' + getString(userIdKey))
+  //   return !!getString(userIdKey);
+  // }
+
+
   get token() {
     console.log('GETTING TOKEN: ' + getString(tokenKey))
     return getString(tokenKey);
@@ -35,6 +42,16 @@ export default class BackendService {
     setString(tokenKey, newToken);
     console.log('TOKEN SET TO: ' + newToken)
   }
+
+  // get userId() {
+  //   console.log('GETTING userId: ' + getString(userIdKey))
+  //   return getString(userIdKey);
+  // }
+
+  // set userId(newUserId) {
+  //   setString(userIdKey, newUserId);
+  //   console.log('userId SET TO: ' + newUserId)
+  // }
 
   get deviceToken() {
     console.log('GETTING diviceToken: ' + getString(deviceToken))

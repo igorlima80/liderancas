@@ -1,0 +1,151 @@
+GET http://liderancas.net.br/api/leaders/1 HTTP/1.1
+content-type: application/json
+
+###
+
+POST http://liderancas.net.br/api/leaders/login HTTP/1.1
+content-type: application/json
+
+{
+    "cpf": "815.891.233-87"
+}
+###
+GET http://localhost:3000/api/leaders/ID/members
+
+[
+    {
+        "id": 1,
+        "name": "teste",
+        "leader_id": 1,
+        "latitude": -5.0896403,
+        "longitude": -42.809588,
+        "cpf": "4657984512",
+        "status": "unvisited",
+        "translate_status": "translation missing: pt-BR.activerecord.attributes.member.statuses.unvisited",
+        "address": {
+            "description": "",
+            "number": "1998",
+            "complement": "",
+            "zipcode": "64057-650",
+            "district": "Vale Quem Tem",
+            "street": "Rua Professora Maria Célia Nascimento"
+        }
+    }
+]
+
+###
+# Alterar Lider
+
+POST http://liderancas.net.br/api/leaders/ID
+
+
+{
+"leader":{
+    "id": 1,
+    "mother_name": "mae",
+    "father_name": "pai",
+    "rg": "teste",
+    "latitude": -5.0896403,
+    "longitude": -42.809588,
+    "user": {
+        "id": 2,
+        "name": "Francisco Igor de Lima e Silva",
+        "email": "f.igor.lima@gmail.com",
+        "provider": "email",
+        "cpf": "81589123387"
+    },
+    "address": {
+        "id": 1,
+        "description": "",
+        "number": "1234",
+        "complement": "",
+        "zipcode": "64057-650",
+        "district": "Vale Quem Tem",
+        "street": "Rua Professora Maria Célia Nascimento",
+        "city_id": 3186,
+        "addressable_type": "Leader",
+        "addressable_id": 1,
+        "created_at": "2019-10-21T16:06:12.493-03:00",
+        "updated_at": "2019-10-21T16:06:12.493-03:00",
+        "city": {
+            "name": "Teresina",
+            "ibge": "2211001",
+            "latitude": -5.0896403,
+            "longitude": -42.809588,
+            "state": {
+                "name": "Piauí",
+                "acronym": "PI"
+            }
+        }
+    }
+ }
+}
+
+###
+# Método para buscar os membros pŕoximos não visitados
+
+POST http://liderancas.net.br/api/members/find_unvisited
+content-type: application/json
+
+{
+ "id":1,	
+ "latitude": -5.114644, 
+ "longitude": -42.753744,
+ "radius": 1000
+}
+###
+# Método para buscar os membros pŕoximos, independente de status
+
+POST http://liderancas.net.br/api/members/find
+content-type: application/json
+
+{
+ "id":1,	
+ "latitude": -5.114644, 
+ "longitude": -42.753744,
+ "radius": 1000
+}
+
+###
+# cadastro de visitas:
+
+POST http://liderancas.net.br:3000/api/visits/create
+content-type: application/json
+
+{
+	"visit":{
+		"date_visit":"2019-10-27",
+		"observation":"testeeee2",
+		"number_of_voters": 4,
+		"member_id": 1
+	}
+}
+
+###
+# Cadastro de membros:
+POST http://liderancas.net.br/api/members/create
+content-type: application/json
+
+{
+	"member":{
+		"name": "membro teste da silva",
+		"cpf": "111.111.111-11",
+		"birthdate": "2019-10-27",
+		"leader_id": 1,
+		"address_attributes":{
+			"description": "trabalho",
+			"zipcode": "64057-650",
+			"street": "retorno do cep",
+			"number": 3365,
+			"complement": "bloco apto lote",
+			"district":"retorno do cep",
+			"city_id": 3286
+		}
+		
+	}
+	
+}
+
+###
+# Setalhes de um membro:
+GET http://liderancas.net.br/api/members/1

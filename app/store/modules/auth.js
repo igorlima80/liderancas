@@ -34,7 +34,7 @@ const actions = {
         .then(data => {
           console.info("User logged in with token: " + data.user.cpf);
           console.dir("User data:" + data);
-          context.commit(SET_TOKEN, data.user.cpf);
+          context.commit(SET_TOKEN, `${data.id}`);
           context.commit(SET_AUTH, data);
           resolve();
         })
@@ -81,7 +81,7 @@ const actions = {
         .user(id)
         .then(data => {
           console.dir("User data: " + data);
-          context.commit(SET_TOKEN, data.user.cpf);
+          context.commit(SET_TOKEN, `${data.id}`);
           context.commit(SET_AUTH, data);
           resolve();
         })
@@ -114,6 +114,7 @@ const mutations = {
   },
   [SET_TOKEN](state, token) {
     loginService.token = token;
+    // loginService.userId = `${token}`;
   },
   [SET_AUTH](state, user) {
     state.user = user;

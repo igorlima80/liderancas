@@ -21,7 +21,7 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Eleitores"></Label>
+      <Label class="action-bar-title" text="Membros"></Label>
     </ActionBar>
 
     <GridLayout rows="auto,auto,*">
