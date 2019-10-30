@@ -48,7 +48,7 @@
           <!-- <Label row="1" col="1" :text="user.user.email" class="list-group-item-text" /> -->
         </GridLayout>
       </MDCardView>
-      <Label text="Membros próximos" class="font-weight-bold text-primary m-t-20 m-l-15" row="1" />
+      <Label text="Membros  próximos" class="font-weight-bold text-primary m-t-20 m-l-15" row="1" />
       <ActivityIndicator
         class="indicator"
         row="2"
