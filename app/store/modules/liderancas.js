@@ -2,6 +2,8 @@ import {
   CHANGE_NOTIFICATION,
   GET_NOTIFICATIONS,
   UPDATE_LEADER,
+  GET_NEAR_MEMBERS,
+  GET_UNVISITED_MEMBERS,
   GET_VOTERS,
   UPDATE_VOTER,
   ADD_VOTER,
@@ -72,6 +74,36 @@ const actions = {
         })
         .catch(error => {
           context.commit(SET_ERROR, error);
+          reject(error);
+        });
+    });
+  },
+  [GET_NEAR_MEMBERS](context, info) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .nearMembers(info)
+        .then(data => {
+          console.info("Membros próximos: " + data.collection);
+          // context.commit(SET_VOTERS, data);
+          resolve(data.collection);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, response.data.errors);
+          reject(error);
+        });
+    });
+  },
+  [GET_UNVISITED_MEMBERS](context, info) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .unvisitedMembers(info)
+        .then(data => {
+          console.info("Membros próximos não visitados: " + data.collection);
+          // context.commit(SET_VOTERS, data);
+          resolve(data.collection);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, response.data.errors);
           reject(error);
         });
     });

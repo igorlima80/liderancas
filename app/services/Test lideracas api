@@ -11,6 +11,7 @@ content-type: application/json
 }
 ###
 GET http://localhost:3000/api/leaders/ID/members
+content-type: application/json
 
 [
     {
@@ -36,49 +37,25 @@ GET http://localhost:3000/api/leaders/ID/members
 ###
 # Alterar Lider
 
-POST http://liderancas.net.br/api/leaders/ID
-
+POST http://liderancas.net.br/api/leaders/2
+content-type: application/json
 
 {
 "leader":{
-    "id": 1,
-    "mother_name": "mae",
-    "father_name": "pai",
+    "mother_name": "maeiii",
+    "father_name": "pddddd",
     "rg": "teste",
-    "latitude": -5.0896403,
-    "longitude": -42.809588,
-    "user": {
-        "id": 2,
-        "name": "Francisco Igor de Lima e Silva",
-        "email": "f.igor.lima@gmail.com",
-        "provider": "email",
-        "cpf": "81589123387"
-    },
-    "address": {
-        "id": 1,
+    
+    "address_attributes": {
         "description": "",
-        "number": "1234",
+        "number": "12345",
         "complement": "",
         "zipcode": "64057-650",
         "district": "Vale Quem Tem",
         "street": "Rua Professora Maria Célia Nascimento",
-        "city_id": 3186,
-        "addressable_type": "Leader",
-        "addressable_id": 1,
-        "created_at": "2019-10-21T16:06:12.493-03:00",
-        "updated_at": "2019-10-21T16:06:12.493-03:00",
-        "city": {
-            "name": "Teresina",
-            "ibge": "2211001",
-            "latitude": -5.0896403,
-            "longitude": -42.809588,
-            "state": {
-                "name": "Piauí",
-                "acronym": "PI"
-            }
+        "city_id": 3186
         }
-    }
- }
+	}
 }
 
 ###
