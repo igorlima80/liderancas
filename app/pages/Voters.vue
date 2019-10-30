@@ -33,22 +33,22 @@
         row="2"
         class="list-group"
         ref="listView"
-        for="voter in voters"
+        for="member in members"
         pullToRefresh="true"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
         <v-template>
         <GridLayout class="list-group-item" rows="auto, *" columns="*, auto">
-          <!-- <Image v-if="voter.image" row="0" col="0" :src="voter.image" class="thumb img-circle" rowSpan="2" @tap="onItemTap(voter)"/>
-          <Image v-else row="0" col="0" src="~/assets/images/userimage.png" class="thumb img-circle" rowSpan="2" @tap="onItemTap(voter)"/> -->
-          <Label row="0" col="0" :text="voter.name" class="list-group-item-heading" @tap="onItemTap(voter)"/>
-          <Label row="1" col="0" :text="voter.address" class="list-group-item-text" @tap="onItemTap(voter)"/>
-          <Label row="0" col="1" class="fas m-r-10" :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" rowSpan="2" @tap="openMaps(voter.latitude, voter.longitude)" />
+          <!-- <Image v-if="member.image" row="0" col="0" :src="member.image" class="thumb img-circle" rowSpan="2" @tap="onItemTap(member)"/>
+          <Image v-else row="0" col="0" src="~/assets/images/userimage.png" class="thumb img-circle" rowSpan="2" @tap="onItemTap(member)"/> -->
+          <Label row="0" col="0" :text="member.name" class="list-group-item-heading" @tap="onItemTap(member)"/>
+          <Label row="1" col="0" :text="member.address" class="list-group-item-text" @tap="onItemTap(member)"/>
+          <Label row="0" col="1" class="fas m-r-10" :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" rowSpan="2" @tap="openMaps(member.latitude, member.longitude)" />
         </GridLayout>
 
           <!-- <StackLayout class="list-group-item list-style-layout">
-            <Label :text="voter.name" class="list-group-item-heading"></Label>
-            <Label :text="voter.address" class="list-group-item-text"></Label>
+            <Label :text="member.name" class="list-group-item-heading"></Label>
+            <Label :text="member.address" class="list-group-item-text"></Label>
           </StackLayout>    -->
         </v-template>
       </RadListView>
@@ -69,7 +69,7 @@ import * as utils from "~/shared/utils";
 import SelectedPageService from "../shared/selected-page-service";
 import { mapGetters } from "vuex";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
-import { GET_VOTERS } from "~/store/actions.type";
+import { GET_MEMBERS } from "~/store/actions.type";
 import { Feedback } from "nativescript-feedback";
 const feedback = new Feedback();
 
@@ -77,13 +77,15 @@ export default {
   data() {
     return {
       votersIndicator: true,
-      listVoters: new ObservableArray(this.voters)
+      members: []
+      // listVoters: new ObservableArray(this.voters)
     };
   },
   created() {
     this.$store
-      .dispatch(GET_VOTERS)
-      .then(() => {
+      .dispatch(GET_MEMBERS, this.user.id)
+      .then((data) => {
+        this.members = data
         this.votersIndicator = false;
       })
       .catch(error => {});
@@ -92,7 +94,7 @@ export default {
     // this.$refs.listView.nativeView.focus();
     SelectedPageService.getInstance().updateSelectedPage("Voters");
   },
-  computed: { ...mapGetters(["voters"]) },
+  computed: { ...mapGetters(["user"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
@@ -104,7 +106,7 @@ export default {
       // we use this.$nextTick call
       this.$nextTick(() => {
         this.$store
-          .dispatch(GET_VOTERS)
+          .dispatch(GET_MEMBERS, this.user.id)
           .then(() => {})
           .catch(error => {});
         object.notifyPullToRefreshFinished();

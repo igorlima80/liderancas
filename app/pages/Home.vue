@@ -34,24 +34,33 @@
             col="0"
             class="thumb img-circle"
             rowSpan="2"
-          /> -->
+          />-->
           <Image
             src="~/assets/images/userimage.png"
             row="0"
             col="0"
             class="thumb img-circle"
-            rowSpan="2"
+            rowspan="2"
           />
           <Label row="0" col="1" text="Olá," class="list-group-item-heading font-weight-bold" />
           <Label row="1" col="1" :text="user.user.name" class="list-group-item-heading" />
           <!-- <Label row="1" col="1" :text="user.user.email" class="list-group-item-text" /> -->
         </GridLayout>
       </MDCardView>
-      <Label text="Membros cadastrados recentemente" class="font-weight-bold text-primary m-t-20 m-l-15" row="1" />
-      <ActivityIndicator class="indicator" row="2" v-if="votersIndicator" :busy="votersIndicator" />
+      <Label
+        text="Membros próximos não visitados"
+        class="font-weight-bold text-primary m-t-20 m-l-15"
+        row="1"
+      />
+      <ActivityIndicator
+        class="indicator"
+        row="2"
+        v-if="unvisitedMembersIndicator"
+        :busy="unvisitedMembersIndicator"
+      />
       <Pager
         v-else
-        for="voter in recent_voters"
+        for="member in unvisited_members"
         row="2"
         transformers="scale"
         showIndicator="true"
@@ -61,43 +70,57 @@
         <v-template>
           <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5">
             <StackLayout class="m-20" verticalAlignment="center">
-              <Label :text="'fa-shoe-prints' | fonticon" class="fas text-right" :class="{visited: voter.status}"/>
-              <Image
-                v-if="voter.image"
-                :src="voter.image"
+              <Label
+                :text="'fa-shoe-prints' | fonticon"
+                class="fas text-right"
+                :class="{visited: member.status === 'visited'}"
+              />
+              <!-- <Image
+                v-if="member.image"
+                :src="member.image"
                 class="thumb img-circle"
                 horizontalAlignment="center"
-                @tap="onVoterCardTap(voter)"
-              />
+                @tap="onUnvisitedMemberCardTap(member)"
+              />-->
               <Image
-                v-else
                 src="~/assets/images/userimage.png"
                 class="thumb img-circle"
                 horizontalAlignment="center"
-                @tap="onVoterCardTap(voter)"
+                @tap="onUnvisitedMemberCardTap(member)"
               />
               <Label
                 class="text-center font-weight-bold m-t-10"
-                :text="voter.name"
+                :text="member.name"
                 textWrap="true"
-                @tap="onVoterCardTap(voter)"
+                @tap="onUnvisitedMemberCardTap(member)"
               />
-              <Label textWrap="true" class="fas text-center m-t-30 p-y-5" @tap="openMaps(voter.latitude, voter.longitude)">
-              <FormattedString>
-                <Span :text="voter.address"/>
-                <Span text="  "/>
-                <Span :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" />
-              </FormattedString>
-            </Label>
+              <Label
+                textWrap="true"
+                class="fas text-center m-t-30 p-y-5"
+                @tap="openMaps(member.latitude, member.longitude)"
+              >
+                <FormattedString>
+                  <!-- <Span :text="member.address.street" />
+                  <Span text=", " />
+                  <Span :text="member.address.number" />
+                  <Span text="  " />-->
+                  <Span :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" />
+                </FormattedString>
+              </Label>
             </StackLayout>
           </MDCardView>
         </v-template>
       </Pager>
       <Label text="Membros próximos" class="font-weight-bold text-primary m-l-15" row="3" />
-      <ActivityIndicator class="indicator" row="4" v-if="nearVoterIndicator" :busy="nearVoterIndicator" />
+      <ActivityIndicator
+        class="indicator"
+        row="4"
+        v-if="nearMemberIndicator"
+        :busy="nearMemberIndicator"
+      />
       <Pager
         v-else
-        for="voter in near_voters"
+        for="member in near_members"
         row="4"
         transformers="scale"
         showIndicator="true"
@@ -107,34 +130,41 @@
         <v-template>
           <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5">
             <StackLayout class="m-20" verticalAlignment="center">
-              <Label :text="'fa-shoe-prints' | fonticon" class="fas text-right" :class="{visited: voter.status}"/>
-              <Image
-                v-if="voter.image"
-                :src="voter.image"
+              <Label
+                :text="'fa-shoe-prints' | fonticon"
+                class="fas text-right"
+                :class="{visited: member.status}"
+              />
+              <!-- <Image
+                v-if="member.image"
+                :src="member.image"
                 class="thumb img-circle"
                 horizontalAlignment="center"
-                @tap="onNearVoterCardTap(voter)"
-              />
+                @tap="onNearMemberCardTap(member)"
+              />-->
               <Image
-                v-else
                 src="~/assets/images/userimage.png"
                 class="thumb img-circle"
                 horizontalAlignment="center"
-                @tap="onNearVoterCardTap(voter)"
+                @tap="onNearMemberCardTap(member)"
               />
               <Label
                 class="text-center font-weight-bold m-t-10"
-                :text="voter.name"
+                :text="member.name"
                 textWrap="true"
-                @tap="onNearVoterCardTap(voter)"
+                @tap="onNearMemberCardTap(member)"
               />
-              <Label textWrap="true" class="fas text-center m-t-30 p-y-5" @tap="openMaps(voter.latitude, voter.longitude)">
-              <FormattedString>
-                <Span :text="voter.address"/>
-                <Span text="  "/>
-                <Span :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" />
-              </FormattedString>
-            </Label>
+              <Label
+                textWrap="true"
+                class="fas text-center m-t-30 p-y-5"
+                @tap="openMaps(member.latitude, member.longitude)"
+              >
+                <FormattedString>
+                  <!-- <Span :text="member.address" />
+                  <Span text="  " />-->
+                  <Span :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" />
+                </FormattedString>
+              </Label>
             </StackLayout>
           </MDCardView>
         </v-template>
@@ -153,7 +183,8 @@ const geolocation = require("nativescript-geolocation");
 const { Accuracy } = require("tns-core-modules/ui/enums");
 import {
   FETCH_USER,
-  GET_VOTERS
+  GET_UNVISITED_MEMBERS,
+  GET_NEAR_MEMBERS
 } from "~/store/actions.type";
 import {
   connectionType,
@@ -164,17 +195,27 @@ const loginService = new LoginService();
 export default {
   data() {
     return {
-      votersIndicator: true,
-      nearVoterIndicator: true,
+      unvisited_members: [],
+      near_members: [],
+      unvisitedMembersIndicator: true,
+      nearMemberIndicator: true,
       userIndicator: true,
-      lat: "",
-      lon: ""
+      locations: [],
+      search: {
+        id: 1,
+        latitude: -5.114644,
+        longitude: -42.753744,
+        radius: 1000
+      },
+      search_unvisited: {
+        id: 1,
+        latitude: -5.114644,
+        longitude: -42.753744,
+        radius: 1000
+      }
     };
   },
   created() {
-    // if (!geolocation.isEnabled()) {
-    //   geolocation.enableLocationRequest();
-    // }
     // this.getLocation();
     this.$store
       .dispatch(FETCH_USER, loginService.token)
@@ -196,17 +237,24 @@ export default {
       });
 
     this.$store
-      .dispatch(GET_VOTERS)
-      .then(() => {
-        this.votersIndicator = false;
-        this.nearVoterIndicator = false;
+      .dispatch(GET_NEAR_MEMBERS, this.search)
+      .then(data => {
+        this.near_members = data.collection;
+        this.nearMemberIndicator = false;
+      })
+      .catch(error => {});
+    this.$store
+      .dispatch(GET_UNVISITED_MEMBERS, this.search_unvisited)
+      .then(data => {
+        this.unvisited_members = data.collection;
+        this.unvisitedMembersIndicator = false;
       })
       .catch(error => {});
   },
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Home");
   },
-  computed: { ...mapGetters(["user", "recent_voters", "near_voters"]) },
+  computed: { ...mapGetters(["user"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
@@ -224,41 +272,59 @@ export default {
     onItemVisitTap() {
       this.$navigator.navigate("/visits");
     },
-    openMaps(latitude,longitude) {
-      utils.openMaps(latitude,longitude)
+    openMaps(latitude, longitude) {
+      utils.openMaps(latitude, longitude);
     },
-    onVoterCardTap(voter){
-      this.$navigator.navigate("/voter", { props: { voter: voter }})
+    onUnvisitedMemberCardTap(voter) {
+      this.$navigator.navigate("/voter", { props: { voter: voter } });
     },
-    onNearVoterCardTap(voter){
-      this.$navigator.navigate("/visit", { props: { voter: voter }})
+    onNearMemberCardTap(voter) {
+      this.$navigator.navigate("/visit", { props: { voter: voter } });
+    },
+    enableLocation() {
+      geolocation.isEnabled().then(
+        function(isEnabled) {
+          if (!isEnabled) {
+            geolocation
+              .enableLocationRequest(true, true)
+              .then(
+                () => {
+                  console.log("User Enabled Location Service");
+                },
+                e => {
+                  console.log("Error: " + (e.message || e));
+                }
+              )
+              .catch(ex => {
+                console.log("Unable to Enable Location", ex);
+              });
+          }
+        },
+        function(e) {
+          console.log("Error: " + (e.message || e));
+        }
+      );
     },
     getLocation() {
-          geolocation
-              .getCurrentLocation({
-                  desiredAccuracy: Accuracy.high,
-                  maximumAge: 5000,
-                  timeout: 20000
-              })
-              .then(res => {
-                  this.lat = res.latitude;
-                  this.lon = res.longitude;
-                  console.log(`${this.lat} , ${this.lon}`)
-                  // this.speed = res.speed;
-                  // get the address (REQUIRES YOUR OWN GOOGLE MAP API KEY!)
-                  // fetch(
-                  //     "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
-                  //         res.latitude +
-                  //         "," +
-                  //         res.longitude +
-                  //         "&key=YOUR-API-KEY"
-                  // )
-                  //     .then(response => response.json())
-                  //     .then(r => {
-                  //         this.addr = r.results[0].formatted_address;
-                  //     });
-              });
-      }
+      this.enableLocation();
+      let that = this;
+      geolocation
+        .getCurrentLocation({
+          desiredAccuracy: Accuracy.high,
+          maximumAge: 5000,
+          timeout: 10000
+        })
+        .then(
+          function(loc) {
+            if (loc) {
+              that.locations.push(loc);
+            }
+          },
+          function(e) {
+            console.log("Error: " + (e.message || e));
+          }
+        );
+    }
   }
 };
 </script>
@@ -278,8 +344,8 @@ export default {
   text-align: center;
 }
 
-.visited{
-  color: $warning-light 
+.visited {
+  color: $warning-light;
 }
 .thumb {
   height: 70;

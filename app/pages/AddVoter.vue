@@ -71,7 +71,7 @@ import {
 import { Color } from "tns-core-modules/color";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
-import { ADD_VOTER } from "~/store/actions.type";
+import { ADD_MEMBER } from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
@@ -218,7 +218,7 @@ export default {
 
       utils.loader.show();
       this.$store
-        .dispatch(ADD_VOTER, this.voter)
+        .dispatch(ADD_MEMBER, this.voter)
         .then(() => {
           this.$navigator.back();
           utils.loader.hide();

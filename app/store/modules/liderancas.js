@@ -2,9 +2,11 @@ import {
   CHANGE_NOTIFICATION,
   GET_NOTIFICATIONS,
   UPDATE_LEADER,
-  GET_VOTERS,
-  UPDATE_VOTER,
-  ADD_VOTER,
+  GET_MEMBERS,
+  GET_NEAR_MEMBERS,
+  GET_UNVISITED_MEMBERS,
+  UPDATE_MEMBER,
+  ADD_MEMBER,
   GET_VISITS,
   UPDATE_VISIT
 } from "~/store/actions.type";
@@ -76,14 +78,14 @@ const actions = {
         });
     });
   },
-  [GET_VOTERS](context) {
+  [GET_MEMBERS](context) {
     return new Promise((resolve, reject) => {
       liderancasService
-        .voters()
+        .members()
         .then(data => {
-          console.info("Voters: " + data);
-          context.commit(SET_VOTERS, data);
-          resolve();
+          console.info("Members: " + data);
+          // context.commit(SET_VOTERS, data);
+          resolve(data);
         })
         .catch(error => {
           context.commit(SET_ERROR, response.data.errors);
@@ -91,7 +93,52 @@ const actions = {
         });
     });
   },
-  [ADD_VOTER](context, voter) {
+  [GET_NEAR_MEMBERS](context, search) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .nearMembers(search)
+        .then(data => {
+          console.info("Members: " + data);
+          // context.commit(SET_VOTERS, data);
+          resolve(data);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, response.data.errors);
+          reject(error);
+        });
+    });
+  },
+  [GET_UNVISITED_MEMBERS](context, search) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .unvisitedMembers(search)
+        .then(data => {
+          console.log("Members: " + data);
+          // context.commit(SET_VOTERS, data);
+          resolve(data);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, response.data.errors);
+          reject(error);
+        });
+    });
+  },
+  // [GET_NEAR_MEMBERS_UNVISITED](context) {
+  //   return new Promise((resolve, reject) => {
+  //     liderancasService
+  //       .voters()
+  //       .then(data => {
+  //         console.info("Voters: " + data);
+  //         context.commit(SET_VOTERS, data);
+  //         resolve();
+  //       })
+  //       .catch(error => {
+  //         context.commit(SET_ERROR, response.data.errors);
+  //         reject(error);
+  //       });
+  //   });
+  // },
+  [ADD_MEMBER](context, voter) {
     return new Promise((resolve, reject) => {
       liderancasService
         .addVoter(voter)
@@ -105,7 +152,7 @@ const actions = {
         });
     });
   },
-  [UPDATE_VOTER](context, voter) {
+  [UPDATE_MEMBER](context, voter) {
     return new Promise((resolve, reject) => {
       liderancasService
         .updateVoter(voter)

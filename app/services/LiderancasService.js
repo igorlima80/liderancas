@@ -51,17 +51,56 @@ export default class LiderancasService extends BackendService {
       });
   }
 
-  voters() {
+  members(leader_id) {
     return http
       .request({
-        url: this.baseUrl + "voters",
+        // url: this.baseUrl + "voters",
+        url: `http://liderancas.net.br/api/leaders/${leader_id}/members`,
         method: "GET",
         headers: this.getHeaders()
       })
       .then(this.validateCode)
       .then(this.getJson)
       .then(data => {
-        console.info("Voters: " + data);
+        console.info("Members: " + data);
+        return data;
+      });
+  }
+
+  nearMembers(data) {
+    return http
+      .request({
+        // url: this.baseUrl + "voters",
+        url: `http://liderancas.net.br/api/members/find`,
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify({
+          data: data
+        })
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Members: " + data);
+        return data;
+      });
+  }
+
+  unvisitedMembers(data) {
+    return http
+      .request({
+        // url: this.baseUrl + "voters",
+        url: `http://liderancas.net.br/api/members/find_unvisited`,
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify({
+          data: data
+        })
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Members: " + data);
         return data;
       });
   }
@@ -131,6 +170,25 @@ export default class LiderancasService extends BackendService {
       .then(this.getJson)
       .then(data => {
         console.info("Visit: " + data);
+        return data;
+      });
+  }
+
+  getCites(description) {
+    return http
+      .request({
+        // url: this.baseUrl + "voters",
+        url: `http://localhost:3000/api/cities/find`,
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify({
+          description: description
+        })
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Members: " + data);
         return data;
       });
   }

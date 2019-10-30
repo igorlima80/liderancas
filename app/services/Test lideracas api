@@ -1,7 +1,3 @@
-GET http://liderancas.net.br/api/leaders/1 HTTP/1.1
-content-type: application/json
-
-###
 
 POST http://liderancas.net.br/api/leaders/login HTTP/1.1
 content-type: application/json
@@ -9,82 +5,39 @@ content-type: application/json
 {
     "cpf": "815.891.233-87"
 }
-###
-GET http://localhost:3000/api/leaders/ID/members
 
-[
-    {
-        "id": 1,
-        "name": "teste",
-        "leader_id": 1,
-        "latitude": -5.0896403,
-        "longitude": -42.809588,
-        "cpf": "4657984512",
-        "status": "unvisited",
-        "translate_status": "translation missing: pt-BR.activerecord.attributes.member.statuses.unvisited",
-        "address": {
-            "description": "",
-            "number": "1998",
-            "complement": "",
-            "zipcode": "64057-650",
-            "district": "Vale Quem Tem",
-            "street": "Rua Professora Maria Célia Nascimento"
-        }
-    }
-]
+###
+GET http://liderancas.net.br/api/leaders/1 HTTP/1.1
+content-type: application/json
+
+###
+GET http://liderancas.net.br/api/leaders/1/members HTTP/1.1
+content-type: application/json
 
 ###
 # Alterar Lider
 
-POST http://liderancas.net.br/api/leaders/ID
-
+POST http://liderancas.net.br/api/leaders/1 HTTP/1.1
+Content-Type: application/json
 
 {
 "leader":{
-    "id": 1,
-    "mother_name": "mae",
-    "father_name": "pai",
-    "rg": "teste",
-    "latitude": -5.0896403,
-    "longitude": -42.809588,
-    "user": {
-        "id": 2,
-        "name": "Francisco Igor de Lima e Silva",
-        "email": "f.igor.lima@gmail.com",
-        "provider": "email",
-        "cpf": "81589123387"
-    },
-    "address": {
-        "id": 1,
-        "description": "",
-        "number": "1234",
+    "address_attributes": {
+        "description": "teste",
+        "number": "12345",
         "complement": "",
         "zipcode": "64057-650",
         "district": "Vale Quem Tem",
         "street": "Rua Professora Maria Célia Nascimento",
-        "city_id": 3186,
-        "addressable_type": "Leader",
-        "addressable_id": 1,
-        "created_at": "2019-10-21T16:06:12.493-03:00",
-        "updated_at": "2019-10-21T16:06:12.493-03:00",
-        "city": {
-            "name": "Teresina",
-            "ibge": "2211001",
-            "latitude": -5.0896403,
-            "longitude": -42.809588,
-            "state": {
-                "name": "Piauí",
-                "acronym": "PI"
-            }
+        "city_id": 3186
         }
-    }
- }
+	}
 }
 
 ###
 # Método para buscar os membros pŕoximos não visitados
 
-POST http://liderancas.net.br/api/members/find_unvisited
+POST http://liderancas.net.br/api/members/find_unvisited HTTP/1.1
 content-type: application/json
 
 {
@@ -96,7 +49,7 @@ content-type: application/json
 ###
 # Método para buscar os membros pŕoximos, independente de status
 
-POST http://liderancas.net.br/api/members/find
+POST http://liderancas.net.br/api/members/find HTTP/1.1
 content-type: application/json
 
 {
@@ -109,7 +62,7 @@ content-type: application/json
 ###
 # cadastro de visitas:
 
-POST http://liderancas.net.br:3000/api/visits/create
+POST http://liderancas.net.br:3000/api/visits/create HTTP/1.1
 content-type: application/json
 
 {
@@ -123,7 +76,7 @@ content-type: application/json
 
 ###
 # Cadastro de membros:
-POST http://liderancas.net.br/api/members/create
+POST http://liderancas.net.br/api/members/create HTTP/1.1
 content-type: application/json
 
 {
@@ -147,5 +100,5 @@ content-type: application/json
 }
 
 ###
-# Setalhes de um membro:
-GET http://liderancas.net.br/api/members/1
+# Detalhes de um membro:
+GET http://liderancas.net.br/api/members/1 HTTP/1.1
