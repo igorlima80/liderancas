@@ -41,10 +41,14 @@
             col="0"
             class="thumb img-circle"
             rowSpan="2"
-             @tap="enableLocationTap"
           />
           <Label row="0" col="1" text="Olá," class="list-group-item-heading font-weight-bold" />
-          <Label row="1" col="1" :text="user.user.name" class="list-group-item-heading"  @tap="enableLocationTap"/>
+          <Label
+            row="1"
+            col="1"
+            :text="user.user.name"
+            class="list-group-item-heading"
+          />
           <!-- <Label row="1" col="1" :text="user.user.email" class="list-group-item-text" /> -->
         </GridLayout>
       </MDCardView>
@@ -217,7 +221,6 @@ export default {
         this.userIndicator = false;
       })
       .catch(error => {
-        // utils.loader.hide();
         alert({
           title: "lideranças",
           message:
@@ -229,14 +232,18 @@ export default {
         });
         return;
       });
-
+    console.log(this.locations[0])
+    this.enableLocation();
+  },
+  getAllNearMembers() {
+    const location = {
+      id: loginService.token,
+      latitude: this.locations[0].latitude,
+      longitude: this.locations[0].longitude,
+      radius: 1000
+    };
     this.$store
-      .dispatch(GET_NEAR_MEMBERS, {
-        id: 1,
-        latitude: -5.114644,
-        longitude: -42.753744,
-        radius: 1000
-      })
+      .dispatch(GET_NEAR_MEMBERS, location)
       .then(data => {
         this.near_members = data;
         this.nearMembersIndicator = false;
@@ -244,12 +251,7 @@ export default {
       .catch(error => {});
 
     this.$store
-      .dispatch(GET_UNVISITED_MEMBERS, {
-        id: 1,
-        latitude: -5.114644,
-        longitude: -42.753744,
-        radius: 1000
-      })
+      .dispatch(GET_UNVISITED_MEMBERS, location)
       .then(data => {
         this.unvisited_members = data;
         this.nearUnvisitedIndicator = false;
@@ -280,7 +282,7 @@ export default {
     onUnvisitedMemberCardTap(member) {
       this.$navigator.navigate("/visit", { props: { voter: member } });
     },
-    enableLocationTap: function() {
+    enableLocation() {
       geolocation.isEnabled().then(
         function(isEnabled) {
           if (!isEnabled) {
@@ -289,14 +291,25 @@ export default {
               .then(
                 () => {
                   console.log("User Enabled Location Service");
+                  this.getLocation();
+                  this.getAllNearMembers();
                 },
                 e => {
                   console.log("Error: " + (e.message || e));
+                  alert({
+                    title: "Lideranças",
+                    message:
+                      "Lideranças precisa de permisão de Localização par emcontrar os menbros proximos.",
+                    okButtonText: "OK"
+                  });
                 }
               )
               .catch(ex => {
                 console.log("Unable to Enable Location", ex);
               });
+          } else {
+            this.getLocation();
+            this.getAllNearMembers();
           }
         },
         function(e) {
@@ -304,7 +317,7 @@ export default {
         }
       );
     },
-    buttonGetLocationTap: function() {
+    getLocation() {
       let that = this;
       geolocation
         .getCurrentLocation({
@@ -316,6 +329,7 @@ export default {
           function(loc) {
             if (loc) {
               that.locations.push(loc);
+              console.log(loc);
             }
           },
           function(e) {

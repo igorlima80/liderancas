@@ -7,7 +7,7 @@ POST http://liderancas.net.br/api/leaders/login HTTP/1.1
 content-type: application/json
 
 {
-    "cpf": "815.891.233-87"
+    "cpf": "123.456.789-12"
 }
 ###
 GET http://localhost:3000/api/leaders/ID/members
