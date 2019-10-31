@@ -1,4 +1,4 @@
-GET http://liderancas.net.br/api/leaders/1 HTTP/1.1
+GET http://liderancas.net.br/api/leaders/2 HTTP/1.1
 content-type: application/json
 
 ###
@@ -10,7 +10,7 @@ content-type: application/json
     "cpf": "123.456.789-12"
 }
 ###
-GET http://localhost:3000/api/leaders/ID/members
+GET http://localhost:3000/api/leaders/2/members
 content-type: application/json
 
 [
@@ -78,8 +78,8 @@ content-type: application/json
 
 {
  "id":1,	
- "latitude": -5.114644, 
- "longitude": -42.753744,
+ "latitude": -5.0814557, 
+ "longitude": -42.7995088,
  "radius": 1000
 }
 

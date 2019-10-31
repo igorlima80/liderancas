@@ -43,12 +43,7 @@
             rowSpan="2"
           />
           <Label row="0" col="1" text="Olá," class="list-group-item-heading font-weight-bold" />
-          <Label
-            row="1"
-            col="1"
-            :text="user.user.name"
-            class="list-group-item-heading"
-          />
+          <Label row="1" col="1" :text="user.user.name" class="list-group-item-heading" />
           <!-- <Label row="1" col="1" :text="user.user.email" class="list-group-item-text" /> -->
         </GridLayout>
       </MDCardView>
@@ -211,7 +206,7 @@ export default {
       userIndicator: true,
       near_members: [],
       unvisited_members: [],
-      locations: []
+      location: {}
     };
   },
   created() {
@@ -232,31 +227,18 @@ export default {
         });
         return;
       });
-    console.log(this.locations[0])
-    this.enableLocation();
-  },
-  getAllNearMembers() {
-    const location = {
-      id: loginService.token,
-      latitude: this.locations[0].latitude,
-      longitude: this.locations[0].longitude,
-      radius: 1000
-    };
-    this.$store
-      .dispatch(GET_NEAR_MEMBERS, location)
-      .then(data => {
-        this.near_members = data;
-        this.nearMembersIndicator = false;
-      })
-      .catch(error => {});
 
-    this.$store
-      .dispatch(GET_UNVISITED_MEMBERS, location)
-      .then(data => {
-        this.unvisited_members = data;
-        this.nearUnvisitedIndicator = false;
-      })
-      .catch(error => {});
+    this.enableLocation();
+
+    if (this.location) {
+      this.getAllNearMembers()
+    } else {
+      alert({
+        title: "lideranças",
+        message: "Não foi possivel localizar os membros mais próximos.",
+        okButtonText: "OK"
+      });
+    }
   },
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Home");
@@ -282,7 +264,31 @@ export default {
     onUnvisitedMemberCardTap(member) {
       this.$navigator.navigate("/visit", { props: { voter: member } });
     },
+    getAllNearMembers() {
+      const loc = {
+        id: 2,
+        latitude: this.location.latitude,
+        longitude: this.location.longitude,
+        radius: 1000
+      };
+      this.$store
+        .dispatch(GET_NEAR_MEMBERS, loc)
+        .then(data => {
+          this.near_members = data;
+          this.nearMembersIndicator = false;
+        })
+        .catch(error => {});
+
+      this.$store
+        .dispatch(GET_UNVISITED_MEMBERS, loc)
+        .then(data => {
+          this.unvisited_members = data;
+          this.nearUnvisitedIndicator = false;
+        })
+        .catch(error => {});
+    },
     enableLocation() {
+      let that = this;
       geolocation.isEnabled().then(
         function(isEnabled) {
           if (!isEnabled) {
@@ -291,8 +297,7 @@ export default {
               .then(
                 () => {
                   console.log("User Enabled Location Service");
-                  this.getLocation();
-                  this.getAllNearMembers();
+                  that.getLocation();
                 },
                 e => {
                   console.log("Error: " + (e.message || e));
@@ -308,8 +313,7 @@ export default {
                 console.log("Unable to Enable Location", ex);
               });
           } else {
-            this.getLocation();
-            this.getAllNearMembers();
+            that.getLocation();
           }
         },
         function(e) {
@@ -328,8 +332,9 @@ export default {
         .then(
           function(loc) {
             if (loc) {
-              that.locations.push(loc);
-              console.log(loc);
+              that.location = loc;
+              console.log(loc.latitude);
+              console.log(loc.longitude);
             }
           },
           function(e) {
