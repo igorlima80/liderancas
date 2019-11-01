@@ -109,6 +109,12 @@
           </MDCardView>
         </v-template>
       </Pager>
+      <!-- <Label
+        v-else
+        text="Não foi encontrado membros próximos!"
+        class="font-weight-bold text-primary m-l-15"
+        row="2"
+      /> -->
       <Label
         text="Membros próximos não visitados"
         class="font-weight-bold text-primary m-l-15"
@@ -182,9 +188,9 @@
 <script>
 import * as utils from "~/shared/utils";
 import { mapGetters } from "vuex";
+import LoginService from "~/services/LoginService";
 import SelectedPageService from "../shared/selected-page-service";
 import orientationModule from "nativescript-screen-orientation";
-import LoginService from "~/services/LoginService";
 import * as geolocation from "nativescript-geolocation";
 import { Accuracy } from "tns-core-modules/ui/enums";
 import {
@@ -259,17 +265,17 @@ export default {
       utils.openMaps(latitude, longitude);
     },
     onMembersCardTap(member) {
-      this.$navigator.navigate("/voter", { props: { voter: member } });
+      this.$navigator.navigate("/visit", { props: { member: member } });
     },
     onUnvisitedMemberCardTap(member) {
-      this.$navigator.navigate("/visit", { props: { voter: member } });
+      this.$navigator.navigate("/visit", { props: { member: member } });
     },
     getAllNearMembers() {
       const loc = {
-        id: 2,
+        id: loginService.token,
         latitude: this.location.latitude,
         longitude: this.location.longitude,
-        radius: 1000
+        radius: 3
       };
       this.$store
         .dispatch(GET_NEAR_MEMBERS, loc)

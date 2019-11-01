@@ -21,36 +21,86 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Registro de Visita"></Label>
+      <Label class="action-bar-title" text="Adicionar Visita"></Label>
     </ActionBar>
+    <GridLayout rows="*,auto" columns="*,*">
+      <ScrollView col="0" row="0" colspan="2">
+        <GridLayout class="page-content" rows="auto,auto,auto,auto" columns="*,*">
+          <Label
+            row="0"
+            col="0"
+            text="Visita"
+            colspan="2"
+            class="font-weight-bold text-primary m-b-20"
+          />
+          <StackLayout class="input-field" row="1" colspan="2">
+            <Label text="Data" class="label" />
+            <TextField
+              ref="data"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="visit.data"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="2" colspan="2">
+            <Label text="N° de familiares" class="label" />
+            <TextField
+              ref="nfamily"
+              keyboardType="number"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="visit.number_of_voters"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="3" colspan="2">
+            <Label text="Observação" class="label" />
+            <TextView
+              ref="observation"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              :text="visit.observation"
+              returnKeyType="done"
+            />
+          </StackLayout>
+        </GridLayout>
+      </ScrollView>
+      <GridLayout col="0" row="1" colspan="2" rows="auto" columns="*,*">
+        <Button row="0" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
+        <Button row="0" col="1" text="Salvar" @tap="addVisit" class="btn btn-primary" />
+      </GridLayout>
+    </GridLayout>
 
-    <GridLayout class="page-content" rows="auto,*,auto" columns="*,*">
-      <RadDataForm
+    <!-- <RadDataForm
         ref="dataForm"
-        :source="visit"
+        :source="voter"
         :metadata="userMetadata"
         :groups="groups"
-        row="1"
+        :isReadOnly="isReadOnly"
+        row="0"
         col="0"
         colSpan="2"
       ></RadDataForm>
-      <Button row="2" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
-      <Button row="2" col="1" text="Salvar" @tap="addVisit" class="btn btn-primary" />
-    </GridLayout>
+      <Button row="1" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
+      <Button
+        row="2"
+        col="1"
+        text="Salvar"
+        @tap="addVisit"
+        class="btn btn-primary"
+        :isEnabled="!isReadOnly"
+    />-->
   </Page>
 </template>
 
 <script>
 import * as utils from "~/shared/utils";
-import {
-  GroupTitleStyle,
-  PropertyGroup,
-  DataFormFontStyle
-} from "nativescript-ui-dataform";
-import { Color } from "tns-core-modules/color";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
-import { ADD_VOTER } from "~/store/actions.type";
+import { ADD_VISIT } from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
@@ -58,154 +108,43 @@ import {
 const feedback = new Feedback();
 
 export default {
-  props: ["voter"],
+  props: ["member"],
   data() {
     return {
       visit: {
-        id: "",
-        description: "",
-        date: "",
-        hour: "",
-        lideranca_id: "",
-        voter_id: "",
-        obs: ""
-      },
-      groups: [],
-      isReadOnly: true,
-      userMetadata: {
-        commitMode: "Immediate",
-        validationMode: "Immediate"
-        // propertyAnnotations: [
-        //   {
-        //     name: "authtoken",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "id",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "image",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "latitude",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "longitude",
-        //     hidden: true
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "name",
-        //     displayName: "Nome",
-        //     index: 0,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "email",
-        //     displayName: "Email",
-        //     readOnly: true,
-        //     index: 1,
-        //     editor: "Email"
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "phone",
-        //     displayName: "Celular",
-        //     index: 2,
-        //     editor: "Phone"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "address",
-        //     displayName: "Logradouro",
-        //     index: 3,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "number",
-        //     displayName: "Número",
-        //     index: 4,
-        //     editor: "Number"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "neighborhood",
-        //     displayName: "Bairro",
-        //     index: 5,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "cep",
-        //     displayName: "CEP",
-        //     index: 6,
-        //     editor: "Number"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "complement",
-        //     displayName: "Complemento",
-        //     index: 7,
-        //     editor: "Text"
-        //   }
-        // ]
+        date_visit: "",
+        observation: "",
+        number_of_voters: null,
+        member_id: null
       }
     };
-  },
-  created() {
-    let gts = new GroupTitleStyle();
-    let pg = new PropertyGroup();
-
-    gts.labelTextColor = new Color("#417169");
-    gts.labelFontStyle = DataFormFontStyle.Bold;
-    gts.labelTextSize = 14;
-
-    pg.name = "Dados Pessoais";
-    pg.collapsible = true;
-    pg.collapsed = false;
-    pg.titleStyle = gts;
-
-    this.groups.push(pg);
-
-    pg = new PropertyGroup();
-
-    pg.name = "Endereço";
-    pg.collapsible = true;
-    pg.collapsed = false;
-    pg.titleStyle = gts;
-
-    this.groups.push(pg);
   },
   methods: {
     addVisit() {
       if (getConnectionType() === connectionType.none) {
         feedback.error({
           message:
-            "Lideranças requer uma conexão com a Internet para cadastrar nova visita."
+            "Lideranças requer uma conexão com a Internet para atualizar o eleitor."
         });
         return;
       }
 
       utils.loader.show();
+      this.visit.member_id = this.member.id;
       this.$store
-        .dispatch(ADD_VOTER, this.voter)
+        .dispatch(ADD_VISIT, this.visit)
         .then(() => {
           this.$navigator.back();
           utils.loader.hide();
           feedback.success({
-            message: "Visita cadastrada com sucesso."
+            message: "Visita adicionada com sucesso."
           });
         })
         .catch(error => {
           console.error(error);
           utils.loader.hide();
           feedback.error({
-            message: "Infelizmente não conseguimos cadastrar. Tente mais tarde."
+            message: "Infelizmente não conseguimos adicionar. Tente mais tarde."
           });
         });
     },
@@ -230,5 +169,9 @@ export default {
 
 .disabled {
   opacity: 0.5;
+}
+
+.page-content {
+  padding: 15 15 0 15;
 }
 </style>

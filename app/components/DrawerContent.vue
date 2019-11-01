@@ -4,7 +4,7 @@
                 <!-- <Image v-if="user.image" :src="user.image" class="sidedrawer-header-image"></Image> -->
                 <Image src="~/assets/images/userimage.png" class="sidedrawer-header-image"></Image>
                 <Label class="sidedrawer-header-brand" :text="user.user.name"></Label>
-                <Label class="footnote" :text="user.user.email"></Label>
+                <Label class="footnote" :text="user.cpf"></Label>
             </StackLayout>
         
             <ScrollView row="1" class="sidedrawer-content">
@@ -98,7 +98,7 @@ $sidedrawer-list-icon-size: 20;
       color: $background-dark;
       // background-color: $background-dark;
       height: $sidedrawer-header-image-size;
-      width: $sidedrawer-header-image-size;
+      width: $sidedrawer-header-image-size; 
       font-size: $sidedrawer-header-image-size;
       padding: 0;
       margin-bottom: $sidedrawer-header-image-offset-bottom;

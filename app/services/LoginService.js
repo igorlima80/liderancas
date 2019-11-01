@@ -3,6 +3,7 @@ import BackendService from "./BackendService";
 
 export default class LoginService extends BackendService {
   login(cpf) {
+    // console.log(cpf);
     return http
       .request({
         // url: this.baseUrl + "login",

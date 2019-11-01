@@ -13,5 +13,6 @@ export const GET_VOTERS = "getVoters";
 export const ADD_VOTER = "addVoter";
 export const UPDATE_VOTER = "updateVoter";
 export const GET_VISITS = "getVisits";
+export const ADD_VISIT = "addVisit";
 export const UPDATE_VISIT = "updateVisit";
 export const INIT_DB = "initDB";

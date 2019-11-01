@@ -25,8 +25,8 @@
     </ActionBar>
 
     <GridLayout rows="auto,auto,*">
-      <SearchBar row="0" hint="Buscar por Eleitor" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
-      <Label row="1" text="Eleitores" class="font-weight-bold text-primary m-t-15 m-l-10" />
+      <SearchBar row="0" hint="Buscar por Membros" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
+      <Label row="1" text="Membros" class="font-weight-bold text-primary m-t-15 m-l-10" />
       <ActivityIndicator row="2" class="indicator" v-if="votersIndicator" :busy="votersIndicator" />
       <RadListView
         v-else
@@ -42,7 +42,20 @@
           <!-- <Image v-if="voter.image" row="0" col="0" :src="voter.image" class="thumb img-circle" rowSpan="2" @tap="onItemTap(voter)"/>
           <Image v-else row="0" col="0" src="~/assets/images/userimage.png" class="thumb img-circle" rowSpan="2" @tap="onItemTap(voter)"/> -->
           <Label row="0" col="0" :text="voter.name" class="list-group-item-heading" @tap="onItemTap(voter)"/>
-          <Label row="1" col="0" :text="voter.address" class="list-group-item-text" @tap="onItemTap(voter)"/>
+              <Label
+                textWrap="true"
+                row="1" col="0"
+                class="list-group-item-text" @tap="onItemTap(voter)"
+              >
+                <FormattedString>
+                  <Span :text="voter.address.street" />
+                  <Span text=", " />
+                  <Span :text="voter.address.number" />
+                  <Span text=", " />
+                  <Span :text="voter.address.district" />
+                </FormattedString>
+              </Label>
+          <!-- <Label row="1" col="0" :text="voter.address" class="list-group-item-text" @tap="onItemTap(voter)"/> -->
           <Label row="0" col="1" class="fas m-r-10" :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" rowSpan="2" @tap="openMaps(voter.latitude, voter.longitude)" />
         </GridLayout>
 
@@ -71,7 +84,10 @@ import { mapGetters } from "vuex";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { GET_VOTERS } from "~/store/actions.type";
 import { Feedback } from "nativescript-feedback";
+import LoginService from "~/services/LoginService";
 const feedback = new Feedback();
+const loginService = new LoginService();
+let clone = require('clone');
 
 export default {
   data() {
@@ -82,7 +98,7 @@ export default {
   },
   created() {
     this.$store
-      .dispatch(GET_VOTERS)
+      .dispatch(GET_VOTERS, loginService.token)
       .then(() => {
         this.votersIndicator = false;
       })
@@ -92,7 +108,7 @@ export default {
     // this.$refs.listView.nativeView.focus();
     SelectedPageService.getInstance().updateSelectedPage("Voters");
   },
-  computed: { ...mapGetters(["voters"]) },
+  computed: { ...mapGetters(["voters","user"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
@@ -104,17 +120,15 @@ export default {
       // we use this.$nextTick call
       this.$nextTick(() => {
         this.$store
-          .dispatch(GET_VOTERS)
+          .dispatch(GET_VOTERS, loginService.token)
           .then(() => {})
           .catch(error => {});
         object.notifyPullToRefreshFinished();
       });
     },
     onItemTap(voter) {
-      this.$navigator.navigate("/voter", { props: { voter: voter }})
-    },
-    onTap(voter) {
-      this.$navigator.navigate("/visit", { props: { voter: voter }})
+      const v = clone(voter);
+      this.$navigator.navigate("/voter", { props: { voter: v }})
     },
     openMaps(latitude,longitude) {
       utils.openMaps(latitude,longitude)

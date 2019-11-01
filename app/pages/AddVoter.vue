@@ -21,43 +21,181 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Novo Eleitor"></Label>
+      <Label class="action-bar-title" text="Adicionar Membro"></Label>
     </ActionBar>
-
-    <GridLayout class="page-content" rows="auto,*,auto" columns="*,*">
-      <GridLayout
-        class="m-20"
+    <GridLayout rows="*,auto" columns="*,*">
+      <ScrollView col="0" row="0" colSpan="2">
+        <GridLayout
+          class="page-content"
+          rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
+          columns="*,*"
+        >
+          <Label
+            row="0"
+            col="0"
+            text="Dados Gerais"
+            colSpan="2"
+            class="font-weight-bold text-primary m-b-20"
+          />
+          <StackLayout class="input-field" row="1" colSpan="2">
+            <Label text="Nome" class="label" />
+            <TextField
+              ref="name"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="member.name"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="2" colSpan="2">
+            <Label text="Data de nascimento" class="label" />
+            <TextField
+              ref="date"
+              keyboardType="datetime"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="member.birthdate"
+              returnKeyType="next"
+            />
+            <!-- mask="00/00/0000" -->
+          </StackLayout>
+          <StackLayout class="input-field" row="3" colSpan="2">
+            <Label text="CPF" class="label" />
+            <!-- <MaskedTextField -->
+            <TextField
+              ref="cpf"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              :text="member.cpf"
+              returnKeyType="next"
+            />
+            <!-- mask="000.000.000-00" -->
+          </StackLayout>
+          <Label
+            row="4"
+            col="0"
+            text="Endereço"
+            colspan="2"
+            class="font-weight-bold text-primary m-y-20"
+          />
+          <StackLayout class="input-field" row="5" colSpan="2">
+            <Label text="Descrição" class="label" />
+            <TextField
+              ref="description"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="member.address.description"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="6" colSpan="2">
+            <Label text="Número" class="label" />
+            <TextField
+              ref="number"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="member.address.number"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="7" colSpan="2">
+            <Label text="Complemento" class="label" />
+            <TextField
+              ref="complement"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="member.address.complement"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="8" colSpan="2">
+            <Label text="CEP" class="label" />
+            <!-- <MaskedTextField -->
+            <TextField
+              ref="zipcode"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="member.address.zipcode"
+              returnKeyType="next"
+            />
+            <!-- mask="00000-000" -->
+          </StackLayout>
+          <StackLayout class="input-field" row="9" colSpan="2">
+            <Label text="Bairro" class="label" />
+            <TextField
+              ref="district"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="member.address.district"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="10" colSpan="2">
+            <Label text="Logradouro" class="label" />
+            <TextField
+              ref="street"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="member.address.street"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="11" colSpan="2">
+            <Label text="Cidade" class="label" />
+            <TextField
+              ref="city_id"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="member.address.city_id"
+              returnKeyType="done"
+            />
+          </StackLayout>
+          <!-- <RadDataFormMaskedTextField
+        @loaded="onLoadMaskedTextField
+        ref="dataForm"
+        :source="member"
+        :metadata="userMetadata"
+        :groups="groups"
         row="0"
         col="0"
         colSpan="2"
-        rows="auto,auto"
-        columns="*, auto"
-        @tap="$navigator.navigate('/upload-image', { props: { user: voter, role: 'voter' }})"
-      >
-        <Image v-if="voter.image" row="0" col="1" :src="voter.image" class="thumb" rowSpan="2" />
-        <Image
-          v-else
-          row="0"
-          col="1"
-          src="~/assets/images/userimage.png"
-          class="thumb"
-          rowSpan="2"
-        />
-        <Label row="0" col="0" text="Avatar" class="font-weight-bold" color="black" />
-        <Label row="1" col="0" text="Modifique o seu avatar" />
+          ></RadDataForm>-->
+        </GridLayout>
+      </ScrollView>
+      <GridLayout col="0" row="1" colSpan="2" rows="auto" columns="*,*">
+        <Button row="0" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
+        <Button row="0" col="1" text="Salvar" @tap="addVoter" class="btn btn-primary" />
       </GridLayout>
-      <RadDataForm
+    </GridLayout>
+
+    <!-- <RadDataForm
         ref="dataForm"
         :source="voter"
         :metadata="userMetadata"
         :groups="groups"
-        row="1"
+        :isReadOnly="isReadOnly"
+        row="0"
         col="0"
         colSpan="2"
       ></RadDataForm>
-      <Button row="2" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
-      <Button row="2" col="1" text="Salvar" @tap="addVoter" class="btn btn-primary" />
-    </GridLayout>
+      <Button row="1" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
+      <Button
+        row="2"
+        col="1"
+        text="Salvar"
+        @tap="addVoter"
+        class="btn btn-primary"
+        :isEnabled="!isReadOnly"
+    />-->
   </Page>
 </template>
 
@@ -81,156 +219,165 @@ const feedback = new Feedback();
 export default {
   data() {
     return {
-      voter: {
-        id: "",
+      member: {
         name: "",
-        image: "",
-        address: "",
-        number: "",
-        neighborhood: "",
-        cep: "",
-        complement: "",
-        latitude: "",
-        longitude: "",
-        liderancas_id: "",
-        obs: ""
-      },
-      groups: [],
-      isReadOnly: true,
-      userMetadata: {
-        commitMode: "Immediate",
-        validationMode: "Immediate"
-        // propertyAnnotations: [
-        //   {
-        //     name: "authtoken",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "id",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "image",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "latitude",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "longitude",
-        //     hidden: true
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "name",
-        //     displayName: "Nome",
-        //     index: 0,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "email",
-        //     displayName: "Email",
-        //     readOnly: true,
-        //     index: 1,
-        //     editor: "Email"
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "phone",
-        //     displayName: "Celular",
-        //     index: 2,
-        //     editor: "Phone"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "address",
-        //     displayName: "Logradouro",
-        //     index: 3,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "number",
-        //     displayName: "Número",
-        //     index: 4,
-        //     editor: "Number"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "neighborhood",
-        //     displayName: "Bairro",
-        //     index: 5,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "cep",
-        //     displayName: "CEP",
-        //     index: 6,
-        //     editor: "Number"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "complement",
-        //     displayName: "Complemento",
-        //     index: 7,
-        //     editor: "Text"
-        //   }
-        // ]
+        latitude: null,
+        longitude: null,
+        cpf: "",
+        status: "",
+        birthdate: "",
+        translate_status: "",
+        leader: {
+          id: null,
+          name: ""
+        },
+        address: {
+          description: "",
+          number: "",
+          complement: "",
+          zipcode: "",
+          district: "",
+          street: "",
+          city_id: null
+        }
       }
+
+      // groups: [],
+      // isReadOnly: true,
+      // userMetadata: {
+      //   commitMode: "Immediate",
+      //   validationMode: "Immediate"
+      // propertyAnnotations: [
+      //   {
+      //     name: "authtoken",
+      //     hidden: true
+      //   },
+      //   {
+      //     name: "id",
+      //     hidden: true
+      //   },
+      //   {
+      //     name: "image",
+      //     hidden: true
+      //   },
+      //   {
+      //     name: "latitude",
+      //     hidden: true
+      //   },
+      //   {
+      //     name: "longitude",
+      //     hidden: true
+      //   },
+      //   {
+      //     groupName: "Dados Pessoais",
+      //     name: "name",
+      //     displayName: "Nome",
+      //     index: 0,
+      //     editor: "Text"
+      //   },
+      //   {
+      //     groupName: "Dados Pessoais",
+      //     name: "email",
+      //     displayName: "Email",
+      //     readOnly: true,
+      //     index: 1,
+      //     editor: "Email"
+      //   },
+      //   {
+      //     groupName: "Dados Pessoais",
+      //     name: "phone",
+      //     displayName: "Celular",
+      //     index: 2,
+      //     editor: "Phone"
+      //   },
+      //   {
+      //     groupName: "Endereço",
+      //     name: "address",
+      //     displayName: "Logradouro",
+      //     index: 3,
+      //     editor: "Text"
+      //   },
+      //   {
+      //     groupName: "Endereço",
+      //     name: "number",
+      //     displayName: "Número",
+      //     index: 4,
+      //     editor: "Number"
+      //   },
+      //   {
+      //     groupName: "Endereço",
+      //     name: "neighborhood",
+      //     displayName: "Bairro",
+      //     index: 5,
+      //     editor: "Text"
+      //   },
+      //   {
+      //     groupName: "Endereço",
+      //     name: "cep",
+      //     displayName: "CEP",
+      //     index: 6,
+      //     editor: "Number"
+      //   },
+      //   {
+      //     groupName: "Endereço",
+      //     name: "complement",
+      //     displayName: "Complemento",
+      //     index: 7,
+      //     editor: "Text"
+      //   }
+      // ]
+      // }
     };
   },
-  created() {
-    let gts = new GroupTitleStyle();
-    let pg = new PropertyGroup();
+  // created() {
+  //   let gts = new GroupTitleStyle();
+  //   let pg = new PropertyGroup();
 
-    gts.labelTextColor = new Color("#417169");
-    gts.labelFontStyle = DataFormFontStyle.Bold;
-    gts.labelTextSize = 14;
+  //   gts.labelTextColor = new Color("#417169");
+  //   gts.labelFontStyle = DataFormFontStyle.Bold;
+  //   gts.labelTextSize = 14;
 
-    pg.name = "Dados Pessoais";
-    pg.collapsible = true;
-    pg.collapsed = false;
-    pg.titleStyle = gts;
+  //   pg.name = "Dados Pessoais";
+  //   pg.collapsible = true;
+  //   pg.collapsed = false;
+  //   pg.titleStyle = gts;
 
-    this.groups.push(pg);
+  //   this.groups.push(pg);
 
-    pg = new PropertyGroup();
+  //   pg = new PropertyGroup();
 
-    pg.name = "Endereço";
-    pg.collapsible = true;
-    pg.collapsed = false;
-    pg.titleStyle = gts;
+  //   pg.name = "Endereço";
+  //   pg.collapsible = true;
+  //   pg.collapsed = false;
+  //   pg.titleStyle = gts;
 
-    this.groups.push(pg);
-  },
+  //   this.groups.push(pg);
+  // },
   methods: {
     addVoter() {
       if (getConnectionType() === connectionType.none) {
         feedback.error({
           message:
-            "Lideranças requer uma conexão com a Internet para cadastrar novo eleitor."
+            "Lideranças requer uma conexão com a Internet para atualizar o eleitor."
         });
         return;
       }
 
       utils.loader.show();
       this.$store
-        .dispatch(ADD_VOTER, this.voter)
+        .dispatch(ADD_VOTER, this.member)
         .then(() => {
           this.$navigator.back();
           utils.loader.hide();
           feedback.success({
-            message: "Eleitor cadastrado com sucesso."
+            message: "Membro adicionado com sucesso."
           });
         })
         .catch(error => {
           console.error(error);
           utils.loader.hide();
           feedback.error({
-            message: "Infelizmente não conseguimos cadsatrar. Tente mais tarde."
+            message: "Infelizmente não conseguimos adicionar. Tente mais tarde."
           });
         });
     },
@@ -255,5 +402,9 @@ export default {
 
 .disabled {
   opacity: 0.5;
+}
+
+.page-content {
+  padding: 15 15 0 15;
 }
 </style>

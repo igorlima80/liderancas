@@ -50,7 +50,7 @@ export default {
     }
 
     this.$store
-      .dispatch(FETCH_USER, this.user.id)
+      .dispatch(FETCH_USER, loginService.token)
       .then(() => {})
       .catch(error => {
         alert({

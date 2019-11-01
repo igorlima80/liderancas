@@ -25,32 +25,54 @@
     </ActionBar>
 
     <GridLayout rows="auto,auto,*">
-      <SearchBar row="0" hint="Buscar por Visitas" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
-      <ActivityIndicator row="2" class="indicator" v-if="visitsIndicator" :busy="visitsIndicator" />
-      <Label row="1" text="Visitas" class="font-weight-bold text-primary m-t-15 m-l-10" />
+      <SearchBar row="0" hint="Buscar por Membros" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
+      <Label row="1" text="Membros" class="font-weight-bold text-primary m-t-15 m-l-10" />
+      <ActivityIndicator row="2" class="indicator" v-if="votersIndicator" :busy="votersIndicator" />
       <RadListView
+        v-else
         row="2"
         class="list-group"
         ref="listView"
-        for="visit in visits"
+        for="voter in voters"
         pullToRefresh="true"
-        @itemTap="onItemTap"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
         <v-template>
-          <StackLayout class="list-group-item">
-            <Label :text="visit.description" class="list-group-item-heading"></Label>
-            <Label :text="visit.date" class="list-group-item-text"></Label>
-          </StackLayout>
+        <GridLayout class="list-group-item" rows="auto, *" columns="*, auto">
+          <!-- <Image v-if="voter.image" row="0" col="0" :src="voter.image" class="thumb img-circle" rowSpan="2" @tap="onItemTap(voter)"/>
+          <Image v-else row="0" col="0" src="~/assets/images/userimage.png" class="thumb img-circle" rowSpan="2" @tap="onItemTap(voter)"/> -->
+          <Label row="0" col="0" :text="voter.name" class="list-group-item-heading" @tap="onItemTap(voter)"/>
+              <Label
+                textWrap="true"
+                row="1" col="0"
+                class="list-group-item-text" @tap="onItemTap(voter)"
+              >
+                <FormattedString>
+                  <Span :text="voter.address.street" />
+                  <Span text=", " />
+                  <Span :text="voter.address.number" />
+                  <Span text=", " />
+                  <Span :text="voter.address.district" />
+                </FormattedString>
+              </Label>
+          <!-- <Label row="1" col="0" :text="voter.address" class="list-group-item-text" @tap="onItemTap(voter)"/> -->
+          <Label row="0" col="1" class="fas m-r-10" :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" rowSpan="2" @tap="openMaps(voter.latitude, voter.longitude)" />
+        </GridLayout>
+
+          <!-- <StackLayout class="list-group-item list-style-layout">
+            <Label :text="voter.name" class="list-group-item-heading"></Label>
+            <Label :text="voter.address" class="list-group-item-text"></Label>
+          </StackLayout>    -->
         </v-template>
       </RadListView>
-      <!-- <MDFloatingActionButton
+      <MDFloatingActionButton
         row="2"
         rippleColor="green"
         elevation="7"
         class="btn btn-primary f-btn"
         src="res://baseline_add_white_24"
-      /> -->
+        @tap="$navigator.navigate('/addvoter')"
+      />
     </GridLayout>
   </Page>
 </template>
@@ -60,27 +82,33 @@ import * as utils from "~/shared/utils";
 import SelectedPageService from "../shared/selected-page-service";
 import { mapGetters } from "vuex";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
-import { GET_VISITS } from "~/store/actions.type";
+import { GET_VOTERS } from "~/store/actions.type";
+import { Feedback } from "nativescript-feedback";
+import LoginService from "~/services/LoginService";
+const feedback = new Feedback();
+const loginService = new LoginService();
+let clone = require('clone');
 
 export default {
   data() {
     return {
-      visitsIndicator: true,
-      listVisits: new ObservableArray(this.visits)
+      votersIndicator: true,
+      listVoters: new ObservableArray(this.voters)
     };
   },
   created() {
     this.$store
-      .dispatch(GET_VISITS)
+      .dispatch(GET_VOTERS, loginService.token)
       .then(() => {
-        this.visitsIndicator = false;
+        this.votersIndicator = false;
       })
       .catch(error => {});
   },
   mounted() {
+    // this.$refs.listView.nativeView.focus();
     SelectedPageService.getInstance().updateSelectedPage("Visits");
   },
-  computed: { ...mapGetters(["visits"]) },
+  computed: { ...mapGetters(["voters","user"]) },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
@@ -92,14 +120,18 @@ export default {
       // we use this.$nextTick call
       this.$nextTick(() => {
         this.$store
-          .dispatch(GET_VISITS)
+          .dispatch(GET_VOTERS, loginService.token)
           .then(() => {})
           .catch(error => {});
         object.notifyPullToRefreshFinished();
       });
     },
-    onItemTap({ item }) {
-      console.log(`Tapped on ${item.name}`);
+    onItemTap(voter) {
+      const v = clone(voter);
+      this.$navigator.navigate("/visit", { props: { member: v }})
+    },
+    openMaps(latitude,longitude) {
+      utils.openMaps(latitude,longitude)
     }
   }
 };

@@ -1,4 +1,4 @@
-GET http://liderancas.net.br/api/leaders/2 HTTP/1.1
+GET http://liderancas.net.br/api/leaders/1 HTTP/1.1
 content-type: application/json
 
 ###
@@ -7,46 +7,27 @@ POST http://liderancas.net.br/api/leaders/login HTTP/1.1
 content-type: application/json
 
 {
-    "cpf": "123.456.789-12"
+    "cpf": "815.891.233-87"
 }
 ###
-GET http://localhost:3000/api/leaders/2/members
+GET http://liderancas.net.br/api/leaders/1/members HTTP/1.1
 content-type: application/json
-
-[
-    {
-        "id": 1,
-        "name": "teste",
-        "leader_id": 1,
-        "latitude": -5.0896403,
-        "longitude": -42.809588,
-        "cpf": "4657984512",
-        "status": "unvisited",
-        "translate_status": "translation missing: pt-BR.activerecord.attributes.member.statuses.unvisited",
-        "address": {
-            "description": "",
-            "number": "1998",
-            "complement": "",
-            "zipcode": "64057-650",
-            "district": "Vale Quem Tem",
-            "street": "Rua Professora Maria Célia Nascimento"
-        }
-    }
-]
 
 ###
 # Alterar Lider
 
-POST http://liderancas.net.br/api/leaders/2
+POST http://liderancas.net.br/api/leaders/1 HTTP/1.1
 content-type: application/json
 
 {
-"leader":{
-    "mother_name": "maeiii",
-    "father_name": "pddddd",
+    "id": 1,
+    "mother_name": "maeeeeeiiii",
+    "father_name": "paiiiuououoiii",
     "rg": "teste",
-    
-    "address_attributes": {
+    "cpf": "815.891.233-87",
+    "latitude": -25.4295963,
+    "longitude": -49.2712724,
+    "address": {
         "description": "",
         "number": "12345",
         "complement": "",
@@ -54,14 +35,13 @@ content-type: application/json
         "district": "Vale Quem Tem",
         "street": "Rua Professora Maria Célia Nascimento",
         "city_id": 3186
-        }
-	}
+    }
 }
 
 ###
 # Método para buscar os membros pŕoximos não visitados
 
-POST http://liderancas.net.br/api/members/find_unvisited
+POST http://liderancas.net.br/api/members/find_unvisited HTTP/1.1
 content-type: application/json
 
 {
@@ -73,7 +53,7 @@ content-type: application/json
 ###
 # Método para buscar os membros pŕoximos, independente de status
 
-POST http://liderancas.net.br/api/members/find
+POST http://liderancas.net.br/api/members/find HTTP/1.1
 content-type: application/json
 
 {
@@ -86,7 +66,7 @@ content-type: application/json
 ###
 # cadastro de visitas:
 
-POST http://liderancas.net.br:3000/api/visits/create
+POST http://liderancas.net.br/api/visits/create HTTP/1.1
 content-type: application/json
 
 {
@@ -100,29 +80,68 @@ content-type: application/json
 
 ###
 # Cadastro de membros:
-POST http://liderancas.net.br/api/members/create
+POST http://liderancas.net.br/api/members/create HTTP/1.1
 content-type: application/json
 
 {
-	"member":{
-		"name": "membro teste da silva",
-		"cpf": "111.111.111-11",
-		"birthdate": "2019-10-27",
-		"leader_id": 1,
-		"address_attributes":{
-			"description": "trabalho",
-			"zipcode": "64057-650",
-			"street": "retorno do cep",
-			"number": 3365,
-			"complement": "bloco apto lote",
-			"district":"retorno do cep",
-			"city_id": 3286
-		}
-		
-	}
-	
+    "name": "Teste 7",
+    "latitude": -5.0707691,
+    "longitude": -42.8156255,
+    "cpf": "13245678912",
+    "status": "unvisited",
+    "birthdate": "1984-04-26",
+    "translate_status": "Não Visitado",
+    "leader": {
+      "id": 1,
+      "name": "Francisco Igor de Lima e Silva"
+    },
+    "address": {
+      "description": "Casa",
+      "number": "1129",
+      "complement": "(Zona Norte) - de 801/802 a 1499/1500",
+      "zipcode": "64002450",
+      "district": "Marquês",
+      "street": "Rua Magalhães Filho",
+      "city_id": 3186
+    }
+  }
 }
 
 ###
-# Setalhes de um membro:
-GET http://liderancas.net.br/api/members/1
+# Detalhes de um membro:
+GET http://liderancas.net.br/api/members/1 HTTP/1.1
+content-type: application/json
+
+###
+# Atualizar membro
+PUT http://liderancas.net.br/api/members/1 HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "name": "membro teste da silva",
+    "leader_id": 1,
+    "cpf": "111.111.111-13",
+    "status": "unvisited",
+    "birthdate": "2019-10-27",
+    "translate_status": "Não Visitado",
+    "address": {
+        "description": "casa",
+        "number": "3365",
+        "complement": "bloco apto lote",
+        "zipcode": "64057-650",
+        "district": "retorno do cep",
+        "street": "retorno do cep",
+        "city_id": 3286
+    }
+}
+
+###
+# Visita por membros
+
+POST http://liderancas.net.br/api/visits/find_by_member HTTP/1.1
+content-type: application/json
+
+{
+	"id": 1
+}

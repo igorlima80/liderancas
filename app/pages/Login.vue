@@ -77,11 +77,6 @@ export default {
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Home");
   },
-  computed: {
-    message() {
-      return "";
-    }
-  },
   methods: {
     getCpf() {
       return this.$refs.cpf.nativeView.text
@@ -114,6 +109,7 @@ export default {
       }
 
       utils.loader.show();
+      console.log(this.getCpf());
       this.$store
         .dispatch(LOGIN, this.getCpf())
         .then(() => {
@@ -188,7 +184,7 @@ export default {
       utils.gesturesEnabled(false);
     },
     openBrowser(){
-      utilsModule.openUrl("https://www.google.com")
+      utilsModule.openUrl("http://liderancas.net.br/")
     }
   }
 };

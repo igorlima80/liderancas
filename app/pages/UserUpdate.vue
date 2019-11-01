@@ -35,7 +35,7 @@
         keyboardType="text"
         autocorrect="false"
         autocapitalizationType="none"
-        v-model="leader.user.name"
+        v-model="leader.name"
         returnKeyType="next"
       />
       </StackLayout>
@@ -46,7 +46,7 @@
         keyboardType="email"
         autocorrect="false"
         autocapitalizationType="none"
-        v-model="leader.user.email"
+        v-model="leader.email"
         returnKeyType="next"
       />
       </StackLayout>
@@ -58,7 +58,7 @@
           keyboardType="text"
           autocorrect="false"
           autocapitalizationType="none"
-          :text="leader.user.cpf"
+          :text="leader.cpf"
           returnKeyType="next"
           mask="000.000.000-00"
         />
@@ -165,12 +165,12 @@
 <script>
 import { mapGetters } from "vuex";
 import * as utils from "~/shared/utils";
-import {
-  GroupTitleStyle,
-  PropertyGroup,
-  DataFormFontStyle
-} from "nativescript-ui-dataform";
-import { Color } from "tns-core-modules/color";
+// import {
+//   GroupTitleStyle,
+//   PropertyGroup,
+//   DataFormFontStyle
+// } from "nativescript-ui-dataform";
+// import { Color } from "tns-core-modules/color";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
 import { UPDATE_LEADER } from "~/store/actions.type";
@@ -184,8 +184,7 @@ let clone = require('clone');
 export default {
   data() {
     return {
-      leader: {user: {},
-      address: {}}
+      leader: {address: {}}
       // groups: [],
       // userMetadata: {
       //   isReadOnly: false,
@@ -305,7 +304,7 @@ export default {
       if (getConnectionType() === connectionType.none) {
         feedback.error({
           message:
-            "Lideranças requer uma conexão com a Internet para efetuar o login."
+            "Lideranças requer uma conexão com a Internet para atualizar."
         });
         return;
       }
@@ -325,7 +324,7 @@ export default {
           utils.loader.hide();
           feedback.error({
             message:
-              "Infelizmente não conseguimos atualizar sua conta. Tente mais tarde."
+              "Infelizmente não conseguimos atualizar seus dados. Tente mais tarde."
           });
         });
     },

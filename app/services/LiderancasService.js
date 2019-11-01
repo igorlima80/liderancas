@@ -39,9 +39,7 @@ export default class LiderancasService extends BackendService {
         url: `http://liderancas.net.br/api/leaders/${leader.id}`,
         method: "POST",
         headers: this.getHeaders(),
-        content: JSON.stringify({
-          leader: leader
-        })
+        content: JSON.stringify(leader)
       })
       .then(this.validateCode)
       .then(this.getJson)
@@ -51,10 +49,11 @@ export default class LiderancasService extends BackendService {
       });
   }
 
-  voters() {
+  voters(leader_id) {
     return http
       .request({
-        url: this.baseUrl + "voters",
+        // url: this.baseUrl + "voters",
+        url: `http://liderancas.net.br/api/leaders/${leader_id}/members`,
         method: "GET",
         headers: this.getHeaders()
       })
@@ -103,11 +102,12 @@ export default class LiderancasService extends BackendService {
   updateVoter(voter) {
     return http
       .request({
-        url: this.baseUrl + "voterupdate",
-        method: "POST",
+        // url: this.baseUrl + "voterupdate",
+        url: `http://liderancas.net.br/api/members/${voter.id}`,
+        method: "PUT",
         headers: this.getHeaders(),
         content: JSON.stringify({
-          voter: voter
+          member: voter
         })
       })
       .then(this.validateCode)
@@ -136,7 +136,7 @@ export default class LiderancasService extends BackendService {
       });
   }
 
-  visits() {
+  visits(voter_id) {
     return http
       .request({
         url: this.baseUrl + "visits",
@@ -160,6 +160,23 @@ export default class LiderancasService extends BackendService {
         content: JSON.stringify({
           visit: visit
         })
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Visit: " + data);
+        return data;
+      });
+  }
+
+  addVisit(visit) {
+    return http
+      .request({
+        // url: this.baseUrl + "visitadd",
+        url: `http://liderancas.net.br/api/visits/find_by_member`,
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify(visit)
       })
       .then(this.validateCode)
       .then(this.getJson)

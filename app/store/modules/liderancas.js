@@ -8,7 +8,8 @@ import {
   UPDATE_VOTER,
   ADD_VOTER,
   GET_VISITS,
-  UPDATE_VISIT
+  UPDATE_VISIT,
+  ADD_VISIT
 } from "~/store/actions.type";
 import {
   SET_NOTIFICATION,
@@ -70,7 +71,7 @@ const actions = {
         .updateLeader(leader)
         .then(data => {
           context.commit(SET_AUTH, data);
-          resolve(data);
+          resolve();
         })
         .catch(error => {
           context.commit(SET_ERROR, error);
@@ -108,10 +109,10 @@ const actions = {
         });
     });
   },
-  [GET_VOTERS](context) {
+  [GET_VOTERS](context, leader_id) {
     return new Promise((resolve, reject) => {
       liderancasService
-        .voters()
+        .voters(leader_id)
         .then(data => {
           console.info("Voters: " + data);
           context.commit(SET_VOTERS, data);
@@ -165,14 +166,28 @@ const actions = {
         });
     });
   },
-  [GET_VISITS](context) {
+  [ADD_VISIT](context, visit) {
     return new Promise((resolve, reject) => {
       liderancasService
-        .visits()
+        .addVisit(visit)
         .then(data => {
-          console.info("visits: " + data);
-          context.commit(SET_VISITS, data);
-          resolve();
+          // context.commit(SET_AUTH, data);
+          resolve(data);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, error);
+          reject(error);
+        });
+    });
+  },
+  [GET_VISITS](context, voter_id) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .visits(voter_id)
+        .then(data => {
+          console.info("Visits: " + data);
+          // context.commit(SET_VISITS, data);
+          resolve(data);
         })
         .catch(error => {
           context.commit(SET_ERROR, response.data.errors);

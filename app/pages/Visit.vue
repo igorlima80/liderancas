@@ -10,12 +10,6 @@
         icon="res://baseline_menu_white_24"
         @tap="onDrawerButtonTap"
       ></NavigationButton>
-      <ActionItem
-        @tap="readOnly"
-        ios.position="right"
-        icon="res://baseline_edit_white_24"
-        text="Editar"
-      />
       <!-- 
             Use the ActionItem for IOS with position set to left. Using the
             NavigationButton as a side-drawer button in iOS is not possible,
@@ -27,48 +21,77 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Registro de Visita"></Label>
+      <Label class="action-bar-title" text="Registro de Visitas"></Label>
     </ActionBar>
 
-    <GridLayout class="page-content" rows="auto,*,auto" columns="*,*">
-      <!-- <GridLayout
-        class="m-20"
-        row="0"
-        col="0"
-        colSpan="2"
-        rows="auto,auto"
-        columns="*, auto"
-      >
-        <Image
-          v-if="voter.image"
-          row="0"
-          col="1"
-          :src="voter.image"
-          class="thumb"
-          rowSpan="2"
-        />
-        <Image v-else row="0" col="1" src="~/assets/images/userimage.png" class="thumb" rowSpan="2" />
-        <Label row="0" col="0" text="Avatar" class="font-weight-bold" color="black" />
-        <Label row="1" col="0" text="Modifique o seu avatar" />
-      </GridLayout> -->
-      <RadDataForm
-        ref="dataForm"
-        :source="visit"
-        :metadata="userMetadata"
-        :groups="groups"
-        :isReadOnly="isReadOnly"
-        row="1"
-        col="0"
-        colSpan="2"
-      ></RadDataForm>
-      <Button row="2" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
-      <Button
+    <GridLayout rows="auto,auto,*">
+      <MDCardView rippleColor="transparent" elevation="2" class="list-group" row="0">
+        <GridLayout rows="auto, auto" columns="auto, *" class="list-group-item">
+          <!-- <Image
+            v-if="user.image"
+            :src="user.image"
+            row="0"
+            col="0"
+            class="thumb img-circle"
+            rowSpan="2"
+          />-->
+          <Image
+            src="~/assets/images/userimage.png"
+            row="0"
+            col="0"
+            class="thumb img-circle"
+            rowSpan="2"
+          />
+          <!-- <Label row="0" col="1" :text="voter.name" class="list-group-item-heading font-weight-bold" /> -->
+          <Label row="0" col="1" :text="member.name" class="list-group-item-heading" />
+          <Label row="1" col="1" :text="member.cpf" class="list-group-item-text" />
+        </GridLayout>
+      </MDCardView>
+      <Label text="Visitas realizadas" class="font-weight-bold text-primary m-t-20 m-l-15" row="1" />
+      <ActivityIndicator class="indicator" row="2" v-if="visitIndicator" :busy="visitIndicator" />
+      <RadListView
+        v-else
         row="2"
-        col="1"
-        text="Salvar"
-        @tap="updateVisit"
-        class="btn btn-primary"
-        :isEnabled="!isReadOnly"
+        class="list-group page-content"
+        ref="listView"
+        for="visit in visits"
+        pullToRefresh="true"
+        @pullToRefreshInitiated="onPullToRefreshInitiated"
+      >
+        <v-template>
+          <GridLayout class="list-group-item" rows="auto, *" columns="*, auto">
+            <Label
+              row="0"
+              col="0"
+              :text="visit.name"
+              class="list-group-item-heading"
+              @tap="onItemTap(visit)"
+            />
+            <Label
+              row="1"
+              col="0"
+              :text="visit.date"
+              class="list-group-item-text"
+              @tap="onItemTap(visit)"
+            />
+            <Label
+              row="0"
+              col="1"
+              class="fas m-r-10"
+              :text="'fa-shoe-prints' | fonticon"
+              :class="{visited: member.status == 'visited'}"
+              rowSpan="2"
+            />
+          </GridLayout>
+        </v-template>
+      </RadListView>
+      <MDFloatingActionButton
+        row="2"
+        rippleColor="green"
+        elevation="7"
+        class="btn btn-primary f-btn"
+        src="res://baseline_add_white_24"
+        @tap="addVisit"
       />
     </GridLayout>
   </Page>
@@ -76,15 +99,16 @@
 
 <script>
 import * as utils from "~/shared/utils";
-import {
-  GroupTitleStyle,
-  PropertyGroup,
-  DataFormFontStyle
-} from "nativescript-ui-dataform";
-import { Color } from "tns-core-modules/color";
+// import {
+//   GroupTitleStyle,
+//   PropertyGroup,
+//   DataFormFontStyle
+// } from "nativescript-ui-dataform";
+// import { Color } from "tns-core-modules/color";
+import { ObservableArray } from "tns-core-modules/data/observable-array";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
-import { UPDATE_VISIT } from "~/store/actions.type";
+import { GET_VISITS } from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
@@ -92,162 +116,73 @@ import {
 const feedback = new Feedback();
 
 export default {
-  props: ["voter"],
+  props: ["member"],
   data() {
     return {
-      visit: {
-        id: "",
-        description: "",
-        date: "",
-        hour: "",
-        lideranca_id: "",
-        voter_id: "",
-        obs: ""
-      },
-      groups: [],
-      isReadOnly: true,
-      userMetadata: {
-        commitMode: "Immediate",
-        validationMode: "Immediate"
-        // propertyAnnotations: [
-        //   {
-        //     name: "authtoken",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "id",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "image",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "latitude",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "longitude",
-        //     hidden: true
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "name",
-        //     displayName: "Nome",
-        //     index: 0,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "email",
-        //     displayName: "Email",
-        //     readOnly: true,
-        //     index: 1,
-        //     editor: "Email"
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "phone",
-        //     displayName: "Celular",
-        //     index: 2,
-        //     editor: "Phone"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "address",
-        //     displayName: "Logradouro",
-        //     index: 3,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "number",
-        //     displayName: "Número",
-        //     index: 4,
-        //     editor: "Number"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "neighborhood",
-        //     displayName: "Bairro",
-        //     index: 5,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "cep",
-        //     displayName: "CEP",
-        //     index: 6,
-        //     editor: "Number"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "complement",
-        //     displayName: "Complemento",
-        //     index: 7,
-        //     editor: "Text"
-        //   }
-        // ]
-      }
+      visitIndicator: true,
+      visits: [],
+      listVisits: new ObservableArray(this.visits)
     };
   },
   created() {
-    let gts = new GroupTitleStyle();
-    let pg = new PropertyGroup();
-
-    gts.labelTextColor = new Color("#417169");
-    gts.labelFontStyle = DataFormFontStyle.Bold;
-    gts.labelTextSize = 14;
-
-    pg.name = "Dados Pessoais";
-    pg.collapsible = true;
-    pg.collapsed = false;
-    pg.titleStyle = gts;
-
-    this.groups.push(pg);
-
-    pg = new PropertyGroup();
-
-    pg.name = "Endereço";
-    pg.collapsible = true;
-    pg.collapsed = false;
-    pg.titleStyle = gts;
-
-    this.groups.push(pg);
+    this.$store
+      .dispatch(GET_VISITS, this.member.id)
+      .then(() => {
+        this.visitIndicator = false;
+      })
+      .catch(error => {});
   },
   methods: {
-    updateVisit() {
-      if (getConnectionType() === connectionType.none) {
-        feedback.error({
-          message:
-            "Lideranças requer uma conexão com a Internet para atualizar o eleitor."
-        });
-        return;
-      }
-
-      utils.loader.show();
-      this.$store
-        .dispatch(UPDATE_VISIT, this.visit)
-        .then(() => {
-          this.$navigator.back();
-          utils.loader.hide();
-          feedback.success({
-            message: "Eleitor atualizado com sucesso."
-          });
-        })
-        .catch(error => {
-          console.error(error);
-          utils.loader.hide();
-          feedback.error({
-            message: "Infelizmente não conseguimos atualizar. Tente mais tarde."
-          });
-        });
+    onPullToRefreshInitiated({ object }) {
+      console.log("Pulling...");
+      // in order to avoid race conditions (only on iOS),
+      // in which the UI may not be completely updated here
+      // we use this.$nextTick call
+      this.$nextTick(() => {
+        this.$store
+          .dispatch(GET_VISITS, this.member.id)
+          .then(() => {})
+          .catch(error => {});
+        object.notifyPullToRefreshFinished();
+      });
     },
+    onItemTap(visit) {
+      // const m = clone(this.member);
+      // this.$navigator.navigate("/addvisit", { props: { member: m }})
+    },
+    addVisit(){
+      const m = clone(this.member);
+      this.$navigator.navigate("/addvisit", { props: { member: m }})
+    },
+    // updateVisit() {
+    //   if (getConnectionType() === connectionType.none) {
+    //     feedback.error({
+    //       message:
+    //         "Lideranças requer uma conexão com a Internet para atualizar o eleitor."
+    //     });
+    //     return;
+    //   }
+
+    //   utils.loader.show();
+    //   this.$store
+    //     .dispatch(UPDATE_VISIT, this.visit)
+    //     .then(() => {
+    //       this.$navigator.back();
+    //       utils.loader.hide();
+    //       feedback.success({
+    //         message: "Eleitor atualizado com sucesso."
+    //       });
+    //     })
+    //     .catch(error => {
+    //       console.error(error);
+    //       utils.loader.hide();
+    //       feedback.error({
+    //         message: "Infelizmente não conseguimos atualizar. Tente mais tarde."
+    //       });
+    //     });
+    // },
     onDrawerButtonTap() {
       utils.showDrawer();
-    },
-    readOnly() {
-      this.isReadOnly = !this.isReadOnly;
     }
   }
 };
@@ -259,13 +194,22 @@ export default {
 // End custom common variables
 
 // Custom styles
-.thumb{
+.thumb {
   height: 45;
   width: 45;
   border-radius: 50%;
 }
 
-.disabled {
-  opacity: 0.50;
+.page-content {
+  padding: 15 15 0 15;
+}
+
+.visited {
+  color: $warning-light;
+}
+
+.f-btn {
+  horizontal-align: right;
+  vertical-align: bottom;
 }
 </style>

@@ -27,34 +27,157 @@
         @tap="onDrawerButtonTap"
         ios.position="left"
       ></ActionItem>
-      <Label class="action-bar-title" text="Modificar Eleitor"></Label>
+      <Label class="action-bar-title" text="Modificar Membro"></Label>
     </ActionBar>
-
-    <GridLayout class="page-content" rows="*,auto" columns="*,*">
-      <!-- <GridLayout
-        :isEnabled="!isReadOnly"
-        class="m-20"
-        :class="{ disabled: isReadOnly }"
+    <GridLayout rows="*,auto" columns="*,*"> 
+      <ScrollView col="0" row="0" colSpan="2">
+      <GridLayout class="page-content" rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto" columns="*,*">
+      <Label row="0" col="0" text="Dados Gerais" colSpan="2" class="font-weight-bold text-primary m-b-20" />
+      <StackLayout class="input-field" row="1" colSpan="2">
+        <Label text="Nome" class="label" />
+        <TextField
+        :isEnabled="enabled"
+        ref="name"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="voter.name"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="2" colSpan="2">
+        <Label text="Data de nascimento" class="label" />
+        <TextField
+        :isEnabled="enabled"
+        ref="date"
+        keyboardType="datetime"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="voter.birthdate"
+        returnKeyType="next"
+      />
+        <!-- mask="00/00/0000" -->
+      </StackLayout>
+      <StackLayout class="input-field" row="3" colSpan="2">
+        <Label text="CPF" class="label" />
+        <!-- <MaskedTextField -->
+          <TextField
+          :isEnabled="enabled"
+          ref="cpf"
+          keyboardType="text"
+          autocorrect="false"
+          autocapitalizationType="none"
+          :text="voter.cpf"
+          returnKeyType="next"
+        />
+          <!-- mask="000.000.000-00" -->
+      </StackLayout>
+      <Label row="4" col="0" text="Endereço" colSpan="2" class="font-weight-bold text-primary m-y-20" />
+      <StackLayout class="input-field" row="5" colSpan="2">
+        <Label text="Descrição" class="label" />
+        <TextField
+        :isEnabled="enabled"
+        ref="description"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="voter.address.description"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="6" colSpan="2">
+        <Label text="Número" class="label" />
+        <TextField
+        :isEnabled="enabled"
+        ref="number"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="voter.address.number"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="7" colSpan="2">
+        <Label text="Complemento" class="label" />
+        <TextField
+        :isEnabled="enabled"
+        ref="complement"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="voter.address.complement"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="8" colSpan="2">
+        <Label text="CEP" class="label" />
+        <!-- <MaskedTextField -->
+        <TextField  
+        :isEnabled="enabled"
+        ref="zipcode"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="voter.address.zipcode"
+        returnKeyType="next"
+      />
+        <!-- mask="00000-000" -->
+      </StackLayout>
+      <StackLayout class="input-field" row="9" colSpan="2">
+        <Label text="Bairro" class="label" />
+        <TextField
+        :isEnabled="enabled"
+        ref="district"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="voter.address.district"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="10" colSpan="2">
+        <Label text="Logradouro" class="label" />
+        <TextField
+        :isEnabled="enabled"
+        ref="street"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="voter.address.street"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <!-- <StackLayout class="input-field" row="11" colSpan="2">
+        <Label text="Cidade" class="label" />
+        <TextField
+        :isEnabled="enabled"
+        ref="city_id"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="voter.address.city_id"
+        returnKeyType="done"
+      />
+      </StackLayout> -->
+      <!-- <RadDataFormMaskedTextField
+        @loaded="onLoadMaskedTextField
+        ref="dataForm"
+        :source="voter"
+        :metadata="userMetadata"
+        :groups="groups"
         row="0"
         col="0"
         colSpan="2"
-        rows="auto,auto"
-        columns="*, auto"
-        @tap="$navigator.navigate('/upload-image', { props: { user: voter, role: 'voter' }})"
-      >
-        <Image
-          v-if="voter.image"
-          row="0"
-          col="1"
-          :src="voter.image"
-          class="thumb"
-          rowSpan="2"
-        />
-        <Image v-else row="0" col="1" src="~/assets/images/userimage.png" class="thumb" rowSpan="2" />
-        <Label row="0" col="0" text="Avatar" class="font-weight-bold" color="black" />
-        <Label row="1" col="0" text="Modifique o seu avatar" />
-      </GridLayout> -->
-      <RadDataForm
+      ></RadDataForm> -->
+      </GridLayout>
+      </ScrollView>
+      <GridLayout col="0" row="1" colSpan="2" rows="auto" columns="*,*">
+        <Button row="0" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
+        <Button row="0" col="1" text="Salvar" @tap="updateVoter" class="btn btn-primary" :isEnabled="enabled"/>
+      </GridLayout>
+    </GridLayout>
+
+      <!-- <RadDataForm
         ref="dataForm"
         :source="voter"
         :metadata="userMetadata"
@@ -72,19 +195,12 @@
         @tap="updateVoter"
         class="btn btn-primary"
         :isEnabled="!isReadOnly"
-      />
-    </GridLayout>
+      /> -->
   </Page>
 </template>
 
 <script>
 import * as utils from "~/shared/utils";
-import {
-  GroupTitleStyle,
-  PropertyGroup,
-  DataFormFontStyle
-} from "nativescript-ui-dataform";
-import { Color } from "tns-core-modules/color";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
 import { UPDATE_VOTER } from "~/store/actions.type";
@@ -98,116 +214,8 @@ export default {
   props: ["voter"],
   data() {
     return {
-      groups: [],
-      isReadOnly: true,
-      userMetadata: {
-        commitMode: "Immediate",
-        validationMode: "Immediate"
-        // propertyAnnotations: [
-        //   {
-        //     name: "authtoken",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "id",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "image",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "latitude",
-        //     hidden: true
-        //   },
-        //   {
-        //     name: "longitude",
-        //     hidden: true
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "name",
-        //     displayName: "Nome",
-        //     index: 0,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "email",
-        //     displayName: "Email",
-        //     readOnly: true,
-        //     index: 1,
-        //     editor: "Email"
-        //   },
-        //   {
-        //     groupName: "Dados Pessoais",
-        //     name: "phone",
-        //     displayName: "Celular",
-        //     index: 2,
-        //     editor: "Phone"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "address",
-        //     displayName: "Logradouro",
-        //     index: 3,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "number",
-        //     displayName: "Número",
-        //     index: 4,
-        //     editor: "Number"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "neighborhood",
-        //     displayName: "Bairro",
-        //     index: 5,
-        //     editor: "Text"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "cep",
-        //     displayName: "CEP",
-        //     index: 6,
-        //     editor: "Number"
-        //   },
-        //   {
-        //     groupName: "Endereço",
-        //     name: "complement",
-        //     displayName: "Complemento",
-        //     index: 7,
-        //     editor: "Text"
-        //   }
-        // ]
-      }
+      enabled: false
     };
-  },
-  created() {
-    let gts = new GroupTitleStyle();
-    let pg = new PropertyGroup();
-
-    gts.labelTextColor = new Color("#417169");
-    gts.labelFontStyle = DataFormFontStyle.Bold;
-    gts.labelTextSize = 14;
-
-    pg.name = "Dados Pessoais";
-    pg.collapsible = true;
-    pg.collapsed = false;
-    pg.titleStyle = gts;
-
-    this.groups.push(pg);
-
-    pg = new PropertyGroup();
-
-    pg.name = "Endereço";
-    pg.collapsible = true;
-    pg.collapsed = false;
-    pg.titleStyle = gts;
-
-    this.groups.push(pg);
   },
   methods: {
     updateVoter() {
@@ -226,7 +234,7 @@ export default {
           this.$navigator.back();
           utils.loader.hide();
           feedback.success({
-            message: "Eleitor atualizado com sucesso."
+            message: "Membro atualizado com sucesso."
           });
         })
         .catch(error => {
@@ -241,7 +249,7 @@ export default {
       utils.showDrawer();
     },
     readOnly() {
-      this.isReadOnly = !this.isReadOnly;
+      this.enabled = !this.enabled;
     }
   }
 };
@@ -261,5 +269,9 @@ export default {
 
 .disabled {
   opacity: 0.50;
+}
+
+.page-content{
+  padding: 15 15 0 15;
 }
 </style>
