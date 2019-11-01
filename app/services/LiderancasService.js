@@ -139,9 +139,13 @@ export default class LiderancasService extends BackendService {
   visits(voter_id) {
     return http
       .request({
-        url: this.baseUrl + "visits",
-        method: "GET",
-        headers: this.getHeaders()
+        // url: this.baseUrl + "visits",
+        url: `http://liderancas.net.br/api/visits/find_by_member`,
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify({
+          id: voter_id
+        })
       })
       .then(this.validateCode)
       .then(this.getJson)
@@ -173,10 +177,10 @@ export default class LiderancasService extends BackendService {
     return http
       .request({
         // url: this.baseUrl + "visitadd",
-        url: `http://liderancas.net.br/api/visits/find_by_member`,
+        url: `http://liderancas.net.br/api/visits/create`,
         method: "POST",
         headers: this.getHeaders(),
-        content: JSON.stringify(visit)
+        content: JSON.stringify({visit: visit})
       })
       .then(this.validateCode)
       .then(this.getJson)

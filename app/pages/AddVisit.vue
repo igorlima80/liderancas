@@ -24,27 +24,27 @@
       <Label class="action-bar-title" text="Adicionar Visita"></Label>
     </ActionBar>
     <GridLayout rows="*,auto" columns="*,*">
-      <ScrollView col="0" row="0" colspan="2">
+      <ScrollView col="0" row="0" colSpan="2">
         <GridLayout class="page-content" rows="auto,auto,auto,auto" columns="*,*">
           <Label
             row="0"
             col="0"
             text="Visita"
-            colspan="2"
+            colSpan="2"
             class="font-weight-bold text-primary m-b-20"
           />
-          <StackLayout class="input-field" row="1" colspan="2">
+          <StackLayout class="input-field" row="1" colSpan="2">
             <Label text="Data" class="label" />
             <TextField
-              ref="data"
+              ref="date_visit"
               keyboardType="text"
               autocorrect="false"
               autocapitalizationType="none"
-              v-model="visit.data"
+              v-model="visit.date_visit"
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="2" colspan="2">
+          <StackLayout class="input-field" row="2" colSpan="2">
             <Label text="N° de familiares" class="label" />
             <TextField
               ref="nfamily"
@@ -55,20 +55,20 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="3" colspan="2">
+          <StackLayout class="input-field" row="3" colSpan="2">
             <Label text="Observação" class="label" />
             <TextView
               ref="observation"
               keyboardType="text"
               autocorrect="false"
               autocapitalizationType="none"
-              :text="visit.observation"
+              v-model="visit.observation"
               returnKeyType="done"
             />
           </StackLayout>
         </GridLayout>
       </ScrollView>
-      <GridLayout col="0" row="1" colspan="2" rows="auto" columns="*,*">
+      <GridLayout col="0" row="1" colSpan="2" rows="auto" columns="*,*">
         <Button row="0" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
         <Button row="0" col="1" text="Salvar" @tap="addVisit" class="btn btn-primary" />
       </GridLayout>
@@ -134,7 +134,7 @@ export default {
       this.$store
         .dispatch(ADD_VISIT, this.visit)
         .then(() => {
-          this.$navigator.back();
+          this.$navigator.navigate("/visit", { props: { member: this.member }})
           utils.loader.hide();
           feedback.success({
             message: "Visita adicionada com sucesso."

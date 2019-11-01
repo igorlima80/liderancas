@@ -201,12 +201,13 @@
 
 <script>
 import * as utils from "~/shared/utils";
-import {
-  GroupTitleStyle,
-  PropertyGroup,
-  DataFormFontStyle
-} from "nativescript-ui-dataform";
-import { Color } from "tns-core-modules/color";
+// import {
+//   GroupTitleStyle,
+//   PropertyGroup,
+//   DataFormFontStyle
+// } from "nativescript-ui-dataform";
+// import { Color } from "tns-core-modules/color";
+import LoginService from "~/services/LoginService";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
 import { ADD_VOTER } from "~/store/actions.type";
@@ -215,6 +216,7 @@ import {
   getConnectionType
 } from "tns-core-modules/connectivity";
 const feedback = new Feedback();
+const loginService = new LoginService();
 
 export default {
   data() {
@@ -228,8 +230,7 @@ export default {
         birthdate: "",
         translate_status: "",
         leader: {
-          id: null,
-          name: ""
+          id: null
         },
         address: {
           description: "",
@@ -364,10 +365,11 @@ export default {
       }
 
       utils.loader.show();
+      this.member.leader.id = loginService.token;
       this.$store
         .dispatch(ADD_VOTER, this.member)
         .then(() => {
-          this.$navigator.back();
+          this.$navigator.navigate("/voters")
           utils.loader.hide();
           feedback.success({
             message: "Membro adicionado com sucesso."

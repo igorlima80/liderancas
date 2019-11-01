@@ -63,14 +63,14 @@
             <Label
               row="0"
               col="0"
-              :text="visit.name"
+              :text="visit.observation"
               class="list-group-item-heading"
               @tap="onItemTap(visit)"
             />
             <Label
               row="1"
               col="0"
-              :text="visit.date"
+              :text="visit.date_visit"
               class="list-group-item-text"
               @tap="onItemTap(visit)"
             />
@@ -125,9 +125,11 @@ export default {
     };
   },
   created() {
+    console.log("id de membro:" + this.member.id)
     this.$store
       .dispatch(GET_VISITS, this.member.id)
-      .then(() => {
+      .then(data => {
+        this.visits = data
         this.visitIndicator = false;
       })
       .catch(error => {});
@@ -141,7 +143,9 @@ export default {
       this.$nextTick(() => {
         this.$store
           .dispatch(GET_VISITS, this.member.id)
-          .then(() => {})
+          .then(data => {
+            this.visits = data
+          })
           .catch(error => {});
         object.notifyPullToRefreshFinished();
       });
@@ -151,8 +155,8 @@ export default {
       // this.$navigator.navigate("/addvisit", { props: { member: m }})
     },
     addVisit(){
-      const m = clone(this.member);
-      this.$navigator.navigate("/addvisit", { props: { member: m }})
+      // const m = clone(this.member);
+      this.$navigator.navigate("/addvisit", { props: { member: this.member }})
     },
     // updateVisit() {
     //   if (getConnectionType() === connectionType.none) {

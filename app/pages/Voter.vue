@@ -231,7 +231,7 @@ export default {
       this.$store
         .dispatch(UPDATE_VOTER, this.voter)
         .then(() => {
-          this.$navigator.back();
+          this.$navigator.navigate("/voters")
           utils.loader.hide();
           feedback.success({
             message: "Membro atualizado com sucesso."

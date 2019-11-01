@@ -48,7 +48,7 @@ content-type: application/json
  "id":1,	
  "latitude": -5.114644, 
  "longitude": -42.753744,
- "radius": 1000
+ "radius": 3
 }
 ###
 # Método para buscar os membros pŕoximos, independente de status
@@ -74,7 +74,7 @@ content-type: application/json
 		"date_visit":"2019-10-27",
 		"observation":"testeeee2",
 		"number_of_voters": 4,
-		"member_id": 1
+		"member_id": 2
 	}
 }
 
@@ -143,5 +143,5 @@ POST http://liderancas.net.br/api/visits/find_by_member HTTP/1.1
 content-type: application/json
 
 {
-	"id": 1
+	"id": 2
 }

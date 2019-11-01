@@ -185,9 +185,9 @@ const actions = {
       liderancasService
         .visits(voter_id)
         .then(data => {
-          console.info("Visits: " + data);
+          console.info("Visits: " + data.collection);
           // context.commit(SET_VISITS, data);
-          resolve(data);
+          resolve(data.collection);
         })
         .catch(error => {
           context.commit(SET_ERROR, response.data.errors);
