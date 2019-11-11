@@ -134,7 +134,7 @@ export default {
       this.$store
         .dispatch(ADD_VISIT, this.visit)
         .then(() => {
-          this.$navigator.navigate("/visit", { props: { member: this.member }})
+          this.$navigator.navigate("/visit", { props: { member: this.member }},{clearHistory: true})
           utils.loader.hide();
           feedback.success({
             message: "Visita adicionada com sucesso."

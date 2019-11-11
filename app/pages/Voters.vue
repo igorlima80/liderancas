@@ -1,5 +1,5 @@
 <template>
-  <Page class="page">
+  <Page class="page" @loaded="onLoaded">
     <ActionBar class="action-bar">
       <!-- 
             Use the NavigationButton as a side-drawer button in Android
@@ -25,7 +25,7 @@
     </ActionBar>
 
     <GridLayout rows="auto,auto,*">
-      <SearchBar row="0" hint="Buscar por Membros" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
+      <SearchBar row="0" hint="Buscar por Membros" v-model="searchQuery" @clear="onClear" @submit="onSubmit" />
       <Label row="1" text="Membros" class="font-weight-bold text-primary m-t-15 m-l-10" />
       <ActivityIndicator row="2" class="indicator" v-if="votersIndicator" :busy="votersIndicator" />
       <RadListView
@@ -33,7 +33,7 @@
         row="2"
         class="list-group"
         ref="listView"
-        for="voter in voters"
+        for="voter in listVoters"
         pullToRefresh="true"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
@@ -81,7 +81,7 @@
 import * as utils from "~/shared/utils";
 import SelectedPageService from "../shared/selected-page-service";
 import { mapGetters } from "vuex";
-import { ObservableArray } from "tns-core-modules/data/observable-array";
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { GET_VOTERS } from "~/store/actions.type";
 import { Feedback } from "nativescript-feedback";
 import LoginService from "~/services/LoginService";
@@ -93,7 +93,8 @@ export default {
   data() {
     return {
       votersIndicator: true,
-      listVoters: new ObservableArray(this.voters)
+      listVoters: [],
+      searchQuery: ""
     };
   },
   created() {
@@ -123,6 +124,7 @@ export default {
           .dispatch(GET_VOTERS, loginService.token)
           .then(() => {})
           .catch(error => {});
+        this.listVoters = clone(this.voters);
         object.notifyPullToRefreshFinished();
       });
     },
@@ -132,6 +134,20 @@ export default {
     },
     openMaps(latitude,longitude) {
       utils.openMaps(latitude,longitude)
+    },
+    filterItems(){     
+      return this.listVoters.filter(el => el.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1);
+    },
+    onSubmit(event){
+      this.listVoters = clone(this.voters);
+      this.listVoters = this.filterItems()
+      console.dir(this.listVoters);      
+    },
+    onClear(){
+      this.listVoters = clone(this.voters);
+    },
+    onLoaded(){
+      this.listVoters = clone(this.voters);
     }
   }
 };

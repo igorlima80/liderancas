@@ -1,10 +1,9 @@
 <template>
   <Page class="page" @loaded="pageLoaded()" actionBarHidden="true">
     <FlexboxLayout flexDirection="column" justifyContent="space-around" class="page-content">
-      <!-- <ActivityIndicator :busy="busy" alignSelf="center"/> -->
       <Image src="~/assets/images/logo.png" width="30%" />
       <CardView margin="1" elevation="5" radius="7" alignSelf="center">
-        <GridLayout rows="auto,auto,auto,auto,auto" class="m-15">
+        <GridLayout rows="auto,auto,auto,auto" class="m-15">
           <Label row="0" text="Login" class="text-center font-weight-bold text-primary m-y-15" />
           <MaskedTextField
             row="1"
@@ -29,13 +28,13 @@
             class="m-b-15"
           /> -->
           <Button row="2" text="Entrar" @tap="submit" class="btn btn-primary m-y-20" />
-          <Label
+          <!-- <Label
             row="3"
             text="Esqueceu sua senha?"
             alignSelf="center"
             class="text-primary text-right m-t-15"
             @tap="forgotPassword"
-          />
+          /> -->
         </GridLayout>
       </CardView>
 
@@ -112,11 +111,19 @@ export default {
       console.log(this.getCpf());
       this.$store
         .dispatch(LOGIN, this.getCpf())
-        .then(() => {
-          this.$navigator.navigate("/home", {
-            clearHistory: true
-          });
+        .then(data => {
+          if ('status' in data) {
           utils.loader.hide();
+          feedback.error({
+            message:
+              "Infelizmente não conseguimos encontrar sua conta. Tente mais tarde."
+          });
+          }else{
+            this.$navigator.navigate("/home", {
+              clearHistory: true
+            });
+            utils.loader.hide();
+          }
         })
         .catch(error => {
           console.error(error);

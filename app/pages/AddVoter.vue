@@ -52,7 +52,7 @@
             <Label text="Data de nascimento" class="label" />
             <TextField
               ref="date"
-              keyboardType="datetime"
+              keyboardType="text"
               autocorrect="false"
               autocapitalizationType="none"
               v-model="member.birthdate"

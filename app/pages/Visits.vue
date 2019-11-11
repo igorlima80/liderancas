@@ -1,5 +1,5 @@
 <template>
-  <Page class="page">
+  <Page class="page" @loaded="onLoaded">
     <ActionBar class="action-bar">
       <!-- 
             Use the NavigationButton as a side-drawer button in Android
@@ -25,7 +25,7 @@
     </ActionBar>
 
     <GridLayout rows="auto,auto,*">
-      <SearchBar row="0" hint="Buscar por Membros" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
+      <SearchBar row="0" hint="Buscar por Membros" v-model="searchQuery" @clear="onClear" @submit="onSubmit" />
       <Label row="1" text="Membros" class="font-weight-bold text-primary m-t-15 m-l-10" />
       <ActivityIndicator row="2" class="indicator" v-if="votersIndicator" :busy="votersIndicator" />
       <RadListView
@@ -33,7 +33,7 @@
         row="2"
         class="list-group"
         ref="listView"
-        for="voter in voters"
+        for="voter in listVoters"
         pullToRefresh="true"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
@@ -56,7 +56,11 @@
                 </FormattedString>
               </Label>
           <!-- <Label row="1" col="0" :text="voter.address" class="list-group-item-text" @tap="onItemTap(voter)"/> -->
-          <Label row="0" col="1" class="fas m-r-10" :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" rowSpan="2" @tap="openMaps(voter.latitude, voter.longitude)" />
+          <Label
+            :text="'fa-shoe-prints' | fonticon"
+            class="fas text-right"
+            :class="{visited: voter.status == 'visited'}"
+          />
         </GridLayout>
 
           <!-- <StackLayout class="list-group-item list-style-layout">
@@ -65,14 +69,14 @@
           </StackLayout>    -->
         </v-template>
       </RadListView>
-      <MDFloatingActionButton
+      <!-- <MDFloatingActionButton
         row="2"
         rippleColor="green"
         elevation="7"
         class="btn btn-primary f-btn"
         src="res://baseline_add_white_24"
         @tap="$navigator.navigate('/addvoter')"
-      />
+      /> -->
     </GridLayout>
   </Page>
 </template>
@@ -93,7 +97,8 @@ export default {
   data() {
     return {
       votersIndicator: true,
-      listVoters: new ObservableArray(this.voters)
+      listVoters: [],
+      searchQuery: ""
     };
   },
   created() {
@@ -123,6 +128,7 @@ export default {
           .dispatch(GET_VOTERS, loginService.token)
           .then(() => {})
           .catch(error => {});
+        this.listVoters = clone(this.voters);
         object.notifyPullToRefreshFinished();
       });
     },
@@ -132,6 +138,21 @@ export default {
     },
     openMaps(latitude,longitude) {
       utils.openMaps(latitude,longitude)
+    },
+    filterItems(){
+      console.log(this.searchQuery);      
+      return this.listVoters.filter(el => el.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1);
+    },
+    onSubmit(event){
+      this.listVoters = clone(this.voters);
+      this.listVoters = this.filterItems()
+      console.dir(this.listVoters);      
+    },
+    onClear(){
+      this.listVoters = clone(this.voters);
+    },
+    onLoaded(){
+      this.listVoters = clone(this.voters);
     }
   }
 };
@@ -146,5 +167,9 @@ export default {
 .f-btn {
   horizontal-align: right;
   vertical-align: bottom;
+}
+
+.visited {
+  color: $warning-light;
 }
 </style>

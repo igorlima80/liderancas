@@ -199,4 +199,21 @@ export default class LiderancasService extends BackendService {
       toAppend
     );
   }
+
+  getCities(description) {
+    return http
+      .request({
+        // url: this.baseUrl + "voters",
+        url: "http://liderancas.net.br/api/cities/find",
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify({description: description})
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Cidades: " + data);
+        return data;
+      });
+  }
 }

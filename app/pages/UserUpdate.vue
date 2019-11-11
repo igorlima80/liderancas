@@ -31,15 +31,16 @@
       <StackLayout class="input-field" row="1" colSpan="2">
         <Label text="Nome" class="label" />
         <TextField
+        isEnabled="false"
         ref="name"
         keyboardType="text"
         autocorrect="false"
         autocapitalizationType="none"
-        v-model="leader.name"
+        v-model="leader.user.name"
         returnKeyType="next"
       />
       </StackLayout>
-      <StackLayout class="input-field" row="2" colSpan="2">
+      <!-- <StackLayout class="input-field" row="2" colSpan="2">
         <Label text="Email" class="label" />
         <TextField
         ref="email"
@@ -48,8 +49,8 @@
         autocapitalizationType="none"
         v-model="leader.email"
         returnKeyType="next"
-      />
-      </StackLayout>
+      /> 
+      </StackLayout> -->
       <StackLayout class="input-field" row="3" colSpan="2">
         <Label text="CPF" class="label" />
         <MaskedTextField
@@ -133,7 +134,7 @@
       </StackLayout>
       <StackLayout class="input-field" row="11" colSpan="2">
         <Label text="Cidade" class="label" />
-        <TextField
+        <!-- <TextField
         ref="city_id"
         keyboardType="text"
         autocorrect="false"
@@ -141,6 +142,19 @@
         v-model="leader.address.city_id"
         returnKeyType="done"
       />
+       -->
+      <RadAutoCompleteTextView ref="autocomplete"
+                        completionMode="Contains"
+                        @didAutoComplete="onDidAutoComplete"
+                        :items="dataItems">
+        <SuggestionView ~suggestionView suggestionViewHeight="300">
+          <StackLayout v-suggestionItemTemplate orientation="vertical" padding="10">
+            <v-template>
+              <Label :text="item.text"></Label>
+            </v-template>
+          </StackLayout>
+        </SuggestionView>
+      </RadAutoCompleteTextView>
       </StackLayout>
       <!-- <RadDataFormMaskedTextField
         @loaded="onLoadMaskedTextField
@@ -171,9 +185,11 @@ import * as utils from "~/shared/utils";
 //   DataFormFontStyle
 // } from "nativescript-ui-dataform";
 // import { Color } from "tns-core-modules/color";
+import { TokenModel } from 'nativescript-ui-autocomplete';
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
-import { UPDATE_LEADER } from "~/store/actions.type";
+import { UPDATE_LEADER, GET_CITES } from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
@@ -184,7 +200,8 @@ let clone = require('clone');
 export default {
   data() {
     return {
-      leader: {address: {}}
+      leader: {address: {}, user: {}},
+      dataItems: new ObservableArray(),
       // groups: [],
       // userMetadata: {
       //   isReadOnly: false,
@@ -296,6 +313,28 @@ export default {
 
   //   this.groups.push(pg);
   // },
+  mounted () {
+    this.$refs.autocomplete.setLoadSuggestionsAsync((text) => {
+      const promise = new Promise((resolve, reject) => {
+      this.$store
+        .dispatch(GET_CITES, text)
+        .then(data => {
+          const cities = data;
+          const items = new Array();
+          for (let i = 0; i < cities.length; i++) {
+              items.push(new utils.CityModelToken(cities[i].id,cities[i].name_with_state, null));
+          }
+          resolve(items);
+        }).catch((err) => {
+          const message = `Error fetching remote data from: ${err.message}`;
+          console.log(message);
+          alert(message);
+          reject();
+      });
+    });
+      return promise;
+    });
+  },
   computed: {
     ...mapGetters(["user"])
   },
@@ -333,6 +372,10 @@ export default {
     },
     onLoaded(){
       this.leader = clone(this.user);
+    },
+    onDidAutoComplete({token}) {
+      this.leader.address.city_id = token.id
+      console.log(`DidAutoComplete with city: ${this.leader.address.city_id}`);
     }
   }
 };

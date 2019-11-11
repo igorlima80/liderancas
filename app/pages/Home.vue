@@ -54,9 +54,10 @@
         v-if="nearMembersIndicator"
         :busy="nearMembersIndicator"
       />
+      <Label row="2" v-else-if="!near_members.success" :text="near_members.message" class="text-center text-primary warning"/>
       <Pager
         v-else
-        for="member in near_members"
+        for="member in near_members.collection"
         row="2"
         transformers="scale"
         showIndicator="true"
@@ -126,9 +127,10 @@
         v-if="nearUnvisitedIndicator"
         :busy="nearUnvisitedIndicator"
       />
+      <Label row="4" v-else-if="!unvisited_members.success" :text="unvisited_members.message" class="text-center text-primary warning"/>
       <Pager
         v-else
-        for="member in unvisited_members"
+        for="member in unvisited_members.collection"
         row="4"
         transformers="scale"
         showIndicator="true"
@@ -136,6 +138,7 @@
         peaking="5%"
       >
         <v-template>
+          
           <MDCardView rippleColor="transparent" elevation="2" class="m-y-30 m-x-5">
             <StackLayout class="m-20" verticalAlignment="center">
               <Label
@@ -210,8 +213,10 @@ export default {
       nearMembersIndicator: true,
       nearUnvisitedIndicator: true,
       userIndicator: true,
-      near_members: [],
-      unvisited_members: [],
+      near_members: {},
+      near_members_empty: true,
+      unvisited_members: {},
+      unvisited_members_empty: true,
       location: {}
     };
   },
@@ -280,16 +285,18 @@ export default {
       this.$store
         .dispatch(GET_NEAR_MEMBERS, loc)
         .then(data => {
-          this.near_members = data;
           this.nearMembersIndicator = false;
+          this.near_members = data;
+          this.near_members_empty = false;
         })
         .catch(error => {});
 
       this.$store
         .dispatch(GET_UNVISITED_MEMBERS, loc)
         .then(data => {
-          this.unvisited_members = data;
           this.nearUnvisitedIndicator = false;
+          this.unvisited_members = data;
+          this.unvisited_members_empty = false;
         })
         .catch(error => {});
     },
@@ -377,5 +384,9 @@ export default {
 }
 .page {
   background-color: $background-light;
+}
+
+.warning{
+  vertical-align: center;
 }
 </style>

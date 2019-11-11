@@ -21,12 +21,10 @@ content-type: application/json
 
 {
     "id": 1,
-    "mother_name": "maeeeeeiiii",
+    "mother_name": "mae",
     "father_name": "paiiiuououoiii",
     "rg": "teste",
     "cpf": "815.891.233-87",
-    "latitude": -25.4295963,
-    "longitude": -49.2712724,
     "address": {
         "description": "",
         "number": "12345",
@@ -144,4 +142,13 @@ content-type: application/json
 
 {
 	"id": 2
+}
+
+###
+
+POST http://liderancas.net.br/api/cities/find HTTP/1.1
+content-type: application/json
+
+{
+	"description":"teres"
 }

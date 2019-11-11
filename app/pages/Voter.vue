@@ -172,7 +172,7 @@
       </GridLayout>
       </ScrollView>
       <GridLayout col="0" row="1" colSpan="2" rows="auto" columns="*,*">
-        <Button row="0" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
+        <Button row="0" col="0" text="Cancelar" @tap="$navigator.navigate('/voters')" class="btn btn-secondary" />
         <Button row="0" col="1" text="Salvar" @tap="updateVoter" class="btn btn-primary" :isEnabled="enabled"/>
       </GridLayout>
     </GridLayout>

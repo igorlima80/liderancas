@@ -1,5 +1,6 @@
 import { getRootView } from "tns-core-modules/application";
 const utilsModule = require("tns-core-modules/utils/utils");
+import { TokenModel } from 'nativescript-ui-autocomplete';
 
 let LoadingIndicator = require("@nstudio/nativescript-loading-indicator")
   .LoadingIndicator;
@@ -57,4 +58,12 @@ export const openMaps = (latitude,longitude) => {
   utilsModule.openUrl(
     `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
   );
+}
+
+export class CityModelToken extends TokenModel {
+  constructor(id, city, image) {
+    super(city, image);
+    this.id = id;
+    this.city = city;
+  }
 }

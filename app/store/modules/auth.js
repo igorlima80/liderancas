@@ -32,11 +32,15 @@ const actions = {
       loginService
         .login(cpf)
         .then(data => {
+          if ('status' in data) {
+            resolve(data);
+          }else{
           console.info("User logged in with token: " + data.cpf);
           console.dir("User data:" + data);
           context.commit(SET_TOKEN, `${data.id}`);
           context.commit(SET_AUTH, data);
-          resolve();
+          resolve(data);
+          }
         })
         .catch(error => {
           context.commit(SET_ERROR, error);

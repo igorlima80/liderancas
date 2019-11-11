@@ -16,3 +16,4 @@ export const GET_VISITS = "getVisits";
 export const ADD_VISIT = "addVisit";
 export const UPDATE_VISIT = "updateVisit";
 export const INIT_DB = "initDB";
+export const GET_CITES = "getCites";

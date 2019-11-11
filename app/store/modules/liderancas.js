@@ -9,7 +9,8 @@ import {
   ADD_VOTER,
   GET_VISITS,
   UPDATE_VISIT,
-  ADD_VISIT
+  ADD_VISIT,
+  GET_CITES
 } from "~/store/actions.type";
 import {
   SET_NOTIFICATION,
@@ -84,9 +85,9 @@ const actions = {
       liderancasService
         .nearMembers(info)
         .then(data => {
-          console.info("Membros próximos: " + data.collection);
+          console.info("Membros próximos: " + data);
           // context.commit(SET_VOTERS, data);
-          resolve(data.collection);
+          resolve(data);
         })
         .catch(error => {
           context.commit(SET_ERROR, response.data.errors);
@@ -99,9 +100,9 @@ const actions = {
       liderancasService
         .unvisitedMembers(info)
         .then(data => {
-          console.info("Membros próximos não visitados: " + data.collection);
+          console.info("Membros próximos não visitados: " + data);
           // context.commit(SET_VOTERS, data);
-          resolve(data.collection);
+          resolve(data);
         })
         .catch(error => {
           context.commit(SET_ERROR, response.data.errors);
@@ -194,7 +195,22 @@ const actions = {
           reject(error);
         });
     });
-  }
+  },
+  [GET_CITES](context, description) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .getCities(description)
+        .then(data => {
+          console.info("Cidades: " + data.collection);
+          // context.commit(SET_VOTERS, data);
+          resolve(data.collection);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, response.data.errors);
+          reject(error);
+        });
+    });
+  },
 };
 
 const mutations = {

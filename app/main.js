@@ -5,6 +5,7 @@ import Navigator from 'nativescript-vue-navigator'
 import Pager from 'nativescript-pager/vue'
 import RadDataForm from 'nativescript-ui-dataform/vue';
 import RadListView from 'nativescript-ui-listview/vue';
+import RadAutoComplete from 'nativescript-ui-autocomplete/vue';
 import FloatingActionButtonPlugin from 'nativescript-material-floatingactionbutton/vue';
 import CardViewPlugin from 'nativescript-material-cardview/vue';
 import { TNSFontIcon, fonticon } from "nativescript-fonticon";
@@ -19,6 +20,7 @@ let firebase = require("nativescript-plugin-firebase");
 
 Vue.use(RadSideDrawer)
 Vue.use(RadDataForm)
+Vue.use(RadAutoComplete);
 Vue.use(Pager);
 Vue.use(RadListView);
 Vue.use(CardViewPlugin);
