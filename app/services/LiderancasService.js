@@ -66,6 +66,8 @@ export default class LiderancasService extends BackendService {
   }
 
   nearMembers(info) {
+    console.log(info);
+    
     return http
       .request({
         // url: this.baseUrl + "voters",
@@ -190,16 +192,6 @@ export default class LiderancasService extends BackendService {
       });
   }
 
-  getHeaders(toAppend = {}) {
-    return Object.assign(
-      {
-        "Content-Type": "application/json",
-        Authorization: "Basic " + this.token
-      },
-      toAppend
-    );
-  }
-
   getCities(description) {
     return http
       .request({
@@ -216,4 +208,50 @@ export default class LiderancasService extends BackendService {
         return data;
       });
   }
+
+  findByZipcode(zipcode) {
+    return http
+      .request({
+        // url: this.baseUrl + "voters",
+        url: "http://liderancas.net.br/api/utils/zipcode",
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify({zipcode: zipcode})
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Cidade: " + data);
+        return data;
+      });
+  }
+
+  findCityByIbge(ibge) {
+    return http
+      .request({
+        // url: this.baseUrl + "voters",
+        url: "http://liderancas.net.br/api/cities/find_by_ibge",
+        method: "POST",
+        headers: this.getHeaders(),
+        content: JSON.stringify({ibge: ibge})
+      })
+      .then(this.validateCode)
+      .then(this.getJson)
+      .then(data => {
+        console.info("Cidade: " + data);
+        return data;
+      });
+  }
+
+  getHeaders(toAppend = {}) {
+    return Object.assign(
+      {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + this.token
+      },
+      toAppend
+    );
+  }
+
+
 }

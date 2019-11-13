@@ -148,7 +148,7 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="11" colSpan="2">
+          <!-- <StackLayout class="input-field" row="11" colSpan="2">
             <Label text="Cidade" class="label" />
             <TextField
               ref="city_id"
@@ -158,7 +158,31 @@
               v-model="member.address.city_id"
               returnKeyType="done"
             />
+          </StackLayout> -->
+      <StackLayout class="input-field" row="11" colSpan="2">
+        <Label text="Cidade" class="label" />
+        <!-- <TextField
+        ref="city_id"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="leader.address.city_id"
+        returnKeyType="done"
+      />
+       -->
+      <RadAutoCompleteTextView ref="autocomplete"
+                        completionMode="Contains"
+                        @didAutoComplete="onDidAutoComplete"
+                        :items="dataItems">
+        <SuggestionView ~suggestionView suggestionViewHeight="300">
+          <StackLayout v-suggestionItemTemplate orientation="vertical" padding="10">
+            <v-template>
+              <Label :text="item.text"></Label>
+            </v-template>
           </StackLayout>
+        </SuggestionView>
+      </RadAutoCompleteTextView>
+      </StackLayout>
           <!-- <RadDataFormMaskedTextField
         @loaded="onLoadMaskedTextField
         ref="dataForm"
@@ -176,41 +200,16 @@
         <Button row="0" col="1" text="Salvar" @tap="addVoter" class="btn btn-primary" />
       </GridLayout>
     </GridLayout>
-
-    <!-- <RadDataForm
-        ref="dataForm"
-        :source="voter"
-        :metadata="userMetadata"
-        :groups="groups"
-        :isReadOnly="isReadOnly"
-        row="0"
-        col="0"
-        colSpan="2"
-      ></RadDataForm>
-      <Button row="1" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
-      <Button
-        row="2"
-        col="1"
-        text="Salvar"
-        @tap="addVoter"
-        class="btn btn-primary"
-        :isEnabled="!isReadOnly"
-    />-->
   </Page>
 </template>
 
 <script>
 import * as utils from "~/shared/utils";
-// import {
-//   GroupTitleStyle,
-//   PropertyGroup,
-//   DataFormFontStyle
-// } from "nativescript-ui-dataform";
-// import { Color } from "tns-core-modules/color";
 import LoginService from "~/services/LoginService";
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
-import { ADD_VOTER } from "~/store/actions.type";
+import { ADD_VOTER, GET_CITES } from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
@@ -230,7 +229,8 @@ export default {
         birthdate: "",
         translate_status: "",
         leader: {
-          id: null
+          id: null,
+          name:"Ari"
         },
         address: {
           description: "",
@@ -241,119 +241,32 @@ export default {
           street: "",
           city_id: null
         }
-      }
-
-      // groups: [],
-      // isReadOnly: true,
-      // userMetadata: {
-      //   commitMode: "Immediate",
-      //   validationMode: "Immediate"
-      // propertyAnnotations: [
-      //   {
-      //     name: "authtoken",
-      //     hidden: true
-      //   },
-      //   {
-      //     name: "id",
-      //     hidden: true
-      //   },
-      //   {
-      //     name: "image",
-      //     hidden: true
-      //   },
-      //   {
-      //     name: "latitude",
-      //     hidden: true
-      //   },
-      //   {
-      //     name: "longitude",
-      //     hidden: true
-      //   },
-      //   {
-      //     groupName: "Dados Pessoais",
-      //     name: "name",
-      //     displayName: "Nome",
-      //     index: 0,
-      //     editor: "Text"
-      //   },
-      //   {
-      //     groupName: "Dados Pessoais",
-      //     name: "email",
-      //     displayName: "Email",
-      //     readOnly: true,
-      //     index: 1,
-      //     editor: "Email"
-      //   },
-      //   {
-      //     groupName: "Dados Pessoais",
-      //     name: "phone",
-      //     displayName: "Celular",
-      //     index: 2,
-      //     editor: "Phone"
-      //   },
-      //   {
-      //     groupName: "Endereço",
-      //     name: "address",
-      //     displayName: "Logradouro",
-      //     index: 3,
-      //     editor: "Text"
-      //   },
-      //   {
-      //     groupName: "Endereço",
-      //     name: "number",
-      //     displayName: "Número",
-      //     index: 4,
-      //     editor: "Number"
-      //   },
-      //   {
-      //     groupName: "Endereço",
-      //     name: "neighborhood",
-      //     displayName: "Bairro",
-      //     index: 5,
-      //     editor: "Text"
-      //   },
-      //   {
-      //     groupName: "Endereço",
-      //     name: "cep",
-      //     displayName: "CEP",
-      //     index: 6,
-      //     editor: "Number"
-      //   },
-      //   {
-      //     groupName: "Endereço",
-      //     name: "complement",
-      //     displayName: "Complemento",
-      //     index: 7,
-      //     editor: "Text"
-      //   }
-      // ]
-      // }
+      },
+      dataItems: new ObservableArray(),
     };
   },
-  // created() {
-  //   let gts = new GroupTitleStyle();
-  //   let pg = new PropertyGroup();
-
-  //   gts.labelTextColor = new Color("#417169");
-  //   gts.labelFontStyle = DataFormFontStyle.Bold;
-  //   gts.labelTextSize = 14;
-
-  //   pg.name = "Dados Pessoais";
-  //   pg.collapsible = true;
-  //   pg.collapsed = false;
-  //   pg.titleStyle = gts;
-
-  //   this.groups.push(pg);
-
-  //   pg = new PropertyGroup();
-
-  //   pg.name = "Endereço";
-  //   pg.collapsible = true;
-  //   pg.collapsed = false;
-  //   pg.titleStyle = gts;
-
-  //   this.groups.push(pg);
-  // },
+  mounted () {
+    this.$refs.autocomplete.setLoadSuggestionsAsync((text) => {
+      const promise = new Promise((resolve, reject) => {
+      this.$store
+        .dispatch(GET_CITES, text)
+        .then(data => {
+          const cities = data;
+          const items = new Array();
+          for (let i = 0; i < cities.length; i++) {
+              items.push(new utils.CityModelToken(cities[i].id,cities[i].name_with_state, null));
+          }
+          resolve(items);
+        }).catch((err) => {
+          const message = `Error fetching remote data from: ${err.message}`;
+          console.log(message);
+          alert(message);
+          reject();
+      });
+    });
+      return promise;
+    });
+  },
   methods: {
     addVoter() {
       if (getConnectionType() === connectionType.none) {
@@ -385,6 +298,10 @@ export default {
     },
     onDrawerButtonTap() {
       utils.showDrawer();
+    },
+    onDidAutoComplete({token}) {
+      this.member.address.city_id = token.id
+      console.log(`DidAutoComplete with city: ${this.member.address.city_id}`);
     }
   }
 };

@@ -17,3 +17,5 @@ export const ADD_VISIT = "addVisit";
 export const UPDATE_VISIT = "updateVisit";
 export const INIT_DB = "initDB";
 export const GET_CITES = "getCites";
+export const FIND_ZIPCODE = "findZipcode";
+export const FIND_CITY_IBGE = "findCityIbge";

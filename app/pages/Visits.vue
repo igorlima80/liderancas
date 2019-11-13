@@ -1,5 +1,5 @@
 <template>
-  <Page class="page" @loaded="onLoaded">
+  <Page class="page">
     <ActionBar class="action-bar">
       <!-- 
             Use the NavigationButton as a side-drawer button in Android
@@ -25,7 +25,7 @@
     </ActionBar>
 
     <GridLayout rows="auto,auto,*">
-      <SearchBar row="0" hint="Buscar por Membros" v-model="searchQuery" @clear="onClear" @submit="onSubmit" />
+      <SearchBar row="0" hint="Buscar por Membros" v-model="searchQuery" @clear="refresh" @submit="onSubmit" />
       <Label row="1" text="Membros" class="font-weight-bold text-primary m-t-15 m-l-10" />
       <ActivityIndicator row="2" class="indicator" v-if="votersIndicator" :busy="votersIndicator" />
       <RadListView
@@ -106,6 +106,7 @@ export default {
       .dispatch(GET_VOTERS, loginService.token)
       .then(() => {
         this.votersIndicator = false;
+        this.refresh();
       })
       .catch(error => {});
   },
@@ -126,9 +127,10 @@ export default {
       this.$nextTick(() => {
         this.$store
           .dispatch(GET_VOTERS, loginService.token)
-          .then(() => {})
+          .then(() => {
+            this.refresh();
+          })
           .catch(error => {});
-        this.listVoters = clone(this.voters);
         object.notifyPullToRefreshFinished();
       });
     },
@@ -144,14 +146,11 @@ export default {
       return this.listVoters.filter(el => el.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1);
     },
     onSubmit(event){
-      this.listVoters = clone(this.voters);
+      this.refresh();
       this.listVoters = this.filterItems()
       console.dir(this.listVoters);      
     },
-    onClear(){
-      this.listVoters = clone(this.voters);
-    },
-    onLoaded(){
+    refresh(){
       this.listVoters = clone(this.voters);
     }
   }

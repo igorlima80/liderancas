@@ -44,8 +44,8 @@ content-type: application/json
 
 {
  "id":1,	
- "latitude": -5.114644, 
- "longitude": -42.753744,
+ "latitude": -5.0792706, 
+ "longitude": -42.8137769,
  "radius": 3
 }
 ###
@@ -58,7 +58,7 @@ content-type: application/json
  "id":1,	
  "latitude": -5.0814557, 
  "longitude": -42.7995088,
- "radius": 1000
+ "radius": 3
 }
 
 ###
@@ -107,7 +107,7 @@ content-type: application/json
 
 ###
 # Detalhes de um membro:
-GET http://liderancas.net.br/api/members/1 HTTP/1.1
+GET http://liderancas.net.br/api/members/4 HTTP/1.1
 content-type: application/json
 
 ###
@@ -151,4 +151,22 @@ content-type: application/json
 
 {
 	"description":"teres"
+}
+
+###
+
+POST http://liderancas.net.br/api/utils/zipcode HTTP/1.1
+content-type: application/json
+
+{
+	"zipcode":"64057-650"
+}
+
+###
+
+POST http://liderancas.net.br/api/cities/find_by_ibge HTTP/1.1
+content-type: application/json
+
+{
+	"ibge": "2211001"
 }

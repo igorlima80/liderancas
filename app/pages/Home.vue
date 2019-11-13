@@ -241,15 +241,15 @@ export default {
 
     this.enableLocation();
 
-    if (this.location) {
-      this.getAllNearMembers()
-    } else {
-      alert({
-        title: "lideranças",
-        message: "Não foi possivel localizar os membros mais próximos.",
-        okButtonText: "OK"
-      });
-    }
+    // if (this.location) {
+    //   this.getAllNearMembers()
+    // } else {
+    //   alert({
+    //     title: "lideranças",
+    //     message: "Não foi possivel localizar os membros mais próximos.",
+    //     okButtonText: "OK"
+    //   });
+    // }
   },
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Home");
@@ -348,10 +348,16 @@ export default {
               that.location = loc;
               console.log(loc.latitude);
               console.log(loc.longitude);
+              that.getAllNearMembers()
             }
           },
           function(e) {
             console.log("Error: " + (e.message || e));
+            alert({
+              title: "lideranças",
+              message: "Não foi possivel localizar os membros mais próximos.",
+              okButtonText: "OK"
+            });
           }
         );
     }

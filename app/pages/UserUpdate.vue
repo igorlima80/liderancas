@@ -77,17 +77,30 @@
       />
       </StackLayout>
       <StackLayout class="input-field" row="6" colSpan="2">
-        <Label text="Número" class="label" />
-        <TextField
-        ref="number"
-        keyboardType="text"
+        <Label text="CEP" class="label" />
+        <MaskedTextField
+        ref="zipcode"
+        @blur="onBlur"
+        keyboardType="number"
         autocorrect="false"
         autocapitalizationType="none"
-        v-model="leader.address.number"
+        v-model="leader.address.zipcode"
         returnKeyType="next"
+        mask="00000-000"
       />
       </StackLayout>
       <StackLayout class="input-field" row="7" colSpan="2">
+        <Label text="Logradouro" class="label" />
+        <TextField
+        ref="street"
+        keyboardType="text"
+        autocorrect="false"
+        autocapitalizationType="none"
+        v-model="leader.address.street"
+        returnKeyType="next"
+      />
+      </StackLayout>
+      <StackLayout class="input-field" row="8" colSpan="2">
         <Label text="Complemento" class="label" />
         <TextField
         ref="complement"
@@ -98,18 +111,7 @@
         returnKeyType="next"
       />
       </StackLayout>
-      <StackLayout class="input-field" row="8" colSpan="2">
-        <Label text="CEP" class="label" />
-        <MaskedTextField
-        ref="zipcode"
-        keyboardType="text"
-        autocorrect="false"
-        autocapitalizationType="none"
-        v-model="leader.address.zipcode"
-        returnKeyType="next"
-        mask="00000-000"
-      />
-      </StackLayout>
+
       <StackLayout class="input-field" row="9" colSpan="2">
         <Label text="Bairro" class="label" />
         <TextField
@@ -121,14 +123,15 @@
         returnKeyType="next"
       />
       </StackLayout>
+
       <StackLayout class="input-field" row="10" colSpan="2">
-        <Label text="Logradouro" class="label" />
+        <Label text="Número" class="label" />
         <TextField
-        ref="street"
-        keyboardType="text"
+        ref="number"
+        keyboardType="number"
         autocorrect="false"
         autocapitalizationType="none"
-        v-model="leader.address.street"
+        v-model="leader.address.number"
         returnKeyType="next"
       />
       </StackLayout>
@@ -146,7 +149,10 @@
       <RadAutoCompleteTextView ref="autocomplete"
                         completionMode="Contains"
                         @didAutoComplete="onDidAutoComplete"
-                        :items="dataItems">
+                        :items="dataItems"
+                        keyboardType="text"
+                        autocorrect="false"
+                        returnKeyType="done">
         <SuggestionView ~suggestionView suggestionViewHeight="300">
           <StackLayout v-suggestionItemTemplate orientation="vertical" padding="10">
             <v-template>
@@ -185,11 +191,10 @@ import * as utils from "~/shared/utils";
 //   DataFormFontStyle
 // } from "nativescript-ui-dataform";
 // import { Color } from "tns-core-modules/color";
-import { TokenModel } from 'nativescript-ui-autocomplete';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
-import { UPDATE_LEADER, GET_CITES } from "~/store/actions.type";
+import { UPDATE_LEADER, GET_CITES, FIND_ZIPCODE, FIND_CITY_IBGE } from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
@@ -372,10 +377,58 @@ export default {
     },
     onLoaded(){
       this.leader = clone(this.user);
+      if (this.leader.address.city) {
+        this.$refs.autocomplete.addToken(
+          new utils.CityModelToken(this.leader.address.city.id,this.leader.address.city.name_with_state, null)
+        );
+      }
+      if (this.leader.address.zipcode) {
+        this.setCep(this.leader.address.zipcode);
+      }
     },
     onDidAutoComplete({token}) {
       this.leader.address.city_id = token.id
       console.log(`DidAutoComplete with city: ${this.leader.address.city_id}`);
+    },
+    onBlur(){
+      if (getConnectionType() === connectionType.none) {
+        alert("Lideranças requer uma conexão com a Internet para buscar o cep.");
+        return;
+      }
+
+      utils.loader.show();
+      const that = this;
+      console.log(this.getCep());
+      this.$store
+        .dispatch(FIND_ZIPCODE, this.getCep())
+        .then(data => {
+          this.leader.address.complement = data.complemento;
+          this.leader.address.street = data.logradouro;
+          this.leader.address.district = data.bairro;
+          this.$store
+            .dispatch(FIND_CITY_IBGE, data.ibge)
+            .then(data => {
+              that.$refs.autocomplete.addToken(
+                new utils.CityModelToken(data.id,data.name_with_state, null)
+              )
+              utils.loader.hide()
+            })
+            .catch(error => {
+              console.error(error);
+              utils.loader.hide()
+            });
+        })
+        .catch(error => {
+          console.error(error);
+          utils.loader.hide();
+          alert("Infelizmente não conseguimos carregar os dados do cep.");
+        });
+    },
+    getCep() {
+      return this.$refs.zipcode.nativeView.text
+    },
+    setCep(zipcode) {
+      this.$refs.zipcode.nativeView.text = zipcode;
     }
   }
 };

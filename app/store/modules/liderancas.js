@@ -10,7 +10,9 @@ import {
   GET_VISITS,
   UPDATE_VISIT,
   ADD_VISIT,
-  GET_CITES
+  GET_CITES,
+  FIND_ZIPCODE,
+  FIND_CITY_IBGE
 } from "~/store/actions.type";
 import {
   SET_NOTIFICATION,
@@ -204,6 +206,36 @@ const actions = {
           console.info("Cidades: " + data.collection);
           // context.commit(SET_VOTERS, data);
           resolve(data.collection);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, response.data.errors);
+          reject(error);
+        });
+    });
+  },
+  [FIND_ZIPCODE](context, zipcode) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .findByZipcode(zipcode)
+        .then(data => {
+          console.info("Cidade: " + data.response);
+          // context.commit(SET_VOTERS, data);
+          resolve(data.response);
+        })
+        .catch(error => {
+          context.commit(SET_ERROR, response.data.errors);
+          reject(error);
+        });
+    });
+  },
+  [FIND_CITY_IBGE](context, ibge) {
+    return new Promise((resolve, reject) => {
+      liderancasService
+        .findCityByIbge(ibge)
+        .then(data => {
+          console.info("Cidade: " + data);
+          // context.commit(SET_VOTERS, data);
+          resolve(data);
         })
         .catch(error => {
           context.commit(SET_ERROR, response.data.errors);
