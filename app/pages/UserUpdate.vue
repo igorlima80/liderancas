@@ -402,6 +402,7 @@ export default {
       this.$store
         .dispatch(FIND_ZIPCODE, this.getCep())
         .then(data => {
+          this.member.address.zipcode = data.cep;
           this.leader.address.complement = data.complemento;
           this.leader.address.street = data.logradouro;
           this.leader.address.district = data.bairro;

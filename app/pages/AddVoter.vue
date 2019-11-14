@@ -92,17 +92,30 @@
             />
           </StackLayout>
           <StackLayout class="input-field" row="6" colSpan="2">
-            <Label text="Número" class="label" />
-            <TextField
-              ref="number"
-              keyboardType="text"
+            <Label text="CEP" class="label" />
+            <MaskedTextField
+              ref="zipcode"
+              @blur="onBlur"
+              keyboardType="number"
               autocorrect="false"
               autocapitalizationType="none"
-              v-model="member.address.number"
+              v-model="member.address.zipcode"
               returnKeyType="next"
+              mask="00000-000"
             />
           </StackLayout>
           <StackLayout class="input-field" row="7" colSpan="2">
+            <Label text="Logradouro" class="label" />
+            <TextField
+              ref="street"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="member.address.street"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="8" colSpan="2">
             <Label text="Complemento" class="label" />
             <TextField
               ref="complement"
@@ -112,19 +125,6 @@
               v-model="member.address.complement"
               returnKeyType="next"
             />
-          </StackLayout>
-          <StackLayout class="input-field" row="8" colSpan="2">
-            <Label text="CEP" class="label" />
-            <!-- <MaskedTextField -->
-            <TextField
-              ref="zipcode"
-              keyboardType="text"
-              autocorrect="false"
-              autocapitalizationType="none"
-              v-model="member.address.zipcode"
-              returnKeyType="next"
-            />
-            <!-- mask="00000-000" -->
           </StackLayout>
           <StackLayout class="input-field" row="9" colSpan="2">
             <Label text="Bairro" class="label" />
@@ -137,52 +137,42 @@
               returnKeyType="next"
             />
           </StackLayout>
+
           <StackLayout class="input-field" row="10" colSpan="2">
-            <Label text="Logradouro" class="label" />
+            <Label text="Número" class="label" />
             <TextField
-              ref="street"
-              keyboardType="text"
+              ref="number"
+              keyboardType="number"
               autocorrect="false"
               autocapitalizationType="none"
-              v-model="member.address.street"
+              v-model="member.address.number"
               returnKeyType="next"
             />
           </StackLayout>
-          <!-- <StackLayout class="input-field" row="11" colSpan="2">
+          <StackLayout class="input-field" row="11" colSpan="2">
             <Label text="Cidade" class="label" />
-            <TextField
-              ref="city_id"
+            <RadAutoCompleteTextView
+              ref="autocomplete"
+              completionMode="Contains"
+              @didAutoComplete="onDidAutoComplete"
+              :items="dataItems"
               keyboardType="text"
               autocorrect="false"
-              autocapitalizationType="none"
-              v-model="member.address.city_id"
               returnKeyType="done"
-            />
-          </StackLayout> -->
-      <StackLayout class="input-field" row="11" colSpan="2">
-        <Label text="Cidade" class="label" />
-        <!-- <TextField
-        ref="city_id"
-        keyboardType="text"
-        autocorrect="false"
-        autocapitalizationType="none"
-        v-model="leader.address.city_id"
-        returnKeyType="done"
-      />
-       -->
-      <RadAutoCompleteTextView ref="autocomplete"
-                        completionMode="Contains"
-                        @didAutoComplete="onDidAutoComplete"
-                        :items="dataItems">
-        <SuggestionView ~suggestionView suggestionViewHeight="300">
-          <StackLayout v-suggestionItemTemplate orientation="vertical" padding="10">
-            <v-template>
-              <Label :text="item.text"></Label>
-            </v-template>
+            >
+              <SuggestionView ~suggestionView suggestionViewHeight="300">
+                <StackLayout
+                  v-suggestionItemTemplate
+                  orientation="vertical"
+                  padding="10"
+                >
+                  <v-template>
+                    <Label :text="item.text"></Label>
+                  </v-template>
+                </StackLayout>
+              </SuggestionView>
+            </RadAutoCompleteTextView>
           </StackLayout>
-        </SuggestionView>
-      </RadAutoCompleteTextView>
-      </StackLayout>
           <!-- <RadDataFormMaskedTextField
         @loaded="onLoadMaskedTextField
         ref="dataForm"
@@ -209,7 +199,7 @@ import LoginService from "~/services/LoginService";
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
-import { ADD_VOTER, GET_CITES } from "~/store/actions.type";
+import { ADD_VOTER, GET_CITES, FIND_ZIPCODE, FIND_CITY_IBGE } from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
@@ -222,16 +212,8 @@ export default {
     return {
       member: {
         name: "",
-        latitude: null,
-        longitude: null,
         cpf: "",
-        status: "",
         birthdate: "",
-        translate_status: "",
-        leader: {
-          id: null,
-          name:"Ari"
-        },
         address: {
           description: "",
           number: "",
@@ -239,7 +221,10 @@ export default {
           zipcode: "",
           district: "",
           street: "",
-          city_id: null
+          city: {
+            id: "",
+            name_with_state: ""
+          }
         }
       },
       dataItems: new ObservableArray(),
@@ -272,13 +257,12 @@ export default {
       if (getConnectionType() === connectionType.none) {
         feedback.error({
           message:
-            "Lideranças requer uma conexão com a Internet para atualizar o eleitor."
+            "Lideranças requer uma conexão com a Internet para cadastrar o membro."
         });
         return;
       }
 
       utils.loader.show();
-      this.member.leader.id = loginService.token;
       this.$store
         .dispatch(ADD_VOTER, this.member)
         .then(() => {
@@ -300,8 +284,52 @@ export default {
       utils.showDrawer();
     },
     onDidAutoComplete({token}) {
-      this.member.address.city_id = token.id
-      console.log(`DidAutoComplete with city: ${this.member.address.city_id}`);
+      this.member.address.city.id = token.id;
+      this.member.address.city.name_with_state = token.name_with_state;
+      console.log(`DidAutoComplete with city: ${this.member.address.city.id}`);
+    },
+    onBlur() {
+      if (getConnectionType() === connectionType.none) {
+        alert(
+          "Lideranças requer uma conexão com a Internet para buscar o cep."
+        );
+        return;
+      }
+
+      utils.loader.show();
+      const that = this;
+      console.log(this.getCep());
+      this.$store
+        .dispatch(FIND_ZIPCODE, this.getCep())
+        .then(data => {
+          this.member.address.zipcode = data.cep;
+          this.member.address.complement = data.complemento;
+          this.member.address.street = data.logradouro;
+          this.member.address.district = data.bairro;
+          this.$store
+            .dispatch(FIND_CITY_IBGE, data.ibge)
+            .then(data => {
+              that.$refs.autocomplete.addToken(
+                new utils.CityModelToken(data.id, data.name_with_state, null)
+              );
+              utils.loader.hide();
+            })
+            .catch(error => {
+              console.error(error);
+              utils.loader.hide();
+            });
+        })
+        .catch(error => {
+          console.error(error);
+          utils.loader.hide();
+          alert("Infelizmente não conseguimos carregar os dados do cep.");
+        });
+    },
+    getCep() {
+      return this.$refs.zipcode.nativeView.text;
+    },
+    setCep(zipcode) {
+      this.$refs.zipcode.nativeView.text = zipcode;
     }
   }
 };

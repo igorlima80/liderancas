@@ -23,7 +23,7 @@
       ></ActionItem>
       <Label class="action-bar-title" text="Início"></Label>
     </ActionBar>
-    <GridLayout rows="auto,auto,*,auto,*" class="page-content">
+    <GridLayout rows="auto,auto,*,auto,*">
       <MDCardView rippleColor="transparent" elevation="2" class="list-group" row="0">
         <ActivityIndicator class="indicator" v-if="userIndicator" :busy="userIndicator" />
         <GridLayout v-else rows="auto, auto" columns="auto, *" class="list-group-item">

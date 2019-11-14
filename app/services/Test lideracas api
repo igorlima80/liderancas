@@ -16,23 +16,24 @@ content-type: application/json
 ###
 # Alterar Lider
 
-POST http://liderancas.net.br/api/leaders/1 HTTP/1.1
+PUT http://liderancas.net.br/api/leaders/1 HTTP/1.1
 content-type: application/json
 
 {
-    "id": 1,
-    "mother_name": "mae",
-    "father_name": "paiiiuououoiii",
-    "rg": "teste",
-    "cpf": "815.891.233-87",
+    "mother_name": "maaaaae",
+    "father_name": "pai",
+    "rg": "123",
     "address": {
-        "description": "",
-        "number": "12345",
+        "description": "Casa",
+        "number": "",
         "complement": "",
-        "zipcode": "64057-650",
-        "district": "Vale Quem Tem",
-        "street": "Rua Professora Maria Célia Nascimento",
-        "city_id": 3186
+        "zipcode": "",
+        "district": "",
+        "street": "",
+        "city":{
+          "id": "",
+          "name_with_state": ""
+        } 
     }
 }
 
@@ -64,7 +65,7 @@ content-type: application/json
 ###
 # cadastro de visitas:
 
-POST http://liderancas.net.br/api/visits/create HTTP/1.1
+POST http://liderancas.net.br/api/visits HTTP/1.1
 content-type: application/json
 
 {
@@ -72,37 +73,31 @@ content-type: application/json
 		"date_visit":"2019-10-27",
 		"observation":"testeeee2",
 		"number_of_voters": 4,
-		"member_id": 2
+		"member_id": 6
 	}
 }
 
 ###
 # Cadastro de membros:
-POST http://liderancas.net.br/api/members/create HTTP/1.1
+POST http://liderancas.net.br/api/members HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Teste 7",
-    "latitude": -5.0707691,
-    "longitude": -42.8156255,
-    "cpf": "13245678912",
-    "status": "unvisited",
-    "birthdate": "1984-04-26",
-    "translate_status": "Não Visitado",
-    "leader": {
-      "id": 1,
-      "name": "Francisco Igor de Lima e Silva"
-    },
+    "name": "mauricio",
+    "cpf": "00771173325",
+    "birthdate": "2019-10-27",
     "address": {
-      "description": "Casa",
-      "number": "1129",
-      "complement": "(Zona Norte) - de 801/802 a 1499/1500",
-      "zipcode": "64002450",
-      "district": "Marquês",
-      "street": "Rua Magalhães Filho",
-      "city_id": 3186
+        "description": "",
+        "number": "",
+        "complement": "",
+        "zipcode": "64057-650",
+        "district": "",
+        "street": "",
+        "city":{
+          "id": "",
+          "name_with_state": ""
+        } 
     }
-  }
 }
 
 ###
@@ -112,25 +107,24 @@ content-type: application/json
 
 ###
 # Atualizar membro
-PUT http://liderancas.net.br/api/members/1 HTTP/1.1
+PUT http://liderancas.net.br/api/members/6 HTTP/1.1
 content-type: application/json
 
 {
-    "id": 1,
-    "name": "membro teste da silva",
-    "leader_id": 1,
-    "cpf": "111.111.111-13",
-    "status": "unvisited",
+    "name": "jose",
+    "cpf": "00771173325",
     "birthdate": "2019-10-27",
-    "translate_status": "Não Visitado",
     "address": {
-        "description": "casa",
-        "number": "3365",
-        "complement": "bloco apto lote",
+        "description": "",
+        "number": "",
+        "complement": "",
         "zipcode": "64057-650",
-        "district": "retorno do cep",
-        "street": "retorno do cep",
-        "city_id": 3286
+        "district": "",
+        "street": "",
+        "city":{
+          "id": "",
+          "name_with_state": ""
+        } 
     }
 }
 
