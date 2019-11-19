@@ -214,6 +214,7 @@ export default {
         name: "",
         cpf: "",
         birthdate: "",
+        leader_id: loginService.token,
         address: {
           description: "",
           number: "",
@@ -221,10 +222,7 @@ export default {
           zipcode: "",
           district: "",
           street: "",
-          city: {
-            id: "",
-            name_with_state: ""
-          }
+          city_id: ""
         }
       },
       dataItems: new ObservableArray(),
@@ -284,9 +282,9 @@ export default {
       utils.showDrawer();
     },
     onDidAutoComplete({token}) {
-      this.member.address.city.id = token.id;
-      this.member.address.city.name_with_state = token.name_with_state;
-      console.log(`DidAutoComplete with city: ${this.member.address.city.id}`);
+      this.member.address.city_id = token.id;
+      // this.member.address.city.name_with_state = token.name_with_state;
+      console.log(`DidAutoComplete with city: ${this.member.address.city_id}`);
     },
     onBlur() {
       if (getConnectionType() === connectionType.none) {

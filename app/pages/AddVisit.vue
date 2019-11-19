@@ -129,6 +129,13 @@ export default {
         return;
       }
 
+      if (!this.visit.date_visit || !this.visit.number_of_voters || !this.visit.observation) {
+        feedback.error({
+          message: "Por favor, digite todos os campos para cadastrar."
+        });
+        return;
+      }
+
       utils.loader.show();
       this.visit.member_id = this.member.id;
       this.$store

@@ -7,7 +7,7 @@ POST http://liderancas.net.br/api/leaders/login HTTP/1.1
 content-type: application/json
 
 {
-    "cpf": "815.891.233-87"
+    "cpf": "00771173369"
 }
 ###
 GET http://liderancas.net.br/api/leaders/1/members HTTP/1.1
@@ -83,49 +83,53 @@ POST http://liderancas.net.br/api/members HTTP/1.1
 content-type: application/json
 
 {
-    "name": "mauricio",
-    "cpf": "00771173325",
-    "birthdate": "2019-10-27",
-    "address": {
-        "description": "",
-        "number": "",
-        "complement": "",
-        "zipcode": "64057-650",
-        "district": "",
-        "street": "",
-        "city":{
-          "id": "",
-          "name_with_state": ""
-        } 
+    "member":{
+        "name": "testando com address 4444",
+        "cpf": "111.111.111-25",
+        "birthdate": "23/02/1981",
+        "leader_id": 1,
+        "address":{
+            "description": "trabalho",
+            "zipcode": "64057-650",
+            "street": "rua professora maria celia nascimento",
+            "number": 6990,
+            "complement": "bloco apto lote",
+            "district": "retorno do cep",
+            "city_id": 3286
+        }
+        
     }
+    
 }
 
 ###
 # Detalhes de um membro:
-GET http://liderancas.net.br/api/members/4 HTTP/1.1
+GET http://liderancas.net.br/api/members/1 HTTP/1.1
 content-type: application/json
 
 ###
 # Atualizar membro
-PUT http://liderancas.net.br/api/members/6 HTTP/1.1
+PUT http://liderancas.net.br/api/members/1 HTTP/1.1
 content-type: application/json
 
 {
-    "name": "jose",
-    "cpf": "00771173325",
-    "birthdate": "2019-10-27",
-    "address": {
-        "description": "",
-        "number": "",
-        "complement": "",
-        "zipcode": "64057-650",
-        "district": "",
-        "street": "",
-        "city":{
-          "id": "",
-          "name_with_state": ""
-        } 
+    "member":{
+        "name": "igor",
+        "cpf": "11111111114",
+        "birthdate": "23/02/1981",
+        "leader_id": 1,
+        "address":{
+            "description": "trabalho",
+            "zipcode": "64057-650",
+            "street": "rua professora maria celia nascimento",
+            "number": 6990,
+            "complement": "bloco apto lote",
+            "district":"retorno do cep",
+            "city_id": 3286
+        }
+        
     }
+    
 }
 
 ###
