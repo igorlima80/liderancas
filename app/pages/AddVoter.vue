@@ -50,28 +50,26 @@
           </StackLayout>
           <StackLayout class="input-field" row="2" colSpan="2">
             <Label text="Data de nascimento" class="label" />
-            <TextField
+            <MaskedTextField
               ref="date"
-              keyboardType="text"
+              keyboardType="number"
               autocorrect="false"
               autocapitalizationType="none"
               v-model="member.birthdate"
               returnKeyType="next"
+              mask="00/00/0000"
             />
-            <!-- mask="00/00/0000" -->
           </StackLayout>
           <StackLayout class="input-field" row="3" colSpan="2">
             <Label text="CPF" class="label" />
-            <!-- <MaskedTextField -->
-            <TextField
+            <MaskedTextField
               ref="cpf"
-              keyboardType="text"
+              keyboardType="number"
               autocorrect="false"
               autocapitalizationType="none"
-              :text="member.cpf"
               returnKeyType="next"
+              mask="000.000.000-00"
             />
-            <!-- mask="000.000.000-00" -->
           </StackLayout>
           <Label
             row="4"
@@ -99,7 +97,6 @@
               keyboardType="number"
               autocorrect="false"
               autocapitalizationType="none"
-              v-model="member.address.zipcode"
               returnKeyType="next"
               mask="00000-000"
             />
@@ -186,8 +183,20 @@
         </GridLayout>
       </ScrollView>
       <GridLayout col="0" row="1" colSpan="2" rows="auto" columns="*,*">
-        <Button row="0" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
-        <Button row="0" col="1" text="Salvar" @tap="addVoter" class="btn btn-primary" />
+        <Button
+          row="0"
+          col="0"
+          text="Cancelar"
+          @tap="$navigator.back()"
+          class="btn btn-secondary"
+        />
+        <Button
+          row="0"
+          col="1"
+          text="Salvar"
+          @tap="addVoter"
+          class="btn btn-primary"
+        />
       </GridLayout>
     </GridLayout>
   </Page>
@@ -196,10 +205,15 @@
 <script>
 import * as utils from "~/shared/utils";
 import LoginService from "~/services/LoginService";
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
+import { ObservableArray } from "tns-core-modules/data/observable-array";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
-import { ADD_VOTER, GET_CITES, FIND_ZIPCODE, FIND_CITY_IBGE } from "~/store/actions.type";
+import {
+  ADD_VOTER,
+  GET_CITES,
+  FIND_ZIPCODE,
+  FIND_CITY_IBGE
+} from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
@@ -214,39 +228,46 @@ export default {
         name: "",
         cpf: "",
         birthdate: "",
-        leader_id: loginService.token,
+        leader_id: 1,
         address: {
           description: "",
+          zipcode: "",
+          street: "",
           number: "",
           complement: "",
-          zipcode: "",
           district: "",
-          street: "",
           city_id: ""
         }
       },
-      dataItems: new ObservableArray(),
+      dataItems: new ObservableArray()
     };
   },
-  mounted () {
-    this.$refs.autocomplete.setLoadSuggestionsAsync((text) => {
+  mounted() {
+    this.$refs.autocomplete.setLoadSuggestionsAsync(text => {
       const promise = new Promise((resolve, reject) => {
-      this.$store
-        .dispatch(GET_CITES, text)
-        .then(data => {
-          const cities = data;
-          const items = new Array();
-          for (let i = 0; i < cities.length; i++) {
-              items.push(new utils.CityModelToken(cities[i].id,cities[i].name_with_state, null));
-          }
-          resolve(items);
-        }).catch((err) => {
-          const message = `Error fetching remote data from: ${err.message}`;
-          console.log(message);
-          alert(message);
-          reject();
+        this.$store
+          .dispatch(GET_CITES, text)
+          .then(data => {
+            const cities = data;
+            const items = new Array();
+            for (let i = 0; i < cities.length; i++) {
+              items.push(
+                new utils.CityModelToken(
+                  cities[i].id,
+                  cities[i].name_with_state,
+                  null
+                )
+              );
+            }
+            resolve(items);
+          })
+          .catch(err => {
+            const message = `Error fetching remote data from: ${err.message}`;
+            console.log(message);
+            alert(message);
+            reject();
+          });
       });
-    });
       return promise;
     });
   },
@@ -261,10 +282,14 @@ export default {
       }
 
       utils.loader.show();
+      // this.member.cpf = this.getCpf();
+      // this.member.birthdate = this.getDate();
+      // this.member.address.zipcode = this.getCep();
+
       this.$store
         .dispatch(ADD_VOTER, this.member)
         .then(() => {
-          this.$navigator.navigate("/voters")
+          this.$navigator.navigate("/voters");
           utils.loader.hide();
           feedback.success({
             message: "Membro adicionado com sucesso."
@@ -281,7 +306,7 @@ export default {
     onDrawerButtonTap() {
       utils.showDrawer();
     },
-    onDidAutoComplete({token}) {
+    onDidAutoComplete({ token }) {
       this.member.address.city_id = token.id;
       // this.member.address.city.name_with_state = token.name_with_state;
       console.log(`DidAutoComplete with city: ${this.member.address.city_id}`);
@@ -295,19 +320,19 @@ export default {
       }
 
       utils.loader.show();
-      const that = this;
+      const self = this;
       console.log(this.getCep());
       this.$store
         .dispatch(FIND_ZIPCODE, this.getCep())
         .then(data => {
-          this.member.address.zipcode = data.cep;
-          this.member.address.complement = data.complemento;
-          this.member.address.street = data.logradouro;
-          this.member.address.district = data.bairro;
-          this.$store
+          self.member.address.zipcode = data.cep;
+          self.member.address.complement = data.complemento;
+          self.member.address.street = data.logradouro;
+          self.member.address.district = data.bairro;
+          self.$store
             .dispatch(FIND_CITY_IBGE, data.ibge)
             .then(data => {
-              that.$refs.autocomplete.addToken(
+              self.$refs.autocomplete.addToken(
                 new utils.CityModelToken(data.id, data.name_with_state, null)
               );
               utils.loader.hide();
@@ -323,11 +348,23 @@ export default {
           alert("Infelizmente não conseguimos carregar os dados do cep.");
         });
     },
+    getCpf() {
+      return this.$refs.cpf.nativeView.text;
+    },
+    setCpf(cpf) {
+      this.$refs.cpf.nativeView.text = cpf;
+    },
     getCep() {
       return this.$refs.zipcode.nativeView.text;
     },
     setCep(zipcode) {
       this.$refs.zipcode.nativeView.text = zipcode;
+    },
+    getDate() {
+      return this.$refs.date.nativeView.text;
+    },
+    setDate(date) {
+      this.$refs.date.nativeView.text = date;
     }
   }
 };

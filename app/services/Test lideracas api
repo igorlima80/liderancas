@@ -7,7 +7,7 @@ POST http://liderancas.net.br/api/leaders/login HTTP/1.1
 content-type: application/json
 
 {
-    "cpf": "00771173369"
+    "cpf": "007.711.733-69"
 }
 ###
 GET http://liderancas.net.br/api/leaders/1/members HTTP/1.1
@@ -85,21 +85,20 @@ content-type: application/json
 {
     "member":{
         "name": "testando com address 4444",
-        "cpf": "111.111.111-25",
+        "cpf": "221.231.223-25",
         "birthdate": "23/02/1981",
         "leader_id": 1,
         "address":{
             "description": "trabalho",
             "zipcode": "64057-650",
-            "street": "rua professora maria celia nascimento",
+            "street": "rua professora",
             "number": 6990,
-            "complement": "bloco apto lote",
+            "complement": "bloco",
             "district": "retorno do cep",
             "city_id": 3286
         }
         
-    }
-    
+    }    
 }
 
 ###

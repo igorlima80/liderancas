@@ -42,7 +42,7 @@
           <!-- <Image v-if="voter.image" row="0" col="0" :src="voter.image" class="thumb img-circle" rowSpan="2" @tap="onItemTap(voter)"/>
           <Image v-else row="0" col="0" src="~/assets/images/userimage.png" class="thumb img-circle" rowSpan="2" @tap="onItemTap(voter)"/> -->
           <Label row="0" col="0" :text="voter.name" class="list-group-item-heading" @tap="onItemTap(voter)"/>
-              <!-- <Label
+              <Label
                 textWrap="true"
                 row="1" col="0"
                 class="list-group-item-text" @tap="onItemTap(voter)"
@@ -54,15 +54,9 @@
                   <Span text=", " />
                   <Span :text="voter.address.district" />
                 </FormattedString>
-              </Label> -->
-          <!-- <Label row="1" col="0" :text="voter.address" class="list-group-item-text" @tap="onItemTap(voter)"/> -->
+              </Label>
           <Label row="0" col="1" class="fas m-r-10" :text="'fa-map-marker-alt' | fonticon" style="color: #D84039" rowSpan="2" @tap="openMaps(voter.latitude, voter.longitude)" />
         </GridLayout>
-
-          <!-- <StackLayout class="list-group-item list-style-layout">
-            <Label :text="voter.name" class="list-group-item-heading"></Label>
-            <Label :text="voter.address" class="list-group-item-text"></Label>
-          </StackLayout>    -->
         </v-template>
       </RadListView>
       <MDFloatingActionButton
@@ -107,7 +101,6 @@ export default {
       .catch(error => {});   
   },
   mounted() {
-    // this.$refs.listView.nativeView.focus();
     SelectedPageService.getInstance().updateSelectedPage("Voters");
   },
   computed: { ...mapGetters(["voters","user"]) },
