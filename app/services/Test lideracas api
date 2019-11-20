@@ -78,30 +78,6 @@ content-type: application/json
 }
 
 ###
-# Cadastro de membros:
-POST http://liderancas.net.br/api/members HTTP/1.1
-content-type: application/json
-
-{
-    "member":{
-        "name": "testando com address 4444",
-        "cpf": "221.231.223-25",
-        "birthdate": "23/02/1981",
-        "leader_id": 1,
-        "address":{
-            "description": "trabalho",
-            "zipcode": "64057-650",
-            "street": "rua professora",
-            "number": 6990,
-            "complement": "bloco",
-            "district": "retorno do cep",
-            "city_id": 3286
-        }
-        
-    }    
-}
-
-###
 # Detalhes de um membro:
 GET http://liderancas.net.br/api/members/1 HTTP/1.1
 content-type: application/json
@@ -166,4 +142,49 @@ content-type: application/json
 
 {
 	"ibge": "2211001"
+}
+
+###
+POST http://liderancas.net.br/api/members HTTP/1.1
+content-type: application/json
+
+{
+    "member":{
+        "name": "testando com address 55555",
+        "cpf": "221.231.223-25",
+        "birthdate": "23/02/1981",
+        "leader_id": 1,
+        "address":{
+            "description": "trabalho",
+            "zipcode": "64057-650",
+            "street": "rua professora",
+            "number": 6990,
+            "complement": "bloco",
+            "district": "retorno do cep",
+            "city_id": 3286
+        }
+    }
+}
+
+###
+
+PUT http://liderancas.net.br/api/members/32 HTTP/1.1
+content-type: application/json
+
+{
+    "member":{
+        "name": "jose",
+        "cpf": "846.644.665-55",
+        "birthdate": "23/02/1981",
+        "leader_id": 1,
+        "address":{
+            "description": "trabalho",
+            "zipcode": "64057-650",
+            "street": "rua professora",
+            "number": 6990,
+            "complement": "bloco",
+            "district": "retorno do cep",
+            "city_id": 3286
+        }
+    }
 }

@@ -27,7 +27,7 @@
       <ScrollView col="0" row="0" colSpan="2">
         <GridLayout
           class="page-content"
-          rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
+          rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
           columns="*,*"
         >
           <Label
@@ -55,7 +55,6 @@
               keyboardType="number"
               autocorrect="false"
               autocapitalizationType="none"
-              v-model="member.birthdate"
               returnKeyType="next"
               mask="00/00/0000"
             />
@@ -187,7 +186,7 @@
           row="0"
           col="0"
           text="Cancelar"
-          @tap="$navigator.back()"
+          @tap="$navigator.navigate('/voters')"
           class="btn btn-secondary"
         />
         <Button
@@ -228,7 +227,7 @@ export default {
         name: "",
         cpf: "",
         birthdate: "",
-        leader_id: 1,
+        leader_id: loginService.token,
         address: {
           description: "",
           zipcode: "",
@@ -282,9 +281,9 @@ export default {
       }
 
       utils.loader.show();
-      // this.member.cpf = this.getCpf();
-      // this.member.birthdate = this.getDate();
-      // this.member.address.zipcode = this.getCep();
+      this.member.cpf = this.getCpf();
+      this.member.birthdate = this.getDate();
+      this.member.address.zipcode = this.getCep();
 
       this.$store
         .dispatch(ADD_VOTER, this.member)
@@ -309,7 +308,7 @@ export default {
     onDidAutoComplete({ token }) {
       this.member.address.city_id = token.id;
       // this.member.address.city.name_with_state = token.name_with_state;
-      console.log(`DidAutoComplete with city: ${this.member.address.city_id}`);
+      // console.log(`DidAutoComplete with city: ${this.member.address.city_id}`);
     },
     onBlur() {
       if (getConnectionType() === connectionType.none) {
@@ -321,20 +320,20 @@ export default {
 
       utils.loader.show();
       const self = this;
-      console.log(this.getCep());
       this.$store
         .dispatch(FIND_ZIPCODE, this.getCep())
         .then(data => {
-          self.member.address.zipcode = data.cep;
-          self.member.address.complement = data.complemento;
-          self.member.address.street = data.logradouro;
-          self.member.address.district = data.bairro;
-          self.$store
+          this.member.address.zipcode = data.cep;
+          this.member.address.complement = data.complemento;
+          this.member.address.street = data.logradouro;
+          this.member.address.district = data.bairro;
+          this.$store
             .dispatch(FIND_CITY_IBGE, data.ibge)
             .then(data => {
               self.$refs.autocomplete.addToken(
                 new utils.CityModelToken(data.id, data.name_with_state, null)
               );
+              self.member.address.city_id = data.id;
               utils.loader.hide();
             })
             .catch(error => {

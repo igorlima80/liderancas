@@ -105,12 +105,10 @@ export default class LiderancasService extends BackendService {
     return http
       .request({
         // url: this.baseUrl + "voterupdate",
-        url: `http://liderancas.net.br/api/members/${voter.id}`,
+        url: `http://liderancas.net.br/api/members/${voter.member.id}`,
         method: "PUT",
         headers: this.getHeaders(),
-        content: JSON.stringify({
-          member: voter
-        })
+        content: JSON.stringify(voter)
       })
       .then(this.validateCode)
       .then(this.getJson)

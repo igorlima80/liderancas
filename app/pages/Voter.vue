@@ -57,30 +57,27 @@
           </StackLayout>
           <StackLayout class="input-field" row="2" colSpan="2">
             <Label text="Data de nascimento" class="label" />
-            <TextField
+            <MaskedTextField
               :isEnabled="enabled"
               ref="date"
-              keyboardType="phone"
+              keyboardType="number"
               autocorrect="false"
               autocapitalizationType="none"
-              v-model="member.birthdate"
               returnKeyType="next"
+              mask="00/00/0000"
             />
-            <!-- mask="00/00/0000" -->
           </StackLayout>
           <StackLayout class="input-field" row="3" colSpan="2">
             <Label text="CPF" class="label" />
-            <!-- <MaskedTextField -->
-            <TextField
+            <MaskedTextField
               :isEnabled="enabled"
               ref="cpf"
-              keyboardType="text"
+              keyboardType="number"
               autocorrect="false"
               autocapitalizationType="none"
-              :text="member.cpf"
               returnKeyType="next"
+              mask="000.000.000-00"
             />
-            <!-- mask="000.000.000-00" -->
           </StackLayout>
           <Label
             row="4"
@@ -110,7 +107,6 @@
               keyboardType="number"
               autocorrect="false"
               autocapitalizationType="none"
-              v-model="member.address.zipcode"
               returnKeyType="next"
               mask="00000-000"
             />
@@ -258,10 +254,7 @@ export default {
           zipcode: "",
           district: "",
           street: "",
-          city: {
-            id: "",
-            name_with_state: ""
-          }
+          city_id:""
         }
       }
     };
@@ -306,6 +299,9 @@ export default {
       }
 
       utils.loader.show();
+      this.member.cpf = this.getCpf();
+      this.member.birthdate = this.getDate();
+      this.member.address.zipcode = this.getCep();
       this.$store
         .dispatch(UPDATE_VOTER, this.member)
         .then(() => {
@@ -327,7 +323,7 @@ export default {
       utils.showDrawer();
     },
     onLoaded() {
-      this.member.id = this.voter.id;
+      this.member.id = this.voter.id
       this.member.name = this.voter.name;
       this.member.cpf = this.voter.cpf;
       this.member.birthdate = this.voter.birthdate;
@@ -351,11 +347,17 @@ export default {
       if (this.member.address.zipcode) {
         this.setCep(this.member.address.zipcode);
       }
+      if (this.member.address.birthdate) {
+        this.setDate(this.member.birthdate);
+      }
+      if (this.member.address.zipcode) {
+        this.setCpf(this.member.cpf);
+      }
     },
     onDidAutoComplete({ token }) {
-      this.member.address.city.id = token.id;
-      this.member.address.city.name_with_state = token.name_with_state;
-      console.log(`DidAutoComplete with city: ${this.member.address.city.id}`);
+      this.member.address.city_id = token.id;
+      // this.member.address.city.name_with_state = token.name_with_state;
+      // console.log(`DidAutoComplete with city: ${this.member.address.city.id}`);
     },
     readOnly() {
       this.enabled = !this.enabled;
@@ -369,8 +371,7 @@ export default {
       }
 
       utils.loader.show();
-      const that = this;
-      console.log(this.getCep());
+      const self = this;
       this.$store
         .dispatch(FIND_ZIPCODE, this.getCep())
         .then(data => {
@@ -381,9 +382,10 @@ export default {
           this.$store
             .dispatch(FIND_CITY_IBGE, data.ibge)
             .then(data => {
-              that.$refs.autocomplete.addToken(
+              self.$refs.autocomplete.addToken(
                 new utils.CityModelToken(data.id, data.name_with_state, null)
               );
+              self.member.address.city_id = data.id;
               utils.loader.hide();
             })
             .catch(error => {
@@ -397,11 +399,23 @@ export default {
           alert("Infelizmente não conseguimos carregar os dados do cep.");
         });
     },
+    getCpf() {
+      return this.$refs.cpf.nativeView.text;
+    },
+    setCpf(cpf) {
+      this.$refs.cpf.nativeView.text = cpf;
+    },
     getCep() {
       return this.$refs.zipcode.nativeView.text;
     },
     setCep(zipcode) {
       this.$refs.zipcode.nativeView.text = zipcode;
+    },
+    getDate() {
+      return this.$refs.date.nativeView.text;
+    },
+    setDate(date) {
+      this.$refs.date.nativeView.text = date;
     }
   }
 };

@@ -27,7 +27,7 @@ const liderancasService = new LiderancasService();
 
 const state = {
   notifications: {},
-  voters:{},
+  voters: {},
   visits: {}
 };
 
@@ -130,7 +130,7 @@ const actions = {
   [ADD_VOTER](context, voter) {
     return new Promise((resolve, reject) => {
       liderancasService
-        .addVoter(voter)
+        .addVoter({ member: voter })
         .then(data => {
           // context.commit(SET_AUTH, data);
           resolve(data);
@@ -144,7 +144,7 @@ const actions = {
   [UPDATE_VOTER](context, voter) {
     return new Promise((resolve, reject) => {
       liderancasService
-        .updateVoter(voter)
+        .updateVoter({ member: voter })
         .then(data => {
           // context.commit(SET_AUTH, data);
           resolve(data);
@@ -242,7 +242,7 @@ const actions = {
           reject(error);
         });
     });
-  },
+  }
 };
 
 const mutations = {
