@@ -93,7 +93,7 @@
             />
           </StackLayout>
           <StackLayout class="input-field" row="6" colSpan="2">
-            <Label text="CEP" class="label" />
+            <Label text="CEP*" class="label" />
             <MaskedTextField
               ref="zipcode"
               @blur="onBlur"
@@ -106,7 +106,7 @@
             />
           </StackLayout>
           <StackLayout class="input-field" row="7" colSpan="2">
-            <Label text="Logradouro" class="label" />
+            <Label text="Logradouro*" class="label" />
             <TextField
               ref="street"
               keyboardType="text"
@@ -129,7 +129,7 @@
           </StackLayout>
 
           <StackLayout class="input-field" row="9" colSpan="2">
-            <Label text="Bairro" class="label" />
+            <Label text="Bairro*" class="label" />
             <TextField
               ref="district"
               keyboardType="text"
@@ -141,7 +141,7 @@
           </StackLayout>
 
           <StackLayout class="input-field" row="10" colSpan="2">
-            <Label text="Número" class="label" />
+            <Label text="Número*" class="label" />
             <TextField
               ref="number"
               keyboardType="number"
@@ -152,7 +152,7 @@
             />
           </StackLayout>
           <StackLayout class="input-field" row="11" colSpan="2">
-            <Label text="Cidade" class="label" />
+            <Label text="Cidade*" class="label" />
             <RadAutoCompleteTextView
               ref="autocomplete"
               completionMode="Contains"
@@ -411,27 +411,39 @@ export default {
         });
         return;
       }
+      if (
+        !this.getCep() ||
+        !this.leader.address.street ||
+        !this.leader.address.number ||
+        !this.leader.address.district ||
+        !this.leader.address.city_id
+      ) {
+        feedback.error({
+          message: "Por favor, digite os campos obrigatórios(*)."
+        });
+        return;
+      }
 
-      utils.loader.show();
-      delete this.leader.address.city;
+      // delete this.leader.address.city;
+      // utils.loader.show();
       console.dir(this.leader);
       this.$store
         .dispatch(UPDATE_LEADER, this.leader)
         .then(() => {
-          // this.$navigator.back();
-          // feedback.success({
-          //   message: "Cadastro atualizado com sucesso."
-          // });
-          utils.loader.hide();
+          this.$navigator.navigate("/settings");
+          // utils.loader.hide();
+          feedback.success({
+            message: "Cadastro atualizado com sucesso."
+          });
         })
         .catch(error => {
           console.error(error);
           // utils.loader.hide();
-          // feedback.error({
-          //   message:
-          //     "Infelizmente não conseguimos atualizar seus dados. Tente mais tarde."
-          // });
-          utils.loader.hide();
+          feedback.error({
+            message:
+              "Infelizmente não conseguimos atualizar seus dados. Tente mais tarde."
+          });
+          // utils.loader.hide();
         });
     },
     onDrawerButtonTap() {

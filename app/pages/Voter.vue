@@ -320,15 +320,6 @@ export default {
         });
         return;
       }
-      console.log(
-        this.member.name,
-        this.getCep(),
-        this.member.address.street,
-        this.member.address.number,
-        this.member.address.district,
-        this.member.address.city_id
-      );
-      
       if (
         !this.member.name ||
         !this.getCep() ||

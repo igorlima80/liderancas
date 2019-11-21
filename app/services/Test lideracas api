@@ -22,11 +22,11 @@ content-type: application/json
 {
     "address": {
         "description": "Casa",
-        "number": "1129",
+        "number": "",
         "complement": "",
         "zipcode": "64000-830",
         "district": "Marques",
-        "street": "teste",
+        "street": "",
         "city_id": "3286"
     }
 }

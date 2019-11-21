@@ -33,11 +33,8 @@ export default class LiderancasService extends BackendService {
   }
 
   updateLeader(leader) {
-    console.log(`http://liderancas.net.br/api/leaders/${leader.id}`);
-    
     return http
       .request({
-        // url: this.baseUrl + "updateleader",
         url: `http://liderancas.net.br/api/leaders/${leader.id}`,
         method: "PUT",
         headers: this.getHeaders(),
