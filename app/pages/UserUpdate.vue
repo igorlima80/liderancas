@@ -24,23 +24,33 @@
       <Label class="action-bar-title" text="Atualizar Cadastro"></Label>
     </ActionBar>
 
-    <GridLayout rows="*,auto" columns="*,*"> 
+    <GridLayout rows="*,auto" columns="*,*">
       <ScrollView col="0" row="0" colSpan="2">
-      <GridLayout class="page-content" rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto" columns="*,*">
-      <Label row="0" col="0" text="Dados Gerais" colSpan="2" class="font-weight-bold text-primary m-b-20" />
-      <StackLayout class="input-field" row="1" colSpan="2">
-        <Label text="Nome" class="label" />
-        <TextField
-        isEnabled="false"
-        ref="name"
-        keyboardType="text"
-        autocorrect="false"
-        autocapitalizationType="none"
-        v-model="leader.user.name"
-        returnKeyType="next"
-      />
-      </StackLayout>
-      <!-- <StackLayout class="input-field" row="2" colSpan="2">
+        <GridLayout
+          class="page-content"
+          rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
+          columns="*,*"
+        >
+          <Label
+            row="0"
+            col="0"
+            text="Dados Gerais"
+            colSpan="2"
+            class="font-weight-bold text-primary m-b-20"
+          />
+          <StackLayout class="input-field" row="1" colSpan="2">
+            <Label text="Nome" class="label" />
+            <TextField
+              isEnabled="false"
+              ref="name"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="leader.user.name"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <!-- <StackLayout class="input-field" row="2" colSpan="2">
         <Label text="Email" class="label" />
         <TextField
         ref="email"
@@ -51,118 +61,121 @@
         returnKeyType="next"
       /> 
       </StackLayout> -->
-      <StackLayout class="input-field" row="3" colSpan="2">
-        <Label text="CPF" class="label" />
-        <MaskedTextField
-          isEnabled="false"
-          ref="cpf"
-          keyboardType="text"
-          autocorrect="false"
-          autocapitalizationType="none"
-          :text="leader.cpf"
-          returnKeyType="next"
-          mask="000.000.000-00"
-        />
-      </StackLayout>
-      <Label row="4" col="0" text="Endereço" colSpan="2" class="font-weight-bold text-primary m-y-20" />
-      <StackLayout class="input-field" row="5" colSpan="2">
-        <Label text="Descrição" class="label" />
-        <TextField
-        ref="description"
-        keyboardType="text"
-        autocorrect="false"
-        autocapitalizationType="none"
-        v-model="leader.address.description"
-        returnKeyType="next"
-      />
-      </StackLayout>
-      <StackLayout class="input-field" row="6" colSpan="2">
-        <Label text="CEP" class="label" />
-        <MaskedTextField
-        ref="zipcode"
-        @blur="onBlur"
-        keyboardType="number"
-        autocorrect="false"
-        autocapitalizationType="none"
-        v-model="leader.address.zipcode"
-        returnKeyType="next"
-        mask="00000-000"
-      />
-      </StackLayout>
-      <StackLayout class="input-field" row="7" colSpan="2">
-        <Label text="Logradouro" class="label" />
-        <TextField
-        ref="street"
-        keyboardType="text"
-        autocorrect="false"
-        autocapitalizationType="none"
-        v-model="leader.address.street"
-        returnKeyType="next"
-      />
-      </StackLayout>
-      <StackLayout class="input-field" row="8" colSpan="2">
-        <Label text="Complemento" class="label" />
-        <TextField
-        ref="complement"
-        keyboardType="text"
-        autocorrect="false"
-        autocapitalizationType="none"
-        v-model="leader.address.complement"
-        returnKeyType="next"
-      />
-      </StackLayout>
-
-      <StackLayout class="input-field" row="9" colSpan="2">
-        <Label text="Bairro" class="label" />
-        <TextField
-        ref="district"
-        keyboardType="text"
-        autocorrect="false"
-        autocapitalizationType="none"
-        v-model="leader.address.district"
-        returnKeyType="next"
-      />
-      </StackLayout>
-
-      <StackLayout class="input-field" row="10" colSpan="2">
-        <Label text="Número" class="label" />
-        <TextField
-        ref="number"
-        keyboardType="number"
-        autocorrect="false"
-        autocapitalizationType="none"
-        v-model="leader.address.number"
-        returnKeyType="next"
-      />
-      </StackLayout>
-      <StackLayout class="input-field" row="11" colSpan="2">
-        <Label text="Cidade" class="label" />
-        <!-- <TextField
-        ref="city_id"
-        keyboardType="text"
-        autocorrect="false"
-        autocapitalizationType="none"
-        v-model="leader.address.city_id"
-        returnKeyType="done"
-      />
-       -->
-      <RadAutoCompleteTextView ref="autocomplete"
-                        completionMode="Contains"
-                        @didAutoComplete="onDidAutoComplete"
-                        :items="dataItems"
-                        keyboardType="text"
-                        autocorrect="false"
-                        returnKeyType="done">
-        <SuggestionView ~suggestionView suggestionViewHeight="300">
-          <StackLayout v-suggestionItemTemplate orientation="vertical" padding="10">
-            <v-template>
-              <Label :text="item.text"></Label>
-            </v-template>
+          <StackLayout class="input-field" row="3" colSpan="2">
+            <Label text="CPF" class="label" />
+            <MaskedTextField
+              isEnabled="false"
+              ref="cpf"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              :text="leader.cpf"
+              returnKeyType="next"
+              mask="000.000.000-00"
+            />
           </StackLayout>
-        </SuggestionView>
-      </RadAutoCompleteTextView>
-      </StackLayout>
-      <!-- <RadDataFormMaskedTextField
+          <Label
+            row="4"
+            col="0"
+            text="Endereço"
+            colSpan="2"
+            class="font-weight-bold text-primary m-y-20"
+          />
+          <StackLayout class="input-field" row="5" colSpan="2">
+            <Label text="Descrição" class="label" />
+            <TextField
+              ref="description"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="leader.address.description"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="6" colSpan="2">
+            <Label text="CEP" class="label" />
+            <MaskedTextField
+              ref="zipcode"
+              @blur="onBlur"
+              keyboardType="number"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="leader.address.zipcode"
+              returnKeyType="next"
+              mask="00000-000"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="7" colSpan="2">
+            <Label text="Logradouro" class="label" />
+            <TextField
+              ref="street"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="leader.address.street"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="8" colSpan="2">
+            <Label text="Complemento" class="label" />
+            <TextField
+              ref="complement"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="leader.address.complement"
+              returnKeyType="next"
+            />
+          </StackLayout>
+
+          <StackLayout class="input-field" row="9" colSpan="2">
+            <Label text="Bairro" class="label" />
+            <TextField
+              ref="district"
+              keyboardType="text"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="leader.address.district"
+              returnKeyType="next"
+            />
+          </StackLayout>
+
+          <StackLayout class="input-field" row="10" colSpan="2">
+            <Label text="Número" class="label" />
+            <TextField
+              ref="number"
+              keyboardType="number"
+              autocorrect="false"
+              autocapitalizationType="none"
+              v-model="leader.address.number"
+              returnKeyType="next"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="11" colSpan="2">
+            <Label text="Cidade" class="label" />
+            <RadAutoCompleteTextView
+              ref="autocomplete"
+              completionMode="Contains"
+              @didAutoComplete="onDidAutoComplete"
+              :items="dataItems"
+              keyboardType="text"
+              autocorrect="false"
+              returnKeyType="done"
+            >
+              <SuggestionView ~suggestionView suggestionViewHeight="300">
+                <StackLayout
+                  v-suggestionItemTemplate
+                  orientation="vertical"
+                  padding="10"
+                >
+                  <v-template>
+                    <Label :text="item.text"></Label>
+                  </v-template>
+                </StackLayout>
+              </SuggestionView>
+            </RadAutoCompleteTextView>
+          </StackLayout>
+          <!-- <RadDataFormMaskedTextField
         @loaded="onLoadMaskedTextField
         ref="dataForm"
         :source="leader"
@@ -172,11 +185,23 @@
         col="0"
         colSpan="2"
       ></RadDataForm> -->
-      </GridLayout>
+        </GridLayout>
       </ScrollView>
       <GridLayout col="0" row="1" colSpan="2" rows="auto" columns="*,*">
-        <Button row="0" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
-        <Button row="0" col="1" text="Salvar" @tap="updateUser" class="btn btn-primary" />
+        <Button
+          row="0"
+          col="0"
+          text="Cancelar"
+          @tap="$navigator.back()"
+          class="btn btn-secondary"
+        />
+        <Button
+          row="0"
+          col="1"
+          text="Salvar"
+          @tap="updateUser"
+          class="btn btn-primary"
+        />
       </GridLayout>
     </GridLayout>
   </Page>
@@ -191,22 +216,27 @@ import * as utils from "~/shared/utils";
 //   DataFormFontStyle
 // } from "nativescript-ui-dataform";
 // import { Color } from "tns-core-modules/color";
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
+import { ObservableArray } from "tns-core-modules/data/observable-array";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
-import { UPDATE_LEADER, GET_CITES, FIND_ZIPCODE, FIND_CITY_IBGE } from "~/store/actions.type";
+import {
+  UPDATE_LEADER,
+  GET_CITES,
+  FIND_ZIPCODE,
+  FIND_CITY_IBGE
+} from "~/store/actions.type";
 import {
   connectionType,
   getConnectionType
 } from "tns-core-modules/connectivity";
 const feedback = new Feedback();
-let clone = require('clone');
+let clone = require("clone");
 
 export default {
   data() {
     return {
-      leader: {address: {}, user: {}},
-      dataItems: new ObservableArray(),
+      leader: { address: {}, user: {} },
+      dataItems: new ObservableArray()
       // groups: [],
       // userMetadata: {
       //   isReadOnly: false,
@@ -292,7 +322,7 @@ export default {
       //     }
       //   ]
       // }
-    }
+    };
   },
   // created() {
   //   let gts = new GroupTitleStyle();
@@ -318,25 +348,32 @@ export default {
 
   //   this.groups.push(pg);
   // },
-  mounted () {
-    this.$refs.autocomplete.setLoadSuggestionsAsync((text) => {
+  mounted() {
+    this.$refs.autocomplete.setLoadSuggestionsAsync(text => {
       const promise = new Promise((resolve, reject) => {
-      this.$store
-        .dispatch(GET_CITES, text)
-        .then(data => {
-          const cities = data;
-          const items = new Array();
-          for (let i = 0; i < cities.length; i++) {
-              items.push(new utils.CityModelToken(cities[i].id,cities[i].name_with_state, null));
-          }
-          resolve(items);
-        }).catch((err) => {
-          const message = `Error fetching remote data from: ${err.message}`;
-          console.log(message);
-          alert(message);
-          reject();
+        this.$store
+          .dispatch(GET_CITES, text)
+          .then(data => {
+            const cities = data;
+            const items = new Array();
+            for (let i = 0; i < cities.length; i++) {
+              items.push(
+                new utils.CityModelToken(
+                  cities[i].id,
+                  cities[i].name_with_state,
+                  null
+                )
+              );
+            }
+            resolve(items);
+          })
+          .catch(err => {
+            const message = `Error fetching remote data from: ${err.message}`;
+            console.log(message);
+            alert(message);
+            reject();
+          });
       });
-    });
       return promise;
     });
   },
@@ -375,48 +412,55 @@ export default {
     onDrawerButtonTap() {
       utils.showDrawer();
     },
-    onLoaded(){
+    onLoaded() {
       this.leader = clone(this.user);
       if (this.leader.address.city) {
         this.$refs.autocomplete.addToken(
-          new utils.CityModelToken(this.leader.address.city.id,this.leader.address.city.name_with_state, null)
+          new utils.CityModelToken(
+            this.leader.address.city.id,
+            this.leader.address.city.name_with_state,
+            null
+          )
         );
       }
       if (this.leader.address.zipcode) {
         this.setCep(this.leader.address.zipcode);
       }
     },
-    onDidAutoComplete({token}) {
-      this.leader.address.city_id = token.id
-      console.log(`DidAutoComplete with city: ${this.leader.address.city_id}`);
+    onDidAutoComplete({ token }) {
+      this.leader.address.city.id = token.id;
+      this.leader.address.city.name_with_state = token.name_with_state;
     },
-    onBlur(){
+    onBlur() {
       if (getConnectionType() === connectionType.none) {
-        alert("Lideranças requer uma conexão com a Internet para buscar o cep.");
+        alert(
+          "Lideranças requer uma conexão com a Internet para buscar o cep."
+        );
         return;
       }
 
       utils.loader.show();
-      const that = this;
-      console.log(this.getCep());
+      const self = this;
       this.$store
         .dispatch(FIND_ZIPCODE, this.getCep())
         .then(data => {
-          this.member.address.zipcode = data.cep;
+          this.leader.address.zipcode = data.cep;
           this.leader.address.complement = data.complemento;
           this.leader.address.street = data.logradouro;
           this.leader.address.district = data.bairro;
           this.$store
             .dispatch(FIND_CITY_IBGE, data.ibge)
             .then(data => {
-              that.$refs.autocomplete.addToken(
-                new utils.CityModelToken(data.id,data.name_with_state, null)
-              )
-              utils.loader.hide()
+              self.$refs.autocomplete.addToken(
+                new utils.CityModelToken(data.id, data.name_with_state, null)
+              );
+              self.leader.address.city.id = data.id;
+              self.leader.address.city.name_with_state = data.name_with_state;
+              utils.loader.hide();
             })
             .catch(error => {
               console.error(error);
-              utils.loader.hide()
+              utils.loader.hide();
             });
         })
         .catch(error => {
@@ -426,7 +470,7 @@ export default {
         });
     },
     getCep() {
-      return this.$refs.zipcode.nativeView.text
+      return this.$refs.zipcode.nativeView.text;
     },
     setCep(zipcode) {
       this.$refs.zipcode.nativeView.text = zipcode;
@@ -441,7 +485,7 @@ export default {
 // End custom common variables
 
 // Custom styles
-.page-content{
+.page-content {
   padding: 15 15 0 15;
 }
 </style>

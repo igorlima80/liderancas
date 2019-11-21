@@ -35,14 +35,10 @@
           />
           <StackLayout class="input-field" row="1" colSpan="2">
             <Label text="Data" class="label" />
-            <TextField
-              ref="date_visit"
-              keyboardType="text"
-              autocorrect="false"
-              autocapitalizationType="none"
-              v-model="visit.date_visit"
-              returnKeyType="next"
-            />
+            <DatePickerField
+              @dateChange="onDateTimeChange1"
+              dateFormat="yyyy-MM-dd"
+            ></DatePickerField>
           </StackLayout>
           <StackLayout class="input-field" row="2" colSpan="2">
             <Label text="N° de familiares" class="label" />
@@ -83,16 +79,7 @@
         row="0"
         col="0"
         colSpan="2"
-      ></RadDataForm>
-      <Button row="1" col="0" text="Cancelar" @tap="$navigator.back()" class="btn btn-secondary" />
-      <Button
-        row="2"
-        col="1"
-        text="Salvar"
-        @tap="addVisit"
-        class="btn btn-primary"
-        :isEnabled="!isReadOnly"
-    />-->
+      ></RadDataForm> -->
   </Page>
 </template>
 
@@ -138,6 +125,7 @@ export default {
 
       utils.loader.show();
       this.visit.member_id = this.member.id;
+      // this.visit.date_visit = this.$refs.date_visit.nativeView.text
       this.$store
         .dispatch(ADD_VISIT, this.visit)
         .then(() => {
@@ -157,6 +145,9 @@ export default {
     },
     onDrawerButtonTap() {
       utils.showDrawer();
+    },
+    onDateTimeChange1(args) {
+      this.visit.date_visit = args.value;
     }
   }
 };

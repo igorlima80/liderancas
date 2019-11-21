@@ -20,18 +20,15 @@ PUT http://liderancas.net.br/api/leaders/1 HTTP/1.1
 content-type: application/json
 
 {
-    "mother_name": "maaaaae",
-    "father_name": "pai",
-    "rg": "123",
     "address": {
         "description": "Casa",
-        "number": "",
+        "number": "112",
         "complement": "",
-        "zipcode": "",
-        "district": "",
-        "street": "",
+        "zipcode": "64000-830",
+        "district": "Cabral",
+        "street": "Praça Edgard Nogueira",
         "city":{
-          "id": "",
+          "id": "3286",
           "name_with_state": ""
         } 
     }
@@ -81,31 +78,6 @@ content-type: application/json
 # Detalhes de um membro:
 GET http://liderancas.net.br/api/members/1 HTTP/1.1
 content-type: application/json
-
-###
-# Atualizar membro
-PUT http://liderancas.net.br/api/members/1 HTTP/1.1
-content-type: application/json
-
-{
-    "member":{
-        "name": "igor",
-        "cpf": "11111111114",
-        "birthdate": "23/02/1981",
-        "leader_id": 1,
-        "address":{
-            "description": "trabalho",
-            "zipcode": "64057-650",
-            "street": "rua professora maria celia nascimento",
-            "number": 6990,
-            "complement": "bloco apto lote",
-            "district":"retorno do cep",
-            "city_id": 3286
-        }
-        
-    }
-    
-}
 
 ###
 # Visita por membros

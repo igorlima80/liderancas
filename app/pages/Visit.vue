@@ -25,8 +25,13 @@
     </ActionBar>
 
     <GridLayout rows="auto,auto,*">
-      <MDCardView rippleColor="transparent" elevation="2" class="list-group" row="0">
-        <GridLayout rows="auto, auto" columns="auto, *" class="list-group-item">
+      <MDCardView
+        rippleColor="transparent"
+        elevation="2"
+        class="list-group"
+        row="0"
+      >
+        <GridLayout rows="auto, auto" columns="auto, *, auto" class="list-group-item">
           <!-- <Image
             v-if="user.image"
             :src="user.image"
@@ -43,12 +48,39 @@
             rowSpan="2"
           />
           <!-- <Label row="0" col="1" :text="voter.name" class="list-group-item-heading font-weight-bold" /> -->
-          <Label row="0" col="1" :text="member.name" class="list-group-item-heading" />
-          <Label row="1" col="1" :text="member.cpf" class="list-group-item-text" />
+          <Label
+            row="0"
+            col="1"
+            :text="member.name"
+            class="list-group-item-heading"
+          />
+          <Label
+            row="1"
+            col="1"
+            :text="member.cpf"
+            class="list-group-item-text"
+          />
+          <Label
+            row="0"
+            col="2"
+            rowSpan="2"
+            :text="'fa-shoe-prints' | fonticon"
+            class="fas text-right"
+            :class="{ visited: member.status == 'visited' }"
+          />
         </GridLayout>
       </MDCardView>
-      <Label text="Visitas realizadas" class="font-weight-bold text-primary m-t-20 m-l-15" row="1" />
-      <ActivityIndicator class="indicator" row="2" v-if="visitIndicator" :busy="visitIndicator" />
+      <Label
+        text="Visitas realizadas"
+        class="font-weight-bold text-primary m-t-20 m-l-15"
+        row="1"
+      />
+      <ActivityIndicator
+        class="indicator"
+        row="2"
+        v-if="visitIndicator"
+        :busy="visitIndicator"
+      />
       <RadListView
         v-else
         row="2"
@@ -59,7 +91,7 @@
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
         <v-template>
-          <GridLayout class="list-group-item" rows="auto, *" columns="*, auto">
+          <GridLayout class="list-group-item" rows="auto, *" columns="*">
             <Label
               row="0"
               col="0"
@@ -73,14 +105,6 @@
               :text="visit.date_visit"
               class="list-group-item-text"
               @tap="onItemTap(visit)"
-            />
-            <Label
-              row="0"
-              col="1"
-              class="fas m-r-10"
-              :text="'fa-shoe-prints' | fonticon"
-              :class="{visited: member.status == 'visited'}"
-              rowSpan="2"
             />
           </GridLayout>
         </v-template>
@@ -125,11 +149,11 @@ export default {
     };
   },
   created() {
-    console.log("id de membro:" + this.member.id)
+    console.log("id de membro:" + this.member.id);
     this.$store
       .dispatch(GET_VISITS, this.member.id)
       .then(data => {
-        this.visits = data
+        this.visits = data;
         this.visitIndicator = false;
       })
       .catch(error => {});
@@ -144,7 +168,7 @@ export default {
         this.$store
           .dispatch(GET_VISITS, this.member.id)
           .then(data => {
-            this.visits = data
+            this.visits = data;
           })
           .catch(error => {});
         object.notifyPullToRefreshFinished();
@@ -154,9 +178,9 @@ export default {
       // const m = clone(this.member);
       // this.$navigator.navigate("/addvisit", { props: { member: m }})
     },
-    addVisit(){
+    addVisit() {
       // const m = clone(this.member);
-      this.$navigator.navigate("/addvisit", { props: { member: this.member }})
+      this.$navigator.navigate("/addvisit", { props: { member: this.member } });
     },
     // updateVisit() {
     //   if (getConnectionType() === connectionType.none) {

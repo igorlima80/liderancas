@@ -57,6 +57,9 @@
               </Label>
           <!-- <Label row="1" col="0" :text="voter.address" class="list-group-item-text" @tap="onItemTap(voter)"/> -->
           <Label
+            row="0"
+            col="1"
+            rowSpan=2
             :text="'fa-shoe-prints' | fonticon"
             class="fas text-right"
             :class="{visited: voter.status == 'visited'}"

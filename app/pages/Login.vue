@@ -81,20 +81,12 @@ export default {
       return this.$refs.cpf.nativeView.text
     },
     submit() {
-      console.log(this.getCpf())
       if (!this.getCpf()) {
         feedback.error({
           message: "Por favor, digite o número do CPF."
         });
         return;
       }
-      // if (!validator.validate(this.email)) {
-      //   feedback.error({
-      //     message: "Digite um endereço de e-mail válido."
-      //   });
-      //   return;
-      // }
-
       this.login();
     },
 

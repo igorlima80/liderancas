@@ -27,7 +27,7 @@
       <ScrollView col="0" row="0" colSpan="2">
         <GridLayout
           class="page-content"
-          rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
+          rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
           columns="*,*"
         >
           <Label
@@ -38,7 +38,7 @@
             class="font-weight-bold text-primary m-b-20"
           />
           <StackLayout class="input-field" row="1" colSpan="2">
-            <Label text="Nome" class="label" />
+            <Label text="Nome*" class="label" />
             <TextField
               ref="name"
               keyboardType="text"
@@ -50,14 +50,10 @@
           </StackLayout>
           <StackLayout class="input-field" row="2" colSpan="2">
             <Label text="Data de nascimento" class="label" />
-            <MaskedTextField
-              ref="date"
-              keyboardType="number"
-              autocorrect="false"
-              autocapitalizationType="none"
-              returnKeyType="next"
-              mask="00/00/0000"
-            />
+            <DatePickerField
+              @dateChange="onDateTimeChange1"
+              dateFormat="yyyy-MM-dd"
+            ></DatePickerField>
           </StackLayout>
           <StackLayout class="input-field" row="3" colSpan="2">
             <Label text="CPF" class="label" />
@@ -70,14 +66,36 @@
               mask="000.000.000-00"
             />
           </StackLayout>
+          <StackLayout class="input-field" row="4" colSpan="2">
+            <Label text="Telefone" class="label" />
+            <MaskedTextField
+              ref="phone"
+              keyboardType="number"
+              autocorrect="false"
+              autocapitalizationType="none"
+              returnKeyType="next"
+              mask="(00)0000-0000"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="5" colSpan="2">
+            <Label text="Celular" class="label" />
+            <MaskedTextField
+              ref="cell_phone"
+              keyboardType="number"
+              autocorrect="false"
+              autocapitalizationType="none"
+              returnKeyType="next"
+              mask="(00)00000-0000"
+            />
+          </StackLayout>
           <Label
-            row="4"
+            row="6"
             col="0"
             text="Endereço"
             colspan="2"
             class="font-weight-bold text-primary m-y-20"
           />
-          <StackLayout class="input-field" row="5" colSpan="2">
+          <StackLayout class="input-field" row="7" colSpan="2">
             <Label text="Descrição" class="label" />
             <TextField
               ref="description"
@@ -88,8 +106,8 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="6" colSpan="2">
-            <Label text="CEP" class="label" />
+          <StackLayout class="input-field" row="8" colSpan="2">
+            <Label text="CEP*" class="label" />
             <MaskedTextField
               ref="zipcode"
               @blur="onBlur"
@@ -100,8 +118,8 @@
               mask="00000-000"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="7" colSpan="2">
-            <Label text="Logradouro" class="label" />
+          <StackLayout class="input-field" row="9" colSpan="2">
+            <Label text="Logradouro*" class="label" />
             <TextField
               ref="street"
               keyboardType="text"
@@ -111,7 +129,7 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="8" colSpan="2">
+          <StackLayout class="input-field" row="10" colSpan="2">
             <Label text="Complemento" class="label" />
             <TextField
               ref="complement"
@@ -122,8 +140,8 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="9" colSpan="2">
-            <Label text="Bairro" class="label" />
+          <StackLayout class="input-field" row="11" colSpan="2">
+            <Label text="Bairro*" class="label" />
             <TextField
               ref="district"
               keyboardType="text"
@@ -134,8 +152,8 @@
             />
           </StackLayout>
 
-          <StackLayout class="input-field" row="10" colSpan="2">
-            <Label text="Número" class="label" />
+          <StackLayout class="input-field" row="12" colSpan="2">
+            <Label text="Número*" class="label" />
             <TextField
               ref="number"
               keyboardType="number"
@@ -145,8 +163,8 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="11" colSpan="2">
-            <Label text="Cidade" class="label" />
+          <StackLayout class="input-field" row="13" colSpan="2">
+            <Label text="Cidade*" class="label" />
             <RadAutoCompleteTextView
               ref="autocomplete"
               completionMode="Contains"
@@ -227,6 +245,8 @@ export default {
         name: "",
         cpf: "",
         birthdate: "",
+        phone: "",
+        cell_phone: "",
         leader_id: loginService.token,
         address: {
           description: "",
@@ -280,10 +300,25 @@ export default {
         return;
       }
 
+      if (
+        !this.member.name ||
+        !this.getCep() ||
+        !this.member.address.street ||
+        !this.member.address.number ||
+        !this.member.address.district ||
+        !this.member.address.city_id
+      ) {
+        feedback.error({
+          message: "Por favor, digite os campos obrigatórios(*)."
+        });
+        return;
+      }
+
       utils.loader.show();
       this.member.cpf = this.getCpf();
-      this.member.birthdate = this.getDate();
       this.member.address.zipcode = this.getCep();
+      this.member.phone = this.getPhone();
+      this.member.cell_phone = this.getCellPhone();
 
       this.$store
         .dispatch(ADD_VOTER, this.member)
@@ -307,8 +342,6 @@ export default {
     },
     onDidAutoComplete({ token }) {
       this.member.address.city_id = token.id;
-      // this.member.address.city.name_with_state = token.name_with_state;
-      // console.log(`DidAutoComplete with city: ${this.member.address.city_id}`);
     },
     onBlur() {
       if (getConnectionType() === connectionType.none) {
@@ -359,11 +392,20 @@ export default {
     setCep(zipcode) {
       this.$refs.zipcode.nativeView.text = zipcode;
     },
-    getDate() {
-      return this.$refs.date.nativeView.text;
+    getPhone() {
+      return this.$refs.phone.nativeView.text;
     },
-    setDate(date) {
-      this.$refs.date.nativeView.text = date;
+    setPhone(phone) {
+      return this.$refs.phone.nativeView.text - phone;
+    },
+    getCellPhone() {
+      return this.$refs.cell_phone.nativeView.text;
+    },
+    setCellPhone(cell_phone) {
+      return (this.$refs.cell_phone.nativeView.text = cell_phone);
+    },
+    onDateTimeChange1(args) {
+      this.member.birthdate = args.value;
     }
   }
 };

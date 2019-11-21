@@ -33,7 +33,7 @@
       <ScrollView col="0" row="0" colSpan="2">
         <GridLayout
           class="page-content"
-          rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
+          rows="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
           columns="*,*"
         >
           <Label
@@ -44,7 +44,7 @@
             class="font-weight-bold text-primary m-b-20"
           />
           <StackLayout class="input-field" row="1" colSpan="2">
-            <Label text="Nome" class="label" />
+            <Label text="Nome*" class="label" />
             <TextField
               :isEnabled="enabled"
               ref="name"
@@ -57,15 +57,12 @@
           </StackLayout>
           <StackLayout class="input-field" row="2" colSpan="2">
             <Label text="Data de nascimento" class="label" />
-            <MaskedTextField
+            <DatePickerField
+              @dateChange="onDateTimeChange1"
+              :date="member.birthdate"
+              dateFormat="yyyy-MM-dd"
               :isEnabled="enabled"
-              ref="date"
-              keyboardType="number"
-              autocorrect="false"
-              autocapitalizationType="none"
-              returnKeyType="next"
-              mask="00/00/0000"
-            />
+            ></DatePickerField>
           </StackLayout>
           <StackLayout class="input-field" row="3" colSpan="2">
             <Label text="CPF" class="label" />
@@ -79,14 +76,38 @@
               mask="000.000.000-00"
             />
           </StackLayout>
+          <StackLayout class="input-field" row="4" colSpan="2">
+            <Label text="Telefone" class="label" />
+            <MaskedTextField
+              :isEnabled="enabled"
+              ref="phone"
+              keyboardType="number"
+              autocorrect="false"
+              autocapitalizationType="none"
+              returnKeyType="next"
+              mask="(00)0000-0000"
+            />
+          </StackLayout>
+          <StackLayout class="input-field" row="5" colSpan="2">
+            <Label text="Celular" class="label" />
+            <MaskedTextField
+              :isEnabled="enabled"
+              ref="cell_phone"
+              keyboardType="number"
+              autocorrect="false"
+              autocapitalizationType="none"
+              returnKeyType="next"
+              mask="(00)00000-0000"
+            />
+          </StackLayout>
           <Label
-            row="4"
+            row="6"
             col="0"
             text="Endereço"
             colSpan="2"
             class="font-weight-bold text-primary m-y-20"
           />
-          <StackLayout class="input-field" row="5" colSpan="2">
+          <StackLayout class="input-field" row="7" colSpan="2">
             <Label text="Descrição" class="label" />
             <TextField
               :isEnabled="enabled"
@@ -98,8 +119,8 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="6" colSpan="2">
-            <Label text="CEP" class="label" />
+          <StackLayout class="input-field" row="8" colSpan="2">
+            <Label text="CEP*" class="label" />
             <MaskedTextField
               :isEnabled="enabled"
               ref="zipcode"
@@ -111,8 +132,8 @@
               mask="00000-000"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="7" colSpan="2">
-            <Label text="Logradouro" class="label" />
+          <StackLayout class="input-field" row="9" colSpan="2">
+            <Label text="Logradouro*" class="label" />
             <TextField
               :isEnabled="enabled"
               ref="street"
@@ -123,7 +144,7 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="8" colSpan="2">
+          <StackLayout class="input-field" row="10" colSpan="2">
             <Label text="Complemento" class="label" />
             <TextField
               :isEnabled="enabled"
@@ -135,8 +156,8 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="9" colSpan="2">
-            <Label text="Bairro" class="label" />
+          <StackLayout class="input-field" row="11" colSpan="2">
+            <Label text="Bairro*" class="label" />
             <TextField
               :isEnabled="enabled"
               ref="district"
@@ -148,8 +169,8 @@
             />
           </StackLayout>
 
-          <StackLayout class="input-field" row="10" colSpan="2">
-            <Label text="Número" class="label" />
+          <StackLayout class="input-field" row="12" colSpan="2">
+            <Label text="Número*" class="label" />
             <TextField
               :isEnabled="enabled"
               ref="number"
@@ -160,8 +181,8 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <StackLayout class="input-field" row="11" colSpan="2">
-            <Label text="Cidade" class="label" />
+          <StackLayout class="input-field" row="13" colSpan="2">
+            <Label text="Cidade*" class="label" />
             <RadAutoCompleteTextView
               ref="autocomplete"
               :readOnly="!enabled"
@@ -247,6 +268,8 @@ export default {
         name: "",
         cpf: "",
         birthdate: "",
+        phone: "",
+        cell_phone: "",
         address: {
           description: "",
           number: "",
@@ -254,7 +277,7 @@ export default {
           zipcode: "",
           district: "",
           street: "",
-          city_id:""
+          city_id: ""
         }
       }
     };
@@ -297,11 +320,34 @@ export default {
         });
         return;
       }
+      console.log(
+        this.member.name,
+        this.getCep(),
+        this.member.address.street,
+        this.member.address.number,
+        this.member.address.district,
+        this.member.address.city_id
+      );
+      
+      if (
+        !this.member.name ||
+        !this.getCep() ||
+        !this.member.address.street ||
+        !this.member.address.number ||
+        !this.member.address.district ||
+        !this.member.address.city_id
+      ) {
+        feedback.error({
+          message: "Por favor, digite os campos obrigatórios(*)."
+        });
+        return;
+      }
 
       utils.loader.show();
       this.member.cpf = this.getCpf();
-      this.member.birthdate = this.getDate();
       this.member.address.zipcode = this.getCep();
+      this.member.phone = this.getPhone();
+      this.member.cell_phone = this.getCellPhone();
       this.$store
         .dispatch(UPDATE_VOTER, this.member)
         .then(() => {
@@ -323,7 +369,7 @@ export default {
       utils.showDrawer();
     },
     onLoaded() {
-      this.member.id = this.voter.id
+      this.member.id = this.voter.id;
       this.member.name = this.voter.name;
       this.member.cpf = this.voter.cpf;
       this.member.birthdate = this.voter.birthdate;
@@ -333,31 +379,32 @@ export default {
       this.member.address.complement = this.voter.address.complement;
       this.member.address.district = this.voter.address.district;
       this.member.address.number = this.voter.address.number;
-      this.member.address.city = this.voter.address.city;
 
-      if (this.member.address.city) {
+      if (this.voter.address.city.id) {
         this.$refs.autocomplete.addToken(
           new utils.CityModelToken(
-            this.member.address.city.id,
-            this.member.address.city.name_with_state,
+            this.voter.address.city.id,
+            this.voter.address.city.name_with_state,
             null
           )
         );
+        this.member.address.city_id = this.voter.address.city.id;
       }
-      if (this.member.address.zipcode) {
-        this.setCep(this.member.address.zipcode);
+      if (this.voter.address.zipcode) {
+        this.setCep(this.voter.address.zipcode);
       }
-      if (this.member.address.birthdate) {
-        this.setDate(this.member.birthdate);
+      if (this.voter.address.zipcode) {
+        this.setCpf(this.voter.cpf);
       }
-      if (this.member.address.zipcode) {
-        this.setCpf(this.member.cpf);
+      if (this.voter.phone) {
+        this.setPhone(this.voter.phone);
+      }
+      if (this.voter.cell_phone) {
+        this.setCellPhone(this.voter.cell_phone);
       }
     },
     onDidAutoComplete({ token }) {
       this.member.address.city_id = token.id;
-      // this.member.address.city.name_with_state = token.name_with_state;
-      // console.log(`DidAutoComplete with city: ${this.member.address.city.id}`);
     },
     readOnly() {
       this.enabled = !this.enabled;
@@ -411,11 +458,20 @@ export default {
     setCep(zipcode) {
       this.$refs.zipcode.nativeView.text = zipcode;
     },
-    getDate() {
-      return this.$refs.date.nativeView.text;
+    getPhone() {
+      return this.$refs.phone.nativeView.text;
     },
-    setDate(date) {
-      this.$refs.date.nativeView.text = date;
+    setPhone(phone) {
+      return (this.$refs.phone.nativeView.text = phone);
+    },
+    getCellPhone() {
+      return this.$refs.cell_phone.nativeView.text;
+    },
+    setCellPhone(cell_phone) {
+      return (this.$refs.cell_phone.nativeView.text = cell_phone);
+    },
+    onDateTimeChange1(args) {
+      this.member.birthdate = args.value;
     }
   }
 };

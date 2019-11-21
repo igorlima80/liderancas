@@ -23,6 +23,7 @@
     "eslint": "^6.6.0",
     "nativescript-background-http": "^4.2.0",
     "nativescript-camera": "^4.5.0",
+    "nativescript-datetimepicker": "^1.2.2",
     "nativescript-feedback": "^1.3.12",
     "nativescript-fonticon": "^2.0.0",
     "nativescript-geolocation": "^5.1.0",

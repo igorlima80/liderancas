@@ -8,6 +8,7 @@ import RadListView from 'nativescript-ui-listview/vue';
 import RadAutoComplete from 'nativescript-ui-autocomplete/vue';
 import FloatingActionButtonPlugin from 'nativescript-material-floatingactionbutton/vue';
 import CardViewPlugin from 'nativescript-material-cardview/vue';
+import DateTimePicker from "nativescript-datetimepicker/vue";
 import { TNSFontIcon, fonticon } from "nativescript-fonticon";
 import firebaseService from '~/services/firebase';
 import DrawerContent from "./components/DrawerContent";
@@ -25,6 +26,7 @@ Vue.use(Pager);
 Vue.use(RadListView);
 Vue.use(CardViewPlugin);
 Vue.use(FloatingActionButtonPlugin);
+Vue.use(DateTimePicker);
 Vue.use(Navigator, { routes })
 if(TNS_ENV !== 'production') {
   Vue.use(VueDevtools)

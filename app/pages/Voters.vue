@@ -35,6 +35,7 @@
         ref="listView"
         for="voter in listVoters"
         pullToRefresh="true"
+        swipeActions="true"
         @pullToRefreshInitiated="onPullToRefreshInitiated"
       >
         <v-template>
