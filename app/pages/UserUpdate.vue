@@ -210,6 +210,7 @@
 <script>
 import { mapGetters } from "vuex";
 import * as utils from "~/shared/utils";
+import LoginService from "~/services/LoginService";
 // import {
 //   GroupTitleStyle,
 //   PropertyGroup,
@@ -220,6 +221,7 @@ import { ObservableArray } from "tns-core-modules/data/observable-array";
 import SelectedPageService from "../shared/selected-page-service";
 import { Feedback } from "nativescript-feedback";
 import {
+  FETCH_USER,
   UPDATE_LEADER,
   GET_CITES,
   FIND_ZIPCODE,
@@ -231,6 +233,7 @@ import {
 } from "tns-core-modules/connectivity";
 const feedback = new Feedback();
 let clone = require("clone");
+const loginService = new LoginService();
 
 export default {
   data() {
@@ -348,6 +351,25 @@ export default {
 
   //   this.groups.push(pg);
   // },
+  created() {
+    this.$store
+      .dispatch(FETCH_USER, loginService.token)
+      .then(() => {
+        this.userIndicator = false;
+      })
+      .catch(error => {
+        alert({
+          title: "lideranças",
+          message:
+            "Não foi possivei carregar os dados do usuário.Tente mais tarde.",
+          okButtonText: "OK"
+        });
+        this.$navigator.navigate("/login", {
+          clearHistory: true
+        });
+        return;
+      });
+  },
   mounted() {
     this.$refs.autocomplete.setLoadSuggestionsAsync(text => {
       const promise = new Promise((resolve, reject) => {
@@ -391,22 +413,25 @@ export default {
       }
 
       utils.loader.show();
+      delete this.leader.address.city;
+      console.dir(this.leader);
       this.$store
         .dispatch(UPDATE_LEADER, this.leader)
         .then(() => {
-          this.$navigator.back();
+          // this.$navigator.back();
+          // feedback.success({
+          //   message: "Cadastro atualizado com sucesso."
+          // });
           utils.loader.hide();
-          feedback.success({
-            message: "Cadastro atualizado com sucesso."
-          });
         })
         .catch(error => {
           console.error(error);
+          // utils.loader.hide();
+          // feedback.error({
+          //   message:
+          //     "Infelizmente não conseguimos atualizar seus dados. Tente mais tarde."
+          // });
           utils.loader.hide();
-          feedback.error({
-            message:
-              "Infelizmente não conseguimos atualizar seus dados. Tente mais tarde."
-          });
         });
     },
     onDrawerButtonTap() {
@@ -422,6 +447,7 @@ export default {
             null
           )
         );
+        this.leader.address.city_id = this.leader.address.city.id;
       }
       if (this.leader.address.zipcode) {
         this.setCep(this.leader.address.zipcode);
@@ -430,6 +456,7 @@ export default {
     onDidAutoComplete({ token }) {
       this.leader.address.city.id = token.id;
       this.leader.address.city.name_with_state = token.name_with_state;
+      this.leader.address.city_id = this.leader.address.city.id;
     },
     onBlur() {
       if (getConnectionType() === connectionType.none) {
@@ -456,6 +483,7 @@ export default {
               );
               self.leader.address.city.id = data.id;
               self.leader.address.city.name_with_state = data.name_with_state;
+              self.leader.address.city_id = data.id;
               utils.loader.hide();
             })
             .catch(error => {

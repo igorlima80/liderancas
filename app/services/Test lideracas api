@@ -22,15 +22,12 @@ content-type: application/json
 {
     "address": {
         "description": "Casa",
-        "number": "112",
+        "number": "1129",
         "complement": "",
         "zipcode": "64000-830",
-        "district": "Cabral",
-        "street": "Praça Edgard Nogueira",
-        "city":{
-          "id": "3286",
-          "name_with_state": ""
-        } 
+        "district": "Marques",
+        "street": "teste",
+        "city_id": "3286"
     }
 }
 
